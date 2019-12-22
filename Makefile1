@@ -1,0 +1,54 @@
+INCLUDE = ./include
+OBJS= main.o Adaboost.o Bayes.o CART.o CRF-CWS.o DNN.o DTree.o GMM.o Hash.o HMM-CWS.o HMM.o kMeans.o LineReg.o LogReg.o MDP.o ME.o MEMM-CWS.o PCA.o RF.o SoftMaxReg.o SVD.o SVM.o
+H = main.h Adaboost.h Bayes.h CART.h CRF-CWS.h DNN.h DTree.h GMM.h Hash.h HMM-CWS.h HMM.h kMeans.h LineReg.h LogReg.h MDP.h ME.h MEMM-CWS.h PCA.h RF.h SoftMaxReg.h SVD.h SVM.h
+ML : $(OBJS)
+	g++ -o ML $(OBJS)
+main.o : main.cpp
+	g++ -c -I $(INCLUDE) -MM main.cpp
+Adaboost.o : Adaboost.cpp
+	g++ -c -I $(INCLUDE) -MM Adaboost.cpp
+Bayes.o : Bayes.cpp
+	g++ -c -I $(INCLUDE) -MM Bayes.cpp
+CART.o : CART.cpp
+	g++ -c -I $(INCLUDE) -MM CART.cpp
+CRF-CWS.o : CRF-CWS.cpp
+	g++ -c -I $(INCLUDE) -MM CRF-CWS.cpp
+DNN.o : DNN.cpp
+	g++ -c -I $(INCLUDE) -MM DNN.cpp
+DTree.o : DTree.cpp
+	g++ -c -I $(INCLUDE) -MM DTree.cpp
+GMM.o : GMM.cpp
+	g++ -c -I $(INCLUDE) -MM GMM.cpp
+Hash.o : Hash.cpp
+	g++ -c -I $(INCLUDE) -MM Hash.cpp
+HMM-CWS.o : HMM-CWS.cpp
+	g++ -c -I $(INCLUDE) -MM HMM-CWS.cpp
+HMM.o : HMM.cpp
+	g++ -c -I $(INCLUDE) -MM HMM.cpp
+kMeans.o : kMeans.cpp
+	g++ -c -I $(INCLUDE) -MM kMeans.cpp
+LineReg.o : LineReg.cpp
+	g++ -c -I $(INCLUDE) -MM LineReg.cpp
+LogReg.o : LogReg.cpp
+	g++ -c -I $(INCLUDE) -MM LogReg.cpp
+MDP.o : MDP.cpp
+	g++ -c -I $(INCLUDE) -MM MDP.cpp
+ME.o : ME.cpp
+	g++ -c -I $(INCLUDE) -MM ME.cpp
+MEMM-CWS.o : MEMM-CWS.cpp
+	g++ -c -I $(INCLUDE) -MM MEMM-CWS.cpp
+PCA.o : PCA.cpp
+	g++ -c -I $(INCLUDE) -MM PCA.cpp
+RF.o : RF.cpp
+	g++ -c -I $(INCLUDE) -MM RF.cpp
+SoftMaxReg.o : SoftMaxReg.cpp
+	g++ -c -I $(INCLUDE) -MM SoftMaxReg.cpp
+SVD.o : SVD.cpp
+	g++ -c -I $(INCLUDE) -MM SVD.cpp
+SVM.o : SVM.cpp
+	g++ -c -I $(INCLUDE) -MM SVM.cpp
+
+.PHONY : clean
+clean :
+	rm ML $(OBJS)
+
