@@ -27,6 +27,7 @@ int LogReg(const char *file, const std::string &model, const double &alpha, cons
     file: data/logReg.txt
     *file: d
     **/
+    ///test
     MLL::LogReg::LogRegPtr logreg = std::make_shared<MLL::LogReg>(file,model,alpha,iter);
     //MLL::LogReg::LogRegPtr logreg(new MLL::LogReg(file,model,alpha,iter));
     if(model=="gradAscent")
