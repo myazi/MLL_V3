@@ -17,7 +17,9 @@ public:
 
     void LoadData(const char *filename);
 
-    void print();
+	void LoadData_spare(const char *filename, int row, int col);
+    
+	void print();
 
     Matrix copyMatrix();
 
@@ -25,7 +27,7 @@ public:
 
     Matrix getOneCol(unsigned int jCol);
 
-    void deleteOneRow(unsigned int iRow);
+	void deleteOneRow(unsigned int iRow);
 
     void deleteOneCol(unsigned int iCol);
 

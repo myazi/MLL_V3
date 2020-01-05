@@ -17,7 +17,6 @@ namespace MLL {
         Matrix weights(_x.col,_y.col,0.1,"T");
         Matrix xT = _x.transposeMatrix();
 
-        //float alpha=0.01;///迭代步长
         float error=0;///记录错误率
         int iter=0;
         int i,j;
@@ -30,14 +29,18 @@ namespace MLL {
             {
                 z.data[i][0]=sigmoid(z.data[i][0]);
             }
-            z = _y - z;
+            z = _y - z ;
+           for(i = 0; i < z.row; i++)
+            {
+                z.data[i][0] *= exp( -0.5 * _y.data[i][0]);
+            }
             error=0;
             for(i=0; i<_x.row; i++)///统计错误率
                 error+=z.data[i][0];
-            //cout<<"error="<<error<<endl;
+            cout<<"error="<<error<<endl;
             //if(error<x.row/100 && error>x.row/100)///设置错误率小于一定值时退出迭代
                // break;
-            grad = xT * z;///计算负梯度方向
+            grad = xT * z ;///计算负梯度方向
             //grad = (1.0/x.row) * grad;
             for(i=0; i<grad.row; i++)
                 grad.data[i][0]*= _alpha;///负梯度方向与步长的乘积确定迭代值
@@ -49,18 +52,58 @@ namespace MLL {
         **/
         int er1=0,er2=0;
         Matrix train=_x * weights;
-        cout<<"test"<<endl;
+		std::ofstream weight_file;
+		weight_file.open("weight");
+		for(int i=0; i < weights.row; i++)
+		{
+			for(int j=0; j < weights.col; j++)
+			{
+				weight_file<< weights.data[i][j]<<endl;
+			}
+		}
+		weight_file.close();
+		cout<<"----------train-------"<<endl;
         for(i=0; i<_y.row; i++)
         {
             if(train.data[i][0]>0)
             {
-                cout<<1-_y.data[i][0]<<endl;
+				cout<<1<<endl;
+                //cout<<1-_y.data[i][0]<<endl;
                 er1+=(1-_y.data[i][0]);
             }
             else
             {
-                cout<<0-_y.data[i][0]<<endl;
+				cout<<0<<endl;
+                //cout<<0-_y.data[i][0]<<endl;
                 er2-=(0-_y.data[i][0]);
+            }
+        }
+        cout<<"er1="<<er1<<endl;
+        cout<<"er2="<<er2<<endl;
+		
+		cout<<"-------test-------"<<endl;
+		Matrix test_x;
+		Matrix test_y;
+		const char *test_file= "sample_100";
+		test_x.LoadData(test_file);
+
+		test_y=test_x.getOneCol(test_x.col-1);
+		test_x.deleteOneCol(test_x.col-1);
+		cout<<"test_x" << test_x.row<<"&&"<<test_x.col<<endl;
+		cout<<"test_y" << test_y.row<<"&&"<<test_y.col<<endl;
+		Matrix test= test_x * weights;
+        er1 = 0;
+		er2 = 0;
+		for(i=0; i<test_y.row; i++)
+        {
+			cout<<test_y.data[i][0]<<endl;
+            if(test.data[i][0]>0)
+            {
+                er1+=(1-test_y.data[i][0]);
+            }
+            else
+            {
+                er2-=(0-test_y.data[i][0]);
             }
         }
         cout<<"er1="<<er1<<endl;
@@ -117,11 +160,25 @@ namespace MLL {
         cout<<"loadData:"<< file<<endl;
         cout<<"----------------------"<<endl;
         _x.LoadData(file);
-        _x.print(); 
-        _y=_x.getOneCol(_x.col-1);
-        _x.deleteOneCol(_x.col-1);
-        _x.print();
-        _alpha = alpha;
+		_y=_x.getOneCol(_x.col-1);
+		_x.deleteOneCol(_x.col-1);
+        _y.print();
+		//const char *file2 = "LDA_sample";
+		//_x.LoadData_spare(file2, 17880,2000);
+        //_x.print();
+		cout<<_x.row<<"&"<<_x.col<<endl;
+        _y.print();
+		int sum = 0;
+		for(int i=0; i<_y.row; i++)
+		{
+			for (int j=0;j<_y.col; j++)
+			{
+				cout<<"y="<< "\t"<<i <<"\t" << j <<"\t"<<_y.data[i][j] <<endl;
+				sum += _y.data[i][j];
+			}
+		}
+		cout<<"sum=" << sum<< endl;
+		_alpha = alpha;
         _iter = iter;
     }
 }

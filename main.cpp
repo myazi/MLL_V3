@@ -3,6 +3,8 @@
 #include "SoftMaxReg.h"
 //#include "ME.h"//
 #include "DNN.h"
+#include "SVM.h"
+#include "DTree.h"
 /*#include "SVM.h"
 #include "Bayes.h"
 #include "HMM.h"
@@ -33,8 +35,38 @@ int LogReg(const char *file, const std::string &model, const double &alpha, cons
     if(model=="gradAscent")
         logreg->gradAscent_Log();
     if(model=="stoGradAscent")
-        logreg->stoGradAscent_Log();
+       logreg->stoGradAscent_Log();
 
+	cout<<"-------test-------"<<endl;
+	Matrix test_x;
+	Matrix test_y;
+	Matrix weights;
+	const char *test_file= "sample_28";
+	test_x.LoadData(test_file);
+	weights.LoadData("weight");
+
+	test_y=test_x.getOneCol(test_x.col-1);
+	test_x.deleteOneCol(test_x.col-1);
+	cout<<"test_x" << test_x.row<<"&&"<<test_x.col<<endl;
+	cout<<"test_y" << test_y.row<<"&&"<<test_y.col<<endl;
+	Matrix test= test_x * weights;
+	int er1 = 0;
+	int er2 = 0;
+	for(int i=0; i<test_y.row; i++)
+	{
+		if(test.data[i][0]>0)
+		{
+			cout<<1<<endl;
+			er1+=(1-test_y.data[i][0]);
+		}
+		else
+		{
+			cout<<0<<endl;
+			er2-=(0-test_y.data[i][0]);
+		}
+	}
+	cout<<"er1="<<er1<<endl;
+	cout<<"er2="<<er2<<endl;
     return 0;
 }
 int SoftMaxReg(const char *file, const std::string &model,const double &alpha, const int &iter)
@@ -88,9 +120,11 @@ int main()
 {
     
     int i;
-    trainDNN("data/logReg.txt");
+    //trainDNN("data/logReg.txt");
     //LineReg("data/lineReg.txt","regression",0.01,1);
     //LogReg("data/logReg.txt","gradAscent",0.01,1000);
+    LogReg("sample","gradAscent",0.001,5000);
+    //LogReg("sample","gradAscent",0.01,1000);
     //SoftMaxReg("data/logReg.txt","gradAscent",0.01,1000);
     //ME();
     //trainDNN();

@@ -23,6 +23,7 @@ typedef std::vector<std::vector<std::string> > DataStr;  //定义为模板
 typedef std::vector<std::string> RowDataStr;
 typedef std::vector<std::string> ColDataStr;
 
+void LoadDataNum_spare(Data &data, const char *infile);
 void LoadDataNum(Data &data, const char *infile);
 void LoadDataStr(DataStr &data, const char *infile);
 void LoadDataStr(RowDataStr &data, const char *infile);

@@ -11,16 +11,17 @@ int SVM()
     Matrix x;
     //x.LoadData(file);
 
-    char file[20]="data\\test.txt";
+    //char file[20]="data\\test.txt";
+    char file[20]="sample";
     x.LoadData(file);
     //x = x.transposeMatrix();
 
     Matrix y;
     y=x.getOneCol(x.col-1);
     x.deleteOneCol(x.col-1);
-    for(int i=x.row-1;i>100;i--)
+    //for(int i=x.row-1;i>100;i--)
     //x.deleteOneCol(x.col-1);
-        x.deleteOneRow(i);
+    //    x.deleteOneRow(i);
     cout<<x.row<<"*"<<x.col<<endl;
     cout<<y.row<<"*"<<y.col<<endl;
     ///调用SMO函数求解SVM模型

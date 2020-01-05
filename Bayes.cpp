@@ -1,4 +1,4 @@
-#include <io.h>
+//#include <io.h>
 #include <string.h>
 #include <stdio.h>
 #include "Bayes.h"

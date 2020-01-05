@@ -3,7 +3,7 @@ using namespace std;
 Matrix::Matrix()
 {
     //Matrix(0);
-    cout<<"matrix is no size"<<endl;
+    //cout<<"matrix is no size"<<endl;
 }
 Matrix::Matrix(unsigned int row, unsigned int col,float lamd, const string &type)
 {
@@ -84,6 +84,24 @@ void Matrix::initMatrix(unsigned int row, unsigned int col,float lamd, const str
         }
     }
 }
+void Matrix::LoadData_spare(const char *filename, int row, int col)
+{
+	RowData cda(col);
+	Data da(row,cda);
+	this->data = da;
+	this->row = row;
+	this->col = col;
+	int i = 0;
+	int j = 0;
+	for(i=0; i<this->row; i++)
+	{
+		for(j=0; j<this->col; j++)
+		{
+			this->data[i][j] = 0;
+		}
+	}
+    LoadDataNum_spare(this->data,filename);
+}
 void Matrix::LoadData(const char *filename)
 {
     LoadDataNum(this->data,filename);
@@ -142,7 +160,7 @@ Matrix Matrix::getOneCol(unsigned int jCol)
 {
     unsigned int i=0;
     ColData cda(1);
-    Data da(row,cda);
+    Data da(this->row,cda);
     Matrix matrix;
     matrix.data=da;
     matrix.col=1;
@@ -151,7 +169,6 @@ Matrix Matrix::getOneCol(unsigned int jCol)
     {
         //cout<<i<<"="<<this->data[i][jCol]<<endl;
         matrix.data[i][0]=this->data[i][jCol];
-
     }
     return matrix;
 }
@@ -200,18 +217,18 @@ Matrix Matrix::transposeMatrix()//矩阵形式的转置
 {
     unsigned int i=0,j=0;
     Matrix matrixT;
-    cout<<col<<"&&&"<<row<<endl;
-    cout<<"ddd"<<endl;
+    //cout<<col<<"&&&"<<row<<endl;
+    //cout<<"ddd"<<endl;
     ColData cda(row);
-    cout<<"ddd1"<<endl;
+    //cout<<"ddd1"<<endl;
     Data da(col,cda);
-    cout<<"ddd2"<<endl;
+    //cout<<"ddd2"<<endl;
     matrixT.data=da;
-    cout<<"ddd3"<<endl;
+    //cout<<"ddd3"<<endl;
     matrixT.row=col;
-    cout<<"ddd4"<<endl;
+    //cout<<"ddd4"<<endl;
     matrixT.col=row;
-    cout<<"sss"<<endl;
+    //cout<<"sss"<<endl;
     for(i=0; i<col; i++)
     {
         for(j=0; j<row; j++)
@@ -219,7 +236,7 @@ Matrix Matrix::transposeMatrix()//矩阵形式的转置
             matrixT.data[i][j]=data[j][i];
         }
     }
-    cout<<"sss"<<endl;
+    //cout<<"sss"<<endl;
     return matrixT;
 }
 Matrix Matrix::addMatrix(const Matrix &matrix1,const Matrix &matrix2)
