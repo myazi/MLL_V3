@@ -112,23 +112,36 @@ int trainDNN(const char *file){
     double epsilon=0.00000001;
 
     //MLL::DNN::DNNPtr dnn = std::make_shared<MLL::DNN>(DNN(file,optimizer="gd",learn_rateing=0.001,initialization="he",lambd=0.001,keep_prob = 1,mini_batch_size=64,beta1=0.9, beta2=0.999, epsilon=0.00000001, iter=5000, print_cost=true);
-    MLL::DNN::DNNPtr dnn = std::make_shared<MLL::DNN>(file,"gd",0.001,"he",0.001,1,64,0.9, 0.999, 0.00000001, 5000, true);
+    MLL::DNN::DNNPtr dnn = std::make_shared<MLL::DNN>(file,"gd",0.1,"he",0.01,1,64,0.9, 0.999, 0.0000001, 500, true);
     //dnn->predict(dnn->_x,dnn->_y);
+    return 0;
+}
+int SVM(const char *file)
+{
+    double C = 0.6;
+    double soft = 0.001;
+    double b = 0;
+    int iter = 100;
+    MLL::kTup ktup;//核函数的定义，其中type元素为0表示不适用核函数，非0分别对应不同的核函数
+    ktup.type=1;
+    ktup.arg=1.0;
+    MLL::SVM::SVMPtr svm = std::make_shared<MLL::SVM>(file,C,soft,b,iter,ktup);//
+    svm->smoP();
     return 0;
 }
 int main()
 {
     
     int i;
-    //trainDNN("data/logReg.txt");
+    trainDNN("data/train.txt");
     //LineReg("data/lineReg.txt","regression",0.01,1);
     //LogReg("data/logReg.txt","gradAscent",0.01,1000);
-    LogReg("sample","gradAscent",0.001,5000);
+    //LogReg("sample","gradAscent",0.001,5000);
     //LogReg("sample","gradAscent",0.01,1000);
     //SoftMaxReg("data/logReg.txt","gradAscent",0.01,1000);
     //ME();
     //trainDNN();
-    //SVM();
+    //SVM(file);
 
     //Bayes();
     //HMM();

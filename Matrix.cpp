@@ -105,13 +105,13 @@ void Matrix::LoadData_spare(const char *filename, int row, int col)
 void Matrix::LoadData(const char *filename)
 {
     LoadDataNum(this->data,filename);
-    cout<<"ss"<<endl;
     row=data.size();
     col=data[0].size();
 }
 void Matrix::print()
 {
     unsigned int i,j;
+    cout<<row<<"**"<<col<<endl;
     for(i=0; i<row; i++)
     {
         for(j=0; j<col; j++)
@@ -229,6 +229,11 @@ Matrix Matrix::transposeMatrix()//矩阵形式的转置
     //cout<<"ddd4"<<endl;
     matrixT.col=row;
     //cout<<"sss"<<endl;
+    ColData cda(row);
+    Data da(col,cda);
+    matrixT.data=da;
+    matrixT.row=col;
+    matrixT.col=row;
     for(i=0; i<col; i++)
     {
         for(j=0; j<row; j++)
@@ -236,7 +241,6 @@ Matrix Matrix::transposeMatrix()//矩阵形式的转置
             matrixT.data[i][j]=data[j][i];
         }
     }
-    //cout<<"sss"<<endl;
     return matrixT;
 }
 Matrix Matrix::addMatrix(const Matrix &matrix1,const Matrix &matrix2)
@@ -310,13 +314,18 @@ Matrix Matrix::multsMatrix(Matrix matrix1,Matrix matrix2)//矩阵形式的相乘
     mults.data=da;
     mults.row=matrix1.row;
     mults.col=matrix2.col;
+    //cout<<this->row<<"&&&&"<<this->col<<endl;
+    //this->print();
+    cout<<"mullll"<<endl;
     for(i=0; i<matrix1.row; i++)
     {
         for(j=0; j<matrix2.col; j++)
         {
             mults.data[i][j]=0;
+            //this->data[i][j]=0;
         }
     }
+    cout<<"mmmmmm"<<endl;
     for(i=0; i<matrix1.row; i++)
     {
         for(j=0; j<matrix2.col; j++)
@@ -324,9 +333,11 @@ Matrix Matrix::multsMatrix(Matrix matrix1,Matrix matrix2)//矩阵形式的相乘
             for(k=0; k<matrix1.col; k++)
             {
                 mults.data[i][j]+=matrix1.data[i][k]*matrix2.data[k][j];
+                //this->data[i][j]+=matrix1.data[i][k]*matrix2.data[k][j];
             }
         }
     }
+    cout<<"mulll_end"<<endl;
     return mults;
 }
 
