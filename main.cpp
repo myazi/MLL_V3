@@ -81,7 +81,7 @@ int trainDNN(const char *file){
     double epsilon=0.00000001;
 
     //MLL::DNN::DNNPtr dnn = std::make_shared<MLL::DNN>(DNN(file,optimizer="gd",learn_rateing=0.001,initialization="he",lambd=0.001,keep_prob = 1,mini_batch_size=64,beta1=0.9, beta2=0.999, epsilon=0.00000001, iter=5000, print_cost=true);
-    MLL::DNN::DNNPtr dnn = std::make_shared<MLL::DNN>(file,"gd",0.001,"he",0.001,1,64,0.9, 0.999, 0.00000001, 5000, true);
+    MLL::DNN::DNNPtr dnn = std::make_shared<MLL::DNN>(file,"gd",0.1,"he",0.01,1,64,0.9, 0.999, 0.0000001, 500, true);
     //dnn->predict(dnn->_x,dnn->_y);
     return 0;
 }
@@ -95,9 +95,7 @@ int SVM(const char *file)
     ktup.type=1;
     ktup.arg=1.0;
     MLL::SVM::SVMPtr svm = std::make_shared<MLL::SVM>(file,C,soft,b,iter,ktup);//
-    cout<<"sss"<<endl;
     svm->smoP();
-    cout<<"00"<<endl;
     return 0;
 }
 int main()
@@ -105,7 +103,7 @@ int main()
     
     int i;
     trainDNN("data/train.txt");
-    char file[20]="data/test.txt";
+    //char file[20]="data/test.txt";
     //LineReg("data/lineReg.txt","regression",0.01,1);
     //LogReg("data/logReg.txt","gradAscent",0.01,1000);
     //SoftMaxReg("data/logReg.txt","gradAscent",0.01,1000);

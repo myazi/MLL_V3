@@ -16,8 +16,8 @@ namespace MLL{
         Matrix Z;
         Matrix A;
         Matrix D;
-        parameters *next;
-        parameters *pre;
+        parameters *next = NULL;
+        parameters *pre = NULL;
     };
 
     /***
@@ -37,8 +37,8 @@ namespace MLL{
         Matrix V_db_corrected;
         Matrix S_dw_corrected;
         Matrix S_db_corrected;
-        grad *next;
-        grad *pre;
+        grad *next = NULL;
+        grad *pre = NULL;
     };
 
     /**
