@@ -11,6 +11,44 @@ typedef std::vector<std::vector<std::string> > DataStr;  //定义为模板
 typedef std::vector<std::string> RowDataStr;
 typedef std::vector<std::string> ColDataStr;
 
+void LoadDataNum_spare(Data &data, const char *infile)
+{
+    std::cout<<infile<<std::endl;
+    std::ifstream dataFile;
+    dataFile.open(infile);
+    std::string tmpstrline;
+	std::string onestr;
+	int pos = 0;
+	int index = 0;
+    double val = 0;
+    RowData rowData;
+    std::cout<<"ff"<<std::endl;
+	int i = 0;
+    if(dataFile)
+    {
+        while(!dataFile.eof())
+        {
+            getline(dataFile,tmpstrline,'\n');//读取文件中一行的数据，保存为string类型
+			std::stringstream input(tmpstrline);
+            if(tmpstrline!="\0")
+            {
+				while(input>>onestr)
+                {
+					pos = 0;
+					pos = onestr.find(":");	
+					std::stringstream input_index(onestr.substr(0,pos));
+					std::stringstream input_val(onestr.substr(pos+1,onestr.size() - pos - 1));
+                    input_index >> index;
+					input_val >> val;
+					std::cout<<"load_spare"<<onestr<<'\t'<<index<<'\t'<<val<<std::endl;
+					data[i][index] = val;
+                }
+            }
+			i++;
+        }
+    }
+    dataFile.close();
+}
 void LoadDataNum(Data &data, const char *infile)
 {
     std::cout<<infile<<std::endl;
