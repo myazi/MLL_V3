@@ -3,6 +3,7 @@
 #include "SoftMaxReg.h"
 //#include "ME.h"//
 #include "DNN.h"
+#include "SVM.h"
 /*#include "SVM.h"
 #include "Bayes.h"
 #include "HMM.h"
@@ -84,17 +85,33 @@ int trainDNN(const char *file){
     //dnn->predict(dnn->_x,dnn->_y);
     return 0;
 }
+int SVM(const char *file)
+{
+    double C = 0.6;
+    double soft = 0.001;
+    double b = 0;
+    int iter = 100;
+    MLL::kTup ktup;//核函数的定义，其中type元素为0表示不适用核函数，非0分别对应不同的核函数
+    ktup.type=1;
+    ktup.arg=1.0;
+    MLL::SVM::SVMPtr svm = std::make_shared<MLL::SVM>(file,C,soft,b,iter,ktup);//
+    cout<<"sss"<<endl;
+    svm->smoP();
+    cout<<"00"<<endl;
+    return 0;
+}
 int main()
 {
     
     int i;
-    trainDNN("data/logReg.txt");
+    trainDNN("data/train.txt");
+    char file[20]="data/test.txt";
     //LineReg("data/lineReg.txt","regression",0.01,1);
     //LogReg("data/logReg.txt","gradAscent",0.01,1000);
     //SoftMaxReg("data/logReg.txt","gradAscent",0.01,1000);
     //ME();
     //trainDNN();
-    //SVM();
+    //SVM(file);
 
     //Bayes();
     //HMM();
