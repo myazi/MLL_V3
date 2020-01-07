@@ -1,6 +1,7 @@
 #include "SVM.h"
 namespace MLL
 {
+	/*
     ///加载数据文件保存到对象dtm的矩阵元素中
 
     ///通过矩阵对象中的load函数初始化样本的特征和类别矩阵x,y
@@ -29,7 +30,7 @@ namespace MLL
     ktup.arg=1.0;
     smop.smoP(x,y,0.6,0.001,40,ktup);//
     return 0;
-}
+}*/
 
     /**
     结构体OS的初始化，用于保存所以SMO算法中需要用到的参数

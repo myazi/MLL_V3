@@ -112,7 +112,7 @@ int trainDNN(const char *file){
     double epsilon=0.00000001;
 
     //MLL::DNN::DNNPtr dnn = std::make_shared<MLL::DNN>(DNN(file,optimizer="gd",learn_rateing=0.001,initialization="he",lambd=0.001,keep_prob = 1,mini_batch_size=64,beta1=0.9, beta2=0.999, epsilon=0.00000001, iter=5000, print_cost=true);
-    MLL::DNN::DNNPtr dnn = std::make_shared<MLL::DNN>(file,"gd",0.1,"he",0.01,1,64,0.9, 0.999, 0.0000001, 500, true);
+    MLL::DNN::DNNPtr dnn = std::make_shared<MLL::DNN>(file,"gd",0.01,"he",0.01,1,64,0.9, 0.999, 0.0000001, 500, true);
     //dnn->predict(dnn->_x,dnn->_y);
     return 0;
 }
