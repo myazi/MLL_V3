@@ -503,7 +503,7 @@ namespace MLL{
          
         int i=0,k=0;
         int lay_dim=3;
-        int lay_n[3]= {500,7,1};
+        int lay_n[3]= {500,3,1};
         lay_n[0]=_x.row;
         string lay_active[3]= {"relu","relu","sigmoid"};
         _sup_par.layer_dims=lay_dim;
