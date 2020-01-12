@@ -513,7 +513,7 @@ namespace MLL{
         //p->A = _x.copyMatrix();
         //Matrix AL;
         Matrix AL(_y.row,_y.col,0,"ss");
-        double *keep_probs=new double (L);
+        double *keep_probs=new double [L];
         for(k=0;k<L;k++)
         {
             keep_probs[k]=1;
