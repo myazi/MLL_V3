@@ -50,7 +50,7 @@ void LoadDataNum_spare(Data &data, const char *infile)
 }
 void LoadDataTest(Data &data, const char *infile)
 {
-    std::cout<<infile<<std::endl;
+    std::cout<< "data filename is:"<< infile<<std::endl;
     std::ifstream dataFile(infile);
     std::string tmpstrline;
     float val;
@@ -82,7 +82,7 @@ void LoadDataTest(Data &data, const char *infile)
 }
 void LoadDataNum(Data &data, const char *infile)
 {
-    std::cout<<infile<<std::endl;
+    std::cout<< "data filename is:"<< infile<<std::endl;
     std::ifstream dataFile;
     dataFile.open(infile);
     std::string tmpstrline;
@@ -111,7 +111,7 @@ void LoadDataNum(Data &data, const char *infile)
 }
 void LoadDataStr(DataStr &data, const char *infile)
 {
-    std::cout<<infile<<std::endl;
+    std::cout<< "data filename is:"<< infile<<std::endl;
     std::ifstream dataFile;
     dataFile.open(infile);
     std::string tmpstrline;
@@ -138,7 +138,7 @@ void LoadDataStr(DataStr &data, const char *infile)
 }
 void LoadDataStr(RowDataStr &data, const char *infile)
 {
-    std::cout<<infile<<std::endl;
+    std::cout<< "data filename is:"<< infile<<std::endl;
     std::ifstream dataFile;
     dataFile.open(infile);
     std::string tmpstrline;

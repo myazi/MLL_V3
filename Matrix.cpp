@@ -5,20 +5,20 @@ Matrix::Matrix()
     //Matrix(0);
     //cout<<"matrix is no size"<<endl;
 }
-Matrix::Matrix(unsigned int row, unsigned int col,float lamd, const string &type)
+Matrix::Matrix(const unsigned int &row, const unsigned int &col,const float &init_val, const string &type)
 {
     RowData cda(col);
     Data da(row,cda);
-    this->data=da;
-    this->row=row;
-    this->col=col;
-    unsigned int i=0,j=0;
+    this->data = da;
+    this->row = row;
+    this->col = col;
+    unsigned int i = 0, j = 0;
     if(type!="diag")
     {
         for(i=0; i<row; i++)
         {
             for(j=0; j<col; j++)
-                data[i][j]=lamd;
+                data[i][j] = init_val;
         }
     }
     else
@@ -29,10 +29,10 @@ Matrix::Matrix(unsigned int row, unsigned int col,float lamd, const string &type
             {
                 for(j=0; j<col; j++)
                 {
-                    if(i==j)
-                        data[i][j]=lamd;
+                    if(i == j)
+                        data[i][j] = init_val;
                     else
-                        data[i][j]=0;
+                        data[i][j] = 0;
                 }
             }
         }
@@ -42,7 +42,7 @@ Matrix::Matrix(unsigned int row, unsigned int col,float lamd, const string &type
         }
     }
 }
-void Matrix::initMatrix(unsigned int row, unsigned int col,float lamd, const string &type)
+void Matrix::initMatrix(const unsigned int &row, const unsigned int &col,const float &init_val, const string &type)
 {
     if(row==0 || col==0)
     {
@@ -51,30 +51,30 @@ void Matrix::initMatrix(unsigned int row, unsigned int col,float lamd, const str
     }
     RowData cda(col);
     Data da(row,cda);
-    this->data=da;
-    this->row=row;
-    this->col=col;
-    unsigned int i=0,j=0;
+    this->data = da;
+    this->row = row;
+    this->col = col;
+    unsigned int i = 0, j = 0;
     if(type!="diag")
     {
         for(i=0; i<row; i++)
         {
             for(j=0; j<col; j++)
-                data[i][j]=lamd;
+                data[i][j] = init_val;
         }
     }
     else
     {
-        if(row==col)
+        if(row == col)
         {
             for(i=0; i<row; i++)
             {
                 for(j=0; j<col; j++)
                 {
-                    if(i==j)
-                        data[i][j]=lamd;
+                    if(i == j)
+                        data[i][j] = init_val;
                     else
-                        data[i][j]=0;
+                        data[i][j] = 0;
                 }
             }
         }
@@ -84,15 +84,14 @@ void Matrix::initMatrix(unsigned int row, unsigned int col,float lamd, const str
         }
     }
 }
-void Matrix::LoadData_spare(const char *filename, int row, int col)
+void Matrix::LoadData_spare(const char *filename, const unsigned int &row, const unsigned int &col)
 {
 	RowData cda(col);
 	Data da(row,cda);
 	this->data = da;
 	this->row = row;
 	this->col = col;
-	int i = 0;
-	int j = 0;
+	unsigned int i = 0, j = 0;
 	for(i=0; i<this->row; i++)
 	{
 		for(j=0; j<this->col; j++)
@@ -100,7 +99,7 @@ void Matrix::LoadData_spare(const char *filename, int row, int col)
 			this->data[i][j] = 0;
 		}
 	}
-    LoadDataNum_spare(this->data,filename);
+    LoadDataNum_spare(this->data, filename);
 }
 void Matrix::LoadData(const char *filename)
 {
@@ -110,23 +109,23 @@ void Matrix::LoadData(const char *filename)
 }
 void Matrix::print()
 {
-    unsigned int i,j;
-    cout<<row<<"**"<<col<<endl;
+    unsigned int i = 0, j = 0;
+    cout<<"matrix size:" << row<<"**"<<col<<endl;
     for(i=0; i<row; i++)
     {
         for(j=0; j<col; j++)
         {
-            cout<<data[i][j]<<"  ";;
+            cout<<data[i][j]<<"  ";
         }
         cout<<endl;
     }
 }
-Matrix Matrix::copyMatrix()
+Matrix& Matrix::copyMatrix()
 {
     unsigned int i=0,j=0;
-    Matrix cp;
     RowData cda(this->col);
     Data da(this->row,cda);
+    static Matrix cp;
     cp.data=da;
     cp.col=this->col;
     cp.row=this->row;
@@ -134,45 +133,45 @@ Matrix Matrix::copyMatrix()
     {
         for(j=0; j<this->col; j++)
         {
-            cp.data[i][j]=this->data[i][j];
+            cp.data[i][j] = this->data[i][j];
         }
     }
     return cp;
 }
-Matrix Matrix::getOneRow(unsigned int iRow)
+Matrix& Matrix::getOneRow(const unsigned int &iRow)
 {
     //this->data(matrix.data.size());
     unsigned int j=0;
     RowData cda(col);
     Data da(1,cda);
-    Matrix matrix;
-    matrix.data=da;
-    matrix.col=col;
-    matrix.row=1;
-    for(j=0; j<this->data[iRow].size(); j++)
+    static Matrix one_row_matrix;
+    one_row_matrix.data = da;
+    one_row_matrix.col = col;
+    one_row_matrix.row = 1;
+    for(j=0; j < this->data[iRow].size(); j++)
     {
-        matrix.data[0][j]=this->data[iRow][j];
+        one_row_matrix.data[0][j]=this->data[iRow][j];
     }
 
-    return matrix;
+    return one_row_matrix;
 }
-Matrix Matrix::getOneCol(unsigned int jCol)
+Matrix& Matrix::getOneCol(const unsigned int &jCol)
 {
     unsigned int i=0;
     ColData cda(1);
     Data da(this->row,cda);
-    Matrix matrix;
-    matrix.data=da;
-    matrix.col=1;
-    matrix.row=row;
+    static Matrix one_col_matrix;
+    one_col_matrix.data=da;
+    one_col_matrix.col=1;
+    one_col_matrix.row=row;
     for(i=0; i<this->data.size(); i++)
     {
         //cout<<i<<"="<<this->data[i][jCol]<<endl;
-        matrix.data[i][0]=this->data[i][jCol];
+        one_col_matrix.data[i][0] = this->data[i][jCol];
     }
-    return matrix;
+    return one_col_matrix;
 }
-void Matrix::deleteOneRow(unsigned int iRow)
+void Matrix::deleteOneRow(const unsigned int &iRow)
 {
     unsigned int i=0;
     for(Data::iterator it=data.begin(); it!=data.end(); it++,i++)
@@ -184,39 +183,40 @@ void Matrix::deleteOneRow(unsigned int iRow)
     }
     this->row--;
 }
-void Matrix::deleteOneCol(unsigned int iCol)
+void Matrix::deleteOneCol(const unsigned int &iCol)
 {
 
     unsigned int i=0,j=0;
-    Matrix cp=this->copyMatrix();
+    Matrix cp = this->copyMatrix();
 
-    this->col--;
-    this->data.clear();
-    RowData cda(this->col);
-    Data da(this->row,cda);
-    this->data=da;
+    //this->col--;
+    //this->data.clear();
+    //RowData cda(this->col);
+    //Data da(this->row,cda);
+    //this->data=da;
 
     for(Data::iterator it=cp.data.begin(); it!=cp.data.end(); it++,i++)
     {
         j=0;
         for(vector<float>::iterator itRow=cp.data[i].begin(); itRow!=cp.data[i].end(); itRow++,j++)
         {
-            if(j<iCol)
+            if(j < iCol)
             {
                 this->data[i][j]=*itRow;
             }
-            if(j>iCol)
+            if(j > iCol)
             {
                 this->data[i][j-1]=*itRow;
             }
         }
 
     }
+    this->col--;
 }
-Matrix Matrix::transposeMatrix()//矩阵形式的转置
+Matrix& Matrix::transposeMatrix()//矩阵形式的转置
 {
     unsigned int i=0,j=0;
-    Matrix matrixT;
+    static Matrix matrixT;
     //cout<<col<<"&&&"<<row<<endl;
     //cout<<"ddd"<<endl;
     //ColData cda(row);
@@ -238,39 +238,39 @@ Matrix Matrix::transposeMatrix()//矩阵形式的转置
     {
         for(j=0; j<row; j++)
         {
-            matrixT.data[i][j]=data[j][i];
+            matrixT.data[i][j] =this->data[j][i];
         }
     }
     return matrixT;
 }
-Matrix Matrix::addMatrix(const Matrix &matrix1,const Matrix &matrix2)
+Matrix& Matrix::addMatrix(const Matrix &matrix1,const Matrix &matrix2)
 {
-    if(matrix1.col!=matrix2.col||matrix1.row!=matrix2.row)
+    if(matrix1.col != matrix2.col || matrix1.row != matrix2.row)
     {
         cout<<matrix1.row<<"*"<<matrix1.col<<endl;
         cout<<matrix2.row<<"*"<<matrix2.col<<endl;
         cout<<"addData data1 data2 is no"<<endl;
         exit(-1);
     }
+    unsigned int i,j;
     RowData cda(matrix1.col);
     Data da(matrix1.row,cda);
-    Matrix add;
+    static Matrix add;
     add.data=da;
     add.row=matrix1.row;
     add.col=matrix1.col;
-    unsigned int i,j;
     for(i=0; i<matrix1.row; i++)
     {
         for(j=0; j<matrix1.col; j++)
         {
-            add.data[i][j]=matrix1.data[i][j]+matrix2.data[i][j];
+            add.data[i][j] = matrix1.data[i][j] + matrix2.data[i][j];
         }
     }
 
     return add;
 }
 
-Matrix Matrix::subMatrix(const Matrix &matrix1,const Matrix &matrix2)
+Matrix& Matrix::subMatrix(const Matrix &matrix1,const Matrix &matrix2)
 {
     if(matrix1.col!=matrix2.col||matrix1.row!=matrix2.row)
     {
@@ -281,7 +281,7 @@ Matrix Matrix::subMatrix(const Matrix &matrix1,const Matrix &matrix2)
     }
     RowData cda(matrix1.col);
     Data da(matrix1.row,cda);
-    Matrix sub;
+    static Matrix sub;
     sub.data=da;
     sub.row=matrix1.row;
     sub.col=matrix1.col;
@@ -293,12 +293,11 @@ Matrix Matrix::subMatrix(const Matrix &matrix1,const Matrix &matrix2)
             sub.data[i][j]=matrix1.data[i][j]-matrix2.data[i][j];
         }
     }
-    cout<<"oooooook"<<endl;
     //delete this;
     return sub;
 }
 
-Matrix Matrix::multsMatrix(Matrix matrix1,Matrix matrix2)//矩阵形式的相乘
+Matrix& Matrix::multsMatrix(const Matrix &matrix1, const Matrix &matrix2)//矩阵形式的相乘
 {
     if(matrix1.col!=matrix2.row)
     {
@@ -307,8 +306,8 @@ Matrix Matrix::multsMatrix(Matrix matrix1,Matrix matrix2)//矩阵形式的相乘
         cout<<"multsData error"<<endl;
         exit(-1);
     }
-    unsigned int i,j,k;
-    Matrix mults;
+    unsigned int i = 0, j =0, k = 0;
+    static Matrix mults;
     ColData cda(matrix2.col);
     Data da(matrix1.row,cda);
     mults.data=da;
@@ -316,7 +315,6 @@ Matrix Matrix::multsMatrix(Matrix matrix1,Matrix matrix2)//矩阵形式的相乘
     mults.col=matrix2.col;
     //cout<<this->row<<"&&&&"<<this->col<<endl;
     //this->print();
-    cout<<"mullll"<<endl;
     for(i=0; i<matrix1.row; i++)
     {
         for(j=0; j<matrix2.col; j++)
@@ -325,7 +323,6 @@ Matrix Matrix::multsMatrix(Matrix matrix1,Matrix matrix2)//矩阵形式的相乘
             //this->data[i][j]=0;
         }
     }
-    cout<<"mmmmmm"<<endl;
     for(i=0; i<matrix1.row; i++)
     {
         for(j=0; j<matrix2.col; j++)
@@ -337,11 +334,10 @@ Matrix Matrix::multsMatrix(Matrix matrix1,Matrix matrix2)//矩阵形式的相乘
             }
         }
     }
-    cout<<"mulll_end"<<endl;
     return mults;
 }
 
-Matrix Matrix::dotmultsMatrix(Matrix matrix1,Matrix matrix2)//矩阵形式的相乘
+Matrix& Matrix::dotmultsMatrix(const Matrix &matrix1, const Matrix &matrix2)//矩阵形式的相乘
 {
     if(matrix1.row!=matrix2.row || matrix1.col!=matrix2.col)
     {
@@ -351,7 +347,7 @@ Matrix Matrix::dotmultsMatrix(Matrix matrix1,Matrix matrix2)//矩阵形式的相乘
         exit(-1);
     }
     unsigned int i,j;
-    Matrix dotmults;
+    static Matrix dotmults;
     ColData cda(matrix1.col);
     Data da(matrix1.row,cda);
     dotmults.data=da;
@@ -375,7 +371,7 @@ double Matrix::detMatrix()
         cout<<"Data det is no"<<endl;
         exit(-1);
     }
-    Matrix mCopy=*this;
+    Matrix mCopy = this->copyMatrix();
     double det=1;
     unsigned int i=0,j=0,k=0;
     double max=-9999999;
@@ -417,7 +413,7 @@ double Matrix::detMatrix()
     return det;
 }
 //高斯消元矩阵求逆,特别注意，LU分解不能进行行列式变换
-Matrix Matrix::niMatrix()
+Matrix& Matrix::niMatrix()
 {
     if(row!=col)
     {
@@ -431,11 +427,11 @@ Matrix Matrix::niMatrix()
     }
     unsigned int i=0,j=0,k=0;//这里存在-1的情况，务必定义为int型
     double temp;
-    Matrix mCopy=*this;
-    Matrix UMatrix=*this;
-    Matrix LMatrix=*this;
-    Matrix UniMatrix=*this;
-    Matrix LniMatrix=*this;
+    Matrix mCopy = this->copyMatrix();
+    Matrix UMatrix = this->copyMatrix();
+    Matrix LMatrix = this->copyMatrix();
+    Matrix UniMatrix = this->copyMatrix();
+    Matrix LniMatrix = this->copyMatrix();
     ColData cda(col);
     Data aij(row,cda);
     for(k=0; k<col-1; k++)//k表示第k次消元，一共需要n-1次
@@ -472,7 +468,7 @@ Matrix Matrix::niMatrix()
                 LMatrix.data[i][j]=0;
         }
     }
-    Matrix mults;
+    static Matrix mults;
     mults=*this;
     mults=mults.multsMatrix(LMatrix,UMatrix);
     Matrix LU=mults;

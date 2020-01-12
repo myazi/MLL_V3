@@ -133,15 +133,15 @@ int main()
 {
     
     int i;
-    trainDNN("data/train.txt");
-    //LineReg("data/lineReg.txt","regression",0.01,1);
+    //trainDNN("data/train.txt");
+    LineReg("data/lineReg.txt","regression",0.01,1);
     //LogReg("data/logReg.txt","gradAscent",0.01,1000);
     //LogReg("sample","gradAscent",0.001,5000);
     //LogReg("sample","gradAscent",0.01,1000);
-    //SoftMaxReg("data/logReg.txt","gradAscent",0.01,1000);
+    SoftMaxReg("data/logReg.txt","gradAscent",0.01,1000);
     //ME();
     //trainDNN();
-    //SVM(file);
+    //SVM("data/logReg.txt");
 
     //Bayes();
     //HMM();
