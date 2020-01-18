@@ -173,6 +173,37 @@ Matrix& Matrix::getOneCol(const unsigned int &jCol)
 }
 void Matrix::deleteOneRow(const unsigned int &iRow)
 {
+
+    unsigned int i=0,j=0;
+    Matrix cp = this->copyMatrix();
+
+    this->row--;
+    //this->data.clear();
+    //RowData cda(this->col);
+    //Data da(this->row,cda);
+    //this->data=da;
+
+    for(Data::iterator it=cp.data.begin(); it!=cp.data.end(); it++,i++)
+    {
+        if(i < iRow)
+		{
+			//for(vector<float>::iterator itRow=cp.data[i].begin(); itRow!=cp.data[i].end(); itRow++,j++)
+			for(vector<float>::iterator itRow = it->begin(); itRow != it->end(); itRow++)
+			{
+				this->data[i][j]=*itRow;
+			}
+		}
+		if(i > iRow)
+		{
+			for(vector<float>::iterator itRow = it->begin(); itRow != it->end(); itRow++)
+			{
+				this->data[i-1][j]=*itRow;
+			}
+		}
+    }
+}
+/*void Matrix::deleteOneRow(unsigned int iRow)
+{
     unsigned int i=0;
     for(Data::iterator it=data.begin(); it!=data.end(); it++,i++)
     {
@@ -182,6 +213,7 @@ void Matrix::deleteOneRow(const unsigned int &iRow)
         }
     }
     this->row--;
+<<<<<<< HEAD
 }
 void Matrix::deleteOneCol(const unsigned int &iCol)
 {
@@ -190,6 +222,15 @@ void Matrix::deleteOneCol(const unsigned int &iCol)
     Matrix cp = this->copyMatrix();
 
     //this->col--;
+=======
+}*/
+void Matrix::deleteOneCol(const unsigned int &iCol)
+{
+
+    unsigned int i=0,j=0;
+    Matrix cp=this->copyMatrix();
+
+    this->col--;
     //this->data.clear();
     //RowData cda(this->col);
     //Data da(this->row,cda);

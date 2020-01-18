@@ -57,10 +57,6 @@ namespace MLL{
             g->grad_Z.initMatrix(_sup_par.layer_n[L-k-1],_x.col,0,"ss");
             g->grad_W.initMatrix(_sup_par.layer_n[L-k-1],_sup_par.layer_n[L-k-2],0,"ss");
             g->grad_b.initMatrix(_sup_par.layer_n[L-k-1],1,0,"ss");
-            g->grad_A.print();
-            g->grad_Z.print();
-            g->grad_W.print();
-            g->grad_b.print();
 
             //用于momentum 和adam优化中用于保存前n次加权平均值
             g->V_dw.initMatrix(_sup_par.layer_n[L-k-1],_sup_par.layer_n[L-k-2],0,"ss");
@@ -113,7 +109,6 @@ namespace MLL{
         p->b.print();
         p->Z = p->W * p->A;
 
-        cout<<"zzz"<<p->Z.row<<"&&"<<p->Z.col<<endl;
         for(i=0; i<p->Z.row; i++) //矩阵与向量的相加，class中未写
         {
             for(j=0; j<p->Z.col; j++)
@@ -173,21 +168,16 @@ namespace MLL{
         int L=_sup_par.layer_dims;
         parameters *p = &_par;
         p->A = _x;
-        cout<<"model_sss"<<endl;
         for(i=0; i<L-1 && p->next!=NULL; i++)
         {
             line_active_forward(p,_sup_par.layer_active[i+1],keep_probs[i]);
             p=p->next;
-            cout<<"i="<<i<<endl;
         }
-        cout<<"model_fff"<<endl;
         return p->A;
     }
     void DNN::sigmoid_backword(parameters *p,grad *g)
     {
         int i=0,j=0;
-        cout<<g->grad_Z.row<<"&&"<<g->grad_Z.col<<endl;
-        cout<<p->A.row<<"&&"<<p->A.col<<endl;
         for(i=0; i<g->grad_A.row; i++)
         {
             for(j=0; j<g->grad_A.col; j++)
@@ -219,26 +209,8 @@ namespace MLL{
     void DNN::line_backword(parameters *p,grad *g, double keep_prob)
     {
         int i,j;
-        cout<<"2222222ssssssss"<<endl;
-        cout<<p->A.row<<"&&"<<p->A.col<<endl;
         Matrix AT = p->A.transposeMatrix();
-
-        cout<<g->grad_Z.row<<"&&"<<g->grad_Z.col<<endl;
-        cout<<g->grad_W.row<<"&&"<<g->grad_W.col<<endl;
-        //g->grad_W.print();
-        for(i=0; i<g->grad_W.row; i++)
-        {
-            cout<<"aaa"<<endl;
-            for(j=0; j<g->grad_W.col; j++)
-            {
-                cout<<"bbb"<<endl;
-                cout<<g->grad_W.data[i][j]<<"  ";
-            }
-            cout<<endl;
-        }
-        //g->grad_W = g->grad_W.multsMatrix(g->grad_Z,AT);
-        //g->grad_W.multsMatrix(g->grad_Z,AT);
-        cout<<"2222222ssssssss"<<endl;
+        g->grad_W = g->grad_W.multsMatrix(g->grad_Z,AT);
         if(_lambd!=0)
         {
             for(i=0; i<p->W.row; i++)
@@ -249,7 +221,6 @@ namespace MLL{
                 }
             }
         }
-        cout<<"sss111111sssss"<<endl;
         for(i=0; i<g->grad_W.row; i++)
         {
             for(j=0; j<g->grad_W.col; j++)
@@ -266,19 +237,15 @@ namespace MLL{
             }
             g->grad_b.data[i][0]/=g->grad_Z.col;
         }
-        cout<<"ssssssss"<<endl;
         Matrix WT = p->W.transposeMatrix();
         g->pre->grad_A = g->pre->grad_A.multsMatrix(WT,g->grad_Z);
-        if(keep_prob!=1)
+		if(keep_prob!=1)
         {
             //这里p指向的D与对应A的dropout层，而等于1的情况下，D是只有初始化，无关赋值，所以对应dropout关系是正确的
             //cout<<p->D.col<<"&"<<p->D.row<<endl;
             //cout<<g->pre->grad_A.col<<"&"<<g->pre->grad_A.row<<endl;
 
             g->pre->grad_A = g->pre->grad_A.multsMatrix(g->pre->grad_A,p->D);//由于keep_prob扩充已经放到D上了
-
-            //p->D.print(p->next->D);
-            //cin>>i;
         }
         //AT.clear();
         //WT.clear();
@@ -286,6 +253,7 @@ namespace MLL{
 
     void DNN::line_active_backword(parameters *p,grad *g,string active, double keep_prob)
     {
+		cout<<"active_backword_start"<<endl;
         if(active=="sigmoid")
         {
             sigmoid_backword(p,g);
@@ -294,10 +262,9 @@ namespace MLL{
         {
             relu_backword(p,g);
         }
-        g->grad_Z.print();
-        cout<<active<<endl;
-        cout<<"active_end"<<endl;
+		cout<<"line_backword_start"<<endl;
         line_backword(p->pre,g,keep_prob);
+
     }
     void DNN::model_backword(Matrix AL,double *keep_probs)
     {
@@ -311,36 +278,10 @@ namespace MLL{
         }
         grad *g = &_gra;
 
-        for(i=0; i<g->grad_b.row; i++)
-        {
-            for(j=0; j<g->grad_b.col; j++)
-            {
-                cout<<g->grad_b.data[i][j]<<" aaa ";
-            }
-            cout<<endl;
-        }
-        for(i=0; i<g->grad_Z.row; i++)
-        {
-            for(j=0; j<g->grad_Z.col; j++)
-            {
-                cout<<g->grad_Z.data[i][j]<<" zzz ";
-            }
-            cout<<endl;
-        }
-        
-        for(i=0; i<g->grad_W.row; i++)
-        {
-            for(j=0; j<g->grad_W.col; j++)
-            {
-                cout<<g->grad_W.data[i][j]<<" www ";
-            }
-            cout<<endl;
-        }
         for(i=0; i< _y.col; i++)
         {
             _gra.grad_A.data[0][i]=-(_y.data[0][i]/AL.data[0][i]-(1 - _y.data[0][i])/(1-AL.data[0][i]));
         }
-        cout<<"gra_al"<<endl;
         for(i=L-1; i>0; i--)
         {
             line_active_backword(p,g,_sup_par.layer_active[i],keep_probs[i]);
@@ -376,7 +317,6 @@ namespace MLL{
             loss+=-(_y.data[0][i]*log(AL.data[0][i])+(1 - _y.data[0][i])*log(1-AL.data[0][i]));
         }
         loss/=m;
-        cout<<"lossm:"<<m<<endl;
         //loss+=loss_L2_regularization;
         return loss;
     }
@@ -516,9 +456,7 @@ namespace MLL{
         {
             keep_probs[k]=1;
         }
-        cout<<"strat_forward"<<endl;
-        //AL=model_forward(keep_probs);
-        cout<<"pp_forward"<<endl;
+        AL=model_forward(keep_probs);
         for(i=0;i<_y.col;i++)
         {
             if(AL.data[0][i]>0.5)
@@ -550,7 +488,7 @@ namespace MLL{
        
         //_x = _x.transposeMatrix();
         
-        _y= _x.getOneRow(_x.row-1);
+        _y = _x.getOneRow(_x.row-1);
         _y.print();
         _x.deleteOneRow(_x.row-1);
         //_y=one_hot(_y,2);
@@ -571,7 +509,7 @@ namespace MLL{
          
         int i=0,k=0;
         int lay_dim=3;
-        int lay_n[3]= {2,3,1};
+        int lay_n[3]= {500,3,1};
         lay_n[0]=_x.row;
         string lay_active[3]= {"relu","relu","sigmoid"};
         _sup_par.layer_dims=lay_dim;
@@ -586,7 +524,7 @@ namespace MLL{
         //Matrix AL(_y.row,_y.col,0,"ss");
         Matrix AL(1,_y.col,0,"ss");
         double *keep_probs;
-        keep_probs=new double (_sup_par.layer_dims);
+        keep_probs=new double [_sup_par.layer_dims];
         if(keep_prob==1)
         {
             for(k=0;k < _sup_par.layer_dims;k++)
@@ -612,7 +550,6 @@ namespace MLL{
         {
             cout<<"-----------forward------------"<<"i="<<i<<endl;
             AL=model_forward(keep_probs);
-            cout<<"AL"<<AL.row<<"&&"<<AL.col<<endl;
             cout<<"-----------loss--------------"<<endl;
             loss=cost_cumpter(AL);
             if(i%100==0)
