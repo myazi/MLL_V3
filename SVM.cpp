@@ -34,7 +34,7 @@ namespace MLL
     /**
     结构体OS的初始化，用于保存所以SMO算法中需要用到的参数
     */
-    SVM::SVM(const char *file, const double C, const double soft, const double b, const int iter,kTup ktup)
+    SVM::SVM(const string &file, const double C, const double soft, const double b, const int iter,kTup ktup)
     {
         cout<<"loadData:"<< file<<endl;
         cout<<"----------------------"<<endl;

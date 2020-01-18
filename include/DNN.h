@@ -116,7 +116,7 @@ namespace MLL{
 
             int predict();
         public:
-            DNN(const char *file, const char *optimizer,double learn_rateing,const char *initialization, double lambd, double keep_prob, \
+            DNN(const string &file, const char *optimizer,double learn_rateing,const char *initialization, double lambd, double keep_prob, \
                 int mini_batch_size,double beta1, double beta2, double epsilon, int iter, bool _print_cost);
 
     typedef std::shared_ptr<DNN> DNNPtr;

@@ -1,5 +1,4 @@
 #include <LoadData.h>
-
 /**
 加载数值型样本数据
 */
@@ -11,7 +10,7 @@ typedef std::vector<std::vector<std::string> > DataStr;  //定义为模板
 typedef std::vector<std::string> RowDataStr;
 typedef std::vector<std::string> ColDataStr;
 
-void LoadDataNum_spare(Data &data, const char *infile)
+void LoadDataNum_spare(Data &data, const std::string &infile)
 {
     std::cout<< "data filename is:"<< infile<<std::endl;
     std::ifstream dataFile;
@@ -48,7 +47,7 @@ void LoadDataNum_spare(Data &data, const char *infile)
     }
     dataFile.close();
 }
-void LoadDataTest(Data &data, const char *infile)
+void LoadDataTest(Data &data, const std::string &infile)
 {
     std::cout<< "data filename is:"<< infile<<std::endl;
     std::ifstream dataFile(infile);
@@ -80,7 +79,7 @@ void LoadDataTest(Data &data, const char *infile)
 
     dataFile.close();
 }
-void LoadDataNum(Data &data, const char *infile)
+void LoadDataNum(Data &data, const std::string &infile)
 {
     std::cout<< "data filename is:"<< infile<<std::endl;
     std::ifstream dataFile;
@@ -109,7 +108,7 @@ void LoadDataNum(Data &data, const char *infile)
     }
     dataFile.close();
 }
-void LoadDataStr(DataStr &data, const char *infile)
+void LoadDataStr(DataStr &data, const std::string &infile)
 {
     std::cout<< "data filename is:"<< infile<<std::endl;
     std::ifstream dataFile;
@@ -136,7 +135,7 @@ void LoadDataStr(DataStr &data, const char *infile)
     }
     dataFile.close();
 }
-void LoadDataStr(RowDataStr &data, const char *infile)
+void LoadDataStr(RowDataStr &data, const std::string &infile)
 {
     std::cout<< "data filename is:"<< infile<<std::endl;
     std::ifstream dataFile;

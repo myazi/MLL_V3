@@ -1,6 +1,6 @@
 #include <MatrixOpe.h>
 #include <stdlib.h>
-Matrix operator+(Matrix matrix1,Matrix matrix2)
+Matrix operator+(const Matrix &matrix1, const Matrix &matrix2)
 {
     if(matrix1.col!=matrix2.col||matrix1.row!=matrix2.row)
     {
@@ -11,7 +11,7 @@ Matrix operator+(Matrix matrix1,Matrix matrix2)
     }
     RowData cda(matrix1.col);
     Data da(matrix1.row,cda);
-    Matrix add;
+    static Matrix add;
     add.data=da;
     add.row=matrix1.row;
     add.col=matrix1.col;
@@ -25,7 +25,7 @@ Matrix operator+(Matrix matrix1,Matrix matrix2)
     }
     return add;
 }
-Matrix operator-(Matrix matrix1,Matrix matrix2)
+Matrix operator-(const Matrix &matrix1, const Matrix &matrix2)
 {
     if(matrix1.col!=matrix2.col||matrix1.row!=matrix2.row)
     {
@@ -36,7 +36,7 @@ Matrix operator-(Matrix matrix1,Matrix matrix2)
     }
     RowData cda(matrix1.col);
     Data da(matrix1.row,cda);
-    Matrix sub;
+    static Matrix sub;
     sub.data=da;
     sub.row=matrix1.row;
     sub.col=matrix1.col;
@@ -50,7 +50,7 @@ Matrix operator-(Matrix matrix1,Matrix matrix2)
     }
     return sub;
 }
-Matrix operator*(Matrix matrix1,Matrix matrix2)
+Matrix operator*(const Matrix &matrix1, const Matrix &matrix2)
 {
     if(matrix1.col!=matrix2.row)
     {
@@ -60,7 +60,7 @@ Matrix operator*(Matrix matrix1,Matrix matrix2)
         exit(-1);
     }
     unsigned int i,j,k;
-    Matrix mults;
+    static Matrix mults;
     ColData cda(matrix2.col);
     Data da(matrix1.row,cda);
     mults.data=da;
@@ -85,10 +85,10 @@ Matrix operator*(Matrix matrix1,Matrix matrix2)
     }
     return mults;
 }
-Matrix operator*(double alpha,Matrix matrix1)
+Matrix operator*(const double &alpha, const Matrix &matrix1)
 {
     unsigned int i,j;
-    Matrix mults;
+    static Matrix mults;
     ColData cda(matrix1.col);
     Data da(matrix1.row,cda);
     mults.data=da;
@@ -102,10 +102,10 @@ Matrix operator*(double alpha,Matrix matrix1)
     }
     return mults;
 }
-Matrix operator/(Matrix matrix1 ,double alpha)
+Matrix operator/(const Matrix &matrix1 , const double &alpha)
 {
     unsigned int i,j;
-    Matrix mults;
+    static Matrix mults;
     ColData cda(matrix1.col);
     Data da(matrix1.row,cda);
     mults.data=da;
@@ -119,28 +119,35 @@ Matrix operator/(Matrix matrix1 ,double alpha)
     }
     return mults;
 }
-Matrix sigmoid(Matrix z)
+/*
+Matrix sigmoid(Matrix &z)
 {
+    static Matrix zz;
+    ColData cda(z.col);
+    Data da(z.row,cda);
+    zz.data=da;
+    zz.row=z.row;
+    zz.col=z.col;
 
     for(size_t i=0;i<z.row;i++)
     {
         for(size_t j=0;j<z.col;j++)
         {
-            z.data[i][j]=1.0/(1+exp(-z.data[i][j]));
+            zz.data[i][j]=1.0/(1+exp(-z.data[i][j]));
         }
     }
-    return z;
+    return zz;
 }
-float sigmoid(float z)
+float sigmoid(const float &z)
 {
     return 1.0/(1+exp(-z));
 }
-
-Matrix one_hot(Matrix Y, int C)
+*/
+Matrix one_hot(const Matrix &Y, const int &C)
 {
     if(Y.row > Y.col)
     {
-        Matrix one_hot_Y(Y.row,C,0,"ss");
+        static Matrix one_hot_Y(Y.row,C,0,"ss");
         int i=0;
         for(i=0;i<one_hot_Y.row;i++)
         {
@@ -150,7 +157,7 @@ Matrix one_hot(Matrix Y, int C)
     }
     else
     {
-        Matrix one_hot_Y(C,Y.col,0,"ss");
+        static Matrix one_hot_Y(C,Y.col,0,"ss");
         int j=0;
         for(j=0;j<one_hot_Y.col;j++)
         {

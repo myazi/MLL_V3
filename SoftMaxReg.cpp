@@ -26,7 +26,7 @@ namespace MLL {
                 zRowSum.data[i][0]=0;
                 for(j=0;j<z.col;j++)
                 {
-                    z.data[i][j]=sigmoid(z.data[i][j]);
+                    sigmoid(&z.data[i][j]);
                     zRowSum.data[i][0]+=z.data[i][j];//求和
                 }
                 for(j=0;j<z.col;j++)
@@ -93,7 +93,7 @@ namespace MLL {
                 zRowSum=0;
                 for(j=0;j<z.col;j++)
                 {
-                    z.data[0][j]=sigmoid(z.data[0][j]);
+                    sigmoid(&z.data[0][j]);
                     zRowSum+=z.data[0][j];//求和
                 }
                 for(j=0;j<z.col;j++)
@@ -136,7 +136,7 @@ namespace MLL {
         }
     }
 
-    SoftMaxReg::SoftMaxReg(const char *file, const string &model, const double &alpha, const int &iter)
+    SoftMaxReg::SoftMaxReg(const string &file, const string &model, const double &alpha, const int &iter)
     {
         cout<<"loadData"<<endl;
         cout<<"----------------------"<<endl;

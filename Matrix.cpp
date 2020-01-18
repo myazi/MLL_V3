@@ -84,7 +84,7 @@ void Matrix::initMatrix(const unsigned int &row, const unsigned int &col,const f
         }
     }
 }
-void Matrix::LoadData_spare(const char *filename, const unsigned int &row, const unsigned int &col)
+void Matrix::LoadData_spare(const string &filename, const unsigned int &row, const unsigned int &col)
 {
 	RowData cda(col);
 	Data da(row,cda);
@@ -101,7 +101,7 @@ void Matrix::LoadData_spare(const char *filename, const unsigned int &row, const
 	}
     LoadDataNum_spare(this->data, filename);
 }
-void Matrix::LoadData(const char *filename)
+void Matrix::LoadData(const string &filename)
 {
     LoadDataNum(this->data,filename);
     row=data.size();

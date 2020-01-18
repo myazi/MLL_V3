@@ -13,7 +13,7 @@ namespace MLL{
             double _k = 1;//
             enum moedl {gradAscent, stoGradAscent};
         public:
-            LineReg(const char *file, const string &model,const double &lamd, const double &k);
+            LineReg(const string &file, const string &model,const double &lamd, const double &k);
             int regression();
             int ridgeRegres();
             int lwlrtest();

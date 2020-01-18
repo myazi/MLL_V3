@@ -15,9 +15,9 @@ public:
 
     void initMatrix(const unsigned int &row, const unsigned int &col, const float &init_val, const string &type);
 
-    void LoadData(const char *filename);
+    void LoadData(const string &filename);
 
-	void LoadData_spare(const char *filename, const unsigned int &row, const unsigned int &col);
+	void LoadData_spare(const string &filename, const unsigned int &row, const unsigned int &col);
     
 	void print();
 

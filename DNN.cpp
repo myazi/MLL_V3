@@ -106,9 +106,9 @@ namespace MLL{
             p->A = p->A * p->D;
         }
         cout<<"zzz"<<p->Z.row<<"&&"<<p->Z.col<<endl;
-        cout<<"zzz"<<p->W.row<<"&&"<<p->W.col<<endl;
-        cout<<"zzz"<<p->A.row<<"&&"<<p->A.col<<endl;
-        cout<<"zzz"<<p->b.row<<"&&"<<p->b.col<<endl;
+        cout<<"www"<<p->W.row<<"&&"<<p->W.col<<endl;
+        cout<<"aaa"<<p->A.row<<"&&"<<p->A.col<<endl;
+        cout<<"bbb"<<p->b.row<<"&&"<<p->b.col<<endl;
         p->Z.print();
         p->b.print();
         p->Z = p->W * p->A;
@@ -156,9 +156,7 @@ namespace MLL{
 
     void DNN::line_active_forward(parameters *p,string active, double keep_prob)
     {
-        cout<<"ffffff"<<endl;
         line_forward(p,keep_prob);
-        cout<<"dddddddd"<<endl;
         if(active=="relu")
         {
             relu_forward(p);
@@ -539,7 +537,7 @@ namespace MLL{
         return 0;
     }
 
-    DNN::DNN(const char *file, const char *optimizer,double learn_rateing,const char *initialization, double lambd, double keep_prob, \
+    DNN::DNN(const string &file, const char *optimizer,double learn_rateing,const char *initialization, double lambd, double keep_prob, \
             int mini_batch_size,double beta1, double beta2, double epsilon, int iter, bool print_cost)
     {
         /**
@@ -573,7 +571,7 @@ namespace MLL{
          
         int i=0,k=0;
         int lay_dim=3;
-        int lay_n[3]= {500,7,1};
+        int lay_n[3]= {2,3,1};
         lay_n[0]=_x.row;
         string lay_active[3]= {"relu","relu","sigmoid"};
         _sup_par.layer_dims=lay_dim;

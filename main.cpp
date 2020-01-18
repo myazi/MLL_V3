@@ -23,14 +23,20 @@
 #include "Hash.h"//
 */
 #include <iostream>
-int LogReg(const char *file, const std::string &model, const double &alpha, const int &iter)
+int LogReg(const char *file = "logReg.txt")
 {
+    string path_file = "data/";
+    path_file.append(file);
+    string model = "gradAscent";
+    double alpha = 0.001;
+    double iter = 10000;
     /**
     file: data/logReg.txt
     *file: d
     **/
     ///test
-    MLL::LogReg::LogRegPtr logreg = std::make_shared<MLL::LogReg>(file,model,alpha,iter);
+
+    MLL::LogReg::LogRegPtr logreg = std::make_shared<MLL::LogReg>(path_file,model,alpha,iter);
     //MLL::LogReg::LogRegPtr logreg(new MLL::LogReg(file,model,alpha,iter));
     if(model=="gradAscent")
         logreg->gradAscent_Log();
@@ -69,9 +75,14 @@ int LogReg(const char *file, const std::string &model, const double &alpha, cons
 	cout<<"er2="<<er2<<endl;
     return 0;
 }
-int SoftMaxReg(const char *file, const std::string &model,const double &alpha, const int &iter)
+int SoftMaxReg(const char *file = "logReg.txt")
 {
-    MLL::SoftMaxReg::SoftMaxRegPtr softmaxreg = std::make_shared<MLL::SoftMaxReg>(file,model,alpha,iter);
+    string path_file = "data/";
+    path_file.append(file);
+    string model = "gradAscent";
+    double alpha = 0.001;
+    double iter = 100;
+    MLL::SoftMaxReg::SoftMaxRegPtr softmaxreg = std::make_shared<MLL::SoftMaxReg>(path_file,model,alpha,iter);
     //MLL::LogReg::LogRegPtr logreg(new MLL::LogReg(file,model,alpha,iter));
     if(model=="gradAscent")
         softmaxreg->gradAscent_SoftMax();
@@ -81,9 +92,14 @@ int SoftMaxReg(const char *file, const std::string &model,const double &alpha, c
     return 0;
 
 }
-int LineReg(const char *file, const string &model, const double &lamd, const double &k)
+int LineReg(const char *file = "lineReg.txt")
 {
-    MLL::LineReg::LineRegPtr linereg = std::make_shared<MLL::LineReg>(file,model,lamd,k);
+    string path_file = "data/";
+    path_file.append(file);
+    string model = "regression";
+    double lamd = 0.001;
+    double k = 100;
+    MLL::LineReg::LineRegPtr linereg = std::make_shared<MLL::LineReg>(path_file,model,lamd,k);
     if(model=="regression")
     {
         linereg->regression();
@@ -98,7 +114,10 @@ int LineReg(const char *file, const string &model, const double &lamd, const dou
     }
     return 0;
 }
-int trainDNN(const char *file){
+int trainDNN(const char *file = "logReg.txt")
+{
+    string path_file = "data/";
+    path_file.append(file);
     const char *initialization="he";
     double learn_rateing=0.1;
     int iter=1000;
@@ -112,12 +131,14 @@ int trainDNN(const char *file){
     double epsilon=0.00000001;
 
     //MLL::DNN::DNNPtr dnn = std::make_shared<MLL::DNN>(DNN(file,optimizer="gd",learn_rateing=0.001,initialization="he",lambd=0.001,keep_prob = 1,mini_batch_size=64,beta1=0.9, beta2=0.999, epsilon=0.00000001, iter=5000, print_cost=true);
-    MLL::DNN::DNNPtr dnn = std::make_shared<MLL::DNN>(file,"gd",0.1,"he",0.01,1,64,0.9, 0.999, 0.0000001, 500, true);
+    MLL::DNN::DNNPtr dnn = std::make_shared<MLL::DNN>(path_file,"gd",0.1,"he",0.01,1,64,0.9, 0.999, 0.0000001, 500, true);
     //dnn->predict(dnn->_x,dnn->_y);
     return 0;
 }
-int SVM(const char *file)
+int SVM(const char *file = "logReg.txt")
 {
+    string path_file = "data/";
+    path_file.append(file);
     double C = 0.6;
     double soft = 0.001;
     double b = 0;
@@ -125,20 +146,42 @@ int SVM(const char *file)
     MLL::kTup ktup;//核函数的定义，其中type元素为0表示不适用核函数，非0分别对应不同的核函数
     ktup.type=1;
     ktup.arg=1.0;
-    MLL::SVM::SVMPtr svm = std::make_shared<MLL::SVM>(file,C,soft,b,iter,ktup);//
+    MLL::SVM::SVMPtr svm = std::make_shared<MLL::SVM>(path_file,C,soft,b,iter,ktup);//
     svm->smoP();
     return 0;
 }
-int main()
+int main(int argc, char* argv[])
 {
     
-    int i;
+    string models[5] ={"LineReg","LogReg","SoftMaxReg","DNN","SVM"};
+    vector<string> models_pos(models, models + 5); 
+    const int (*models_list[])(const char *file) = {LineReg, LogReg,SoftMaxReg,trainDNN,SVM};
+    const int (*models_ptr) (const char *file);
+    if(argc != 3)
+    {
+        cout<<"arg is error"<<endl;
+        return -1;
+    }
+    string type = argv[1];
+    char *file_name = argv[2];
+    cout<< type  << endl;
+    //int pos = 1;//logreg
+    for(int i = 0; i < models_pos.size(); i++)
+    {
+        cout<< models_pos[i] << endl;
+        if(type == models_pos[i])
+        {
+            models_ptr = models_list[i];
+            int ret = models_ptr(file_name);
+            return ret;
+        }
+    }
     //trainDNN("data/train.txt");
-    LineReg("data/lineReg.txt","regression",0.01,1);
+    //LineReg("data/lineReg.txt","regression",0.01,1);
     //LogReg("data/logReg.txt","gradAscent",0.01,1000);
     //LogReg("sample","gradAscent",0.001,5000);
     //LogReg("sample","gradAscent",0.01,1000);
-    SoftMaxReg("data/logReg.txt","gradAscent",0.01,1000);
+    //SoftMaxReg("data/logReg.txt","gradAscent",0.01,1000);
     //ME();
     //trainDNN();
     //SVM("data/logReg.txt");
