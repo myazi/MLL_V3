@@ -2,21 +2,33 @@
 #define MatrixOpe_H
 #include "Matrix.h"
 
-Matrix operator+(Matrix matrix1,Matrix matrix2);
+Matrix operator+(const Matrix &matrix1, const Matrix &matrix2);
 
-Matrix operator-(Matrix matrix1,Matrix matrix2);
+Matrix operator-(const Matrix &matrix1, const Matrix &matrix2);
 
-Matrix operator*(Matrix matrix1,Matrix matrix2);
+Matrix operator*(const Matrix &matrix1, const Matrix &matrix2);
 
-Matrix operator*(double alpha,Matrix matrix1);
+Matrix operator*(const double &alpha, const Matrix &matrix1);
 
-Matrix operator/(Matrix matrix1 ,double alpha);
+Matrix operator/(const Matrix &matrix1 , const double &alpha);
 
-float sigmoid(float z);
+inline void sigmoid(float *z)
+{
+    *z = 1.0 / (1.0 + exp(-*z));       
+}
 
-Matrix sigmoid(Matrix z);
+inline void sigmoid(Matrix *z)
+{
+    for(size_t i=0;i<z->row;i++)
+    {
+        for(size_t j=0;j<z->col;j++)
+        {
+            z->data[i][j]=1.0 / (1.0 + exp(- z->data[i][j]));
+        }
+    }
+}
 
-Matrix one_hot(Matrix Y, int C);
+Matrix one_hot(const Matrix &Y, const int &C);
 
 //print 
 

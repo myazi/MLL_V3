@@ -49,7 +49,7 @@ namespace MLL
 			vector<int> Classify(const int &axis, const double &threshVal, const string &threshIneq);
 			Stump buildStump(vector<double> &weight);
 			int AdaboostTrainDS();
-			Adaboost(const char *filename, const int &numIt);
+			Adaboost(const string &filename, const int &numIt);
 			typedef std::shared_ptr<Adaboost> AdaboostPtr;
 	};
 }

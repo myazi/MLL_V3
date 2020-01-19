@@ -281,7 +281,7 @@ namespace MLL {
 		return 0;
 	}
 
-	DTree::DTree(const char *file, const string &type)
+	DTree::DTree(const string &file, const string &type)
 	{
 		LoadDataStr(data,file);
 		for(unsigned int i=0;i<data[0].size();i++)

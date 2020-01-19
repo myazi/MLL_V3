@@ -14,27 +14,6 @@
 #include "CART.h"
 #define MAX 1000000000
 
-/*
-struct twoSubData_C
-{
-    Data left;
-    Data right;
-};
-struct split_C
-{
-    int bestIndex;//表示最好的分类属性，当非叶子节点时，即表示分裂属性下标，否则为-1，表示为叶子节点标记
-    double value;//若为分裂节点，则表示分裂阈值，否则为叶子节点，用来记录叶子节点的均值
-};
-typedef struct bitnode
-{
-    struct bitnode *left;//小于等于阈值的左子树
-    struct bitnode *right;//大于阈值的右子树
-    int feature;//只有非叶子节点才有分裂属性，叶子节点feature=-1
-    double meanValue;//如果是叶子节点为值型,非叶子节点为阈值
-    Data data;//每颗树都存储了该树下的数据
-    bitnode():left(NULL),right(NULL),feature(-1),meanValue(0),data() {};
-} bitnode,*bitree;
-*/
 namespace MLL
 {
 	CART::twoSubData_C CART::binSplitDataSet(const Data &data,const int &axis,const double &value)

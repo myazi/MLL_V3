@@ -101,6 +101,12 @@ namespace MLL{
             }
             p->A = p->A * p->D;
         }
+        cout<<"zzz"<<p->Z.row<<"&&"<<p->Z.col<<endl;
+        cout<<"www"<<p->W.row<<"&&"<<p->W.col<<endl;
+        cout<<"aaa"<<p->A.row<<"&&"<<p->A.col<<endl;
+        cout<<"bbb"<<p->b.row<<"&&"<<p->b.col<<endl;
+        p->Z.print();
+        p->b.print();
         p->Z = p->W * p->A;
 
         for(i=0; i<p->Z.row; i++) //矩阵与向量的相加，class中未写
@@ -469,7 +475,7 @@ namespace MLL{
         return 0;
     }
 
-    DNN::DNN(const char *file, const char *optimizer,double learn_rateing,const char *initialization, double lambd, double keep_prob, \
+    DNN::DNN(const string &file, const char *optimizer,double learn_rateing,const char *initialization, double lambd, double keep_prob, \
             int mini_batch_size,double beta1, double beta2, double epsilon, int iter, bool print_cost)
     {
         /**

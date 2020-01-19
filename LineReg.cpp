@@ -122,7 +122,7 @@ namespace MLL{
         return 0;
     }
 
-    LineReg::LineReg(const char *file, const string &model, const double &lamd, const double &k)
+    LineReg::LineReg(const string &file, const string &model, const double &lamd, const double &k)
     {
         cout<<"loadData"<<endl;
         cout<<"----------------------"<<endl;

@@ -2,8 +2,6 @@
 namespace MLL
 {
 	/*
-    ///加载数据文件保存到对象dtm的矩阵元素中
-
     ///通过矩阵对象中的load函数初始化样本的特征和类别矩阵x,y
     //char file[20]="data\\svm.txt";
     Matrix x;
@@ -35,7 +33,7 @@ namespace MLL
     /**
     结构体OS的初始化，用于保存所以SMO算法中需要用到的参数
     */
-    SVM::SVM(const char *file, const double C, const double soft, const double b, const int iter,kTup ktup)
+    SVM::SVM(const string &file, const double C, const double soft, const double b, const int iter,kTup ktup)
     {
         cout<<"loadData:"<< file<<endl;
         cout<<"----------------------"<<endl;

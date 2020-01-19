@@ -27,7 +27,7 @@ namespace MLL {
             z = _x * weights;
             for(i = 0; i < z.row; i++)
             {
-                z.data[i][0]=sigmoid(z.data[i][0]);
+                sigmoid(&z.data[i][0]);
             }
             z = _y - z ;
            for(i = 0; i < z.row; i++)
@@ -131,8 +131,8 @@ namespace MLL {
             {
                 xOneRow=_x.getOneRow(i);///随机选择一个样本点，这里没有作随机选择，而是按序选择
                 z = xOneRow * weights;
-                z.data[0][0]=sigmoid(z.data[0][0]);
-                z.data[0][0]=_y.data[i][0]-z.data[0][0];
+               sigmoid(&z.data[i][0]);
+                z.data[i][0]=_y.data[i][0]-z.data[i][0];
                 xOneRowT = xOneRow.transposeMatrix();
                 grad = xOneRowT * z;///根据一样样本的预测误差来确定负梯度方向
                 for(j=0; j<grad.row; j++)
@@ -155,7 +155,7 @@ namespace MLL {
             }
         }
     }
-    LogReg::LogReg(const char *file, const string &model, const double alpha,const int iter)
+    LogReg::LogReg(const string &file, const string &model, const double alpha,const int iter)
     {
         cout<<"loadData:"<< file<<endl;
         cout<<"----------------------"<<endl;

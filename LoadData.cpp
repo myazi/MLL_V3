@@ -1,5 +1,4 @@
 #include <LoadData.h>
-
 /**
 加载数值型样本数据
 */
@@ -11,9 +10,9 @@ typedef std::vector<std::vector<std::string> > DataStr;  //定义为模板
 typedef std::vector<std::string> RowDataStr;
 typedef std::vector<std::string> ColDataStr;
 
-void LoadDataNum_spare(Data &data, const char *infile)
+void LoadDataNum_spare(Data &data, const std::string &infile)
 {
-    std::cout<<infile<<std::endl;
+    std::cout<< "data filename is:"<< infile<<std::endl;
     std::ifstream dataFile;
     dataFile.open(infile);
     std::string tmpstrline;
@@ -22,7 +21,6 @@ void LoadDataNum_spare(Data &data, const char *infile)
 	int index = 0;
     double val = 0;
     RowData rowData;
-    std::cout<<"ff"<<std::endl;
 	int i = 0;
     if(dataFile)
     {
@@ -49,17 +47,16 @@ void LoadDataNum_spare(Data &data, const char *infile)
     }
     dataFile.close();
 }
-void LoadDataNum(Data &data, const char *infile)
+void LoadDataTest(Data &data, const std::string &infile)
 {
-    std::cout<<infile<<std::endl;
-    std::ifstream dataFile;
-    dataFile.open(infile);
+    std::cout<< "data filename is:"<< infile<<std::endl;
+    std::ifstream dataFile(infile);
     std::string tmpstrline;
     float val;
     RowData rowData;
-    std::cout<<"ff"<<std::endl;
     if(dataFile)
     {
+        //while(dataFile>>)
         while(!dataFile.eof())
         {
             getline(dataFile,tmpstrline,'\n');//读取文件中一行的数据，保存为string类型
@@ -75,11 +72,45 @@ void LoadDataNum(Data &data, const char *infile)
             rowData.clear();
         }
     }
+    else
+    {
+        std::cerr<< "data file open fail"<<std::endl;
+    }
+
     dataFile.close();
 }
-void LoadDataStr(DataStr &data, const char *infile)
+void LoadDataNum(Data &data, const std::string &infile)
 {
-    std::cout<<infile<<std::endl;
+    std::cout<< "data filename is:"<< infile<<std::endl;
+    std::ifstream dataFile;
+    dataFile.open(infile);
+    std::string tmpstrline;
+    float val;
+    RowData rowData;
+    if(dataFile)
+    {
+        while(!dataFile.eof())
+        {
+            getline(dataFile,tmpstrline,'\n');//读取文件中一行的数据，保存为string类型
+            //char buffer[256];
+            //dataFile.getline(buffer,100);//读取文件中一行的数据，保存为string类型
+            std::stringstream input(tmpstrline);
+            if(tmpstrline!="\0")
+            {
+                while(input>>val)
+                {
+                    rowData.push_back(val);
+                }
+                data.push_back(rowData);
+            }
+            rowData.clear();
+        }
+    }
+    dataFile.close();
+}
+void LoadDataStr(DataStr &data, const std::string &infile)
+{
+    std::cout<< "data filename is:"<< infile<<std::endl;
     std::ifstream dataFile;
     dataFile.open(infile);
     std::string tmpstrline;
@@ -104,9 +135,9 @@ void LoadDataStr(DataStr &data, const char *infile)
     }
     dataFile.close();
 }
-void LoadDataStr(RowDataStr &data, const char *infile)
+void LoadDataStr(RowDataStr &data, const std::string &infile)
 {
-    std::cout<<infile<<std::endl;
+    std::cout<< "data filename is:"<< infile<<std::endl;
     std::ifstream dataFile;
     dataFile.open(infile);
     std::string tmpstrline;

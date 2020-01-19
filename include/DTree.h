@@ -46,7 +46,7 @@ namespace MLL {
 
 			int createTree();
 
-			DTree(const char *file, const string &type);
+			DTree(const string &file, const string &type);
 			
 			typedef std::shared_ptr<DTree> DTreePtr;
 	};

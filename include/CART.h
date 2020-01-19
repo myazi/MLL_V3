@@ -11,7 +11,7 @@
 **/
 
 #include "MatrixOpe.h"
-
+#include <memory>
 namespace MLL
 {
 	class CART
@@ -35,25 +35,25 @@ namespace MLL
 			Data data;//每颗树都存储了该树下的数据
 			bitnode():left(NULL),right(NULL),feature(-1),meanValue(0),data() {};
 		} bitnode,*bitree;
-		
-		twoSubData_C binSplitDataSet(const Data &data,const int &axis,const double &value);
+		public:	
+			twoSubData_C binSplitDataSet(const Data &data,const int &axis,const double &value);
 
-		double mean_C(const Data &data);
+			double mean_C(const Data &data);
 
-		double MeanErr_C(const Data &data);
+			double MeanErr_C(const Data &data);
 
-		split_C chooseBestSplit(const Data &data,const double &minErr);
+			split_C chooseBestSplit(const Data &data,const double &minErr);
 
-		int createBinTree(bitree &t,Data &data);
+			int createBinTree(bitree &t,Data &data);
 
-		int preorder(bitree &t);//递归先序遍历二叉树
+			int preorder(bitree &t);//递归先序遍历二叉树
 
-		int prune(bitree &t,const Data &testData);
+			int prune(bitree &t,const Data &testData);
 
-		double predict(bitree t, const RowData &data);//bitree &t，不能引用，不能改变树根
+			double predict(bitree t, const RowData &data);//bitree &t，不能引用，不能改变树根
 
-		CART(const string &file);
+			CART(const string &file);
 
-		typedef std::shared_ptr<CART> CARTPtr;
+			typedef std::shared_ptr<CART> CARTPtr;
 	};
 }

@@ -162,7 +162,7 @@ namespace MLL
 		}
 		return 0;
 	}
-	Adaboost::Adaboost(const char *file,const int &numIt)
+	Adaboost::Adaboost(const string &file,const int &numIt)
 	{
 		this->numIt = numIt;
 		LoadDataNum(data,file);
