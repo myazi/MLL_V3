@@ -5,6 +5,8 @@
 #include "DNN.h"
 #include "SVM.h"
 #include "DTree.h"
+#include "Adaboost.h"
+#include "CART.h"
 /*#include "SVM.h"
 #include "Bayes.h"
 #include "HMM.h"
@@ -129,14 +131,24 @@ int SVM(const char *file)
     svm->smoP();
     return 0;
 }
+int Adaboost(const char *file, const int &numIt)
+{
+	MLL::Adaboost::AdaboostPtr adaboost = std::make_shared<MLL::Adaboost>(file,numIt);
+	adaboost->AdaboostTrainDS();
+}
+int DTree(const char *file, const string &type)
+{
+	MLL::DTree::DTreePtr dtree = std::make_shared<MLL::DTree>(file,type);
+}
+
 int main()
 {
     
     int i;
-    trainDNN("data/train.txt");
+    //trainDNN("data/train.txt");
     //LineReg("data/lineReg.txt","regression",0.01,1);
     //LogReg("data/logReg.txt","gradAscent",0.01,1000);
-    //LogReg("sample","gradAscent",0.001,5000);
+    //LogReg("sample.new","gradAscent",0.001,5000);
     //LogReg("sample","gradAscent",0.01,1000);
     //SoftMaxReg("data/logReg.txt","gradAscent",0.01,1000);
     //ME();
@@ -150,9 +162,10 @@ int main()
     //CRF_CWS();
     //MDP();
 
-    //DTree("ID3");
-    //CART();
-    //Adaboost(20);
+    //DTree("data/id3.txt","ID3");
+	MLL::CART::CART("data/cart.txt");
+    //Adaboost("sample",50);
+    //Adaboost("data/adaboost.txt",50);
     //RF(50,5,0.01);
 
     //kmeans();

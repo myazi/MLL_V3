@@ -121,7 +121,7 @@ void Matrix::print()
         cout<<endl;
     }
 }
-Matrix* Matrix::copyMatrix()
+Matrix& Matrix::copyMatrix()
 {
     unsigned int i=0,j=0;
     Matrix cp;
@@ -137,7 +137,7 @@ Matrix* Matrix::copyMatrix()
             cp.data[i][j]=this->data[i][j];
         }
     }
-    return &cp;
+    return cp;
 }
 Matrix Matrix::getOneRow(unsigned int iRow)
 {
@@ -176,7 +176,7 @@ void Matrix::deleteOneRow(unsigned int iRow)
 {
 
     unsigned int i=0,j=0;
-    Matrix *cp = this->copyMatrix();
+    Matrix cp = this->copyMatrix();
 
     this->row--;
     //this->data.clear();
@@ -184,7 +184,7 @@ void Matrix::deleteOneRow(unsigned int iRow)
     //Data da(this->row,cda);
     //this->data=da;
 
-    for(Data::iterator it=cp->data.begin(); it!=cp->data.end(); it++,i++)
+    for(Data::iterator it=cp.data.begin(); it!=cp.data.end(); it++,i++)
     {
         if(i < iRow)
 		{
@@ -219,7 +219,7 @@ void Matrix::deleteOneCol(unsigned int iCol)
 {
 
     unsigned int i=0,j=0;
-    Matrix *cp=this->copyMatrix();
+    Matrix cp=this->copyMatrix();
 
     this->col--;
     //this->data.clear();
@@ -227,10 +227,10 @@ void Matrix::deleteOneCol(unsigned int iCol)
     //Data da(this->row,cda);
     //this->data=da;
 
-    for(Data::iterator it=cp->data.begin(); it!=cp->data.end(); it++,i++)
+    for(Data::iterator it=cp.data.begin(); it!=cp.data.end(); it++,i++)
     {
         j=0;
-        for(vector<float>::iterator itRow=cp->data[i].begin(); itRow!=cp->data[i].end(); itRow++,j++)
+        for(vector<float>::iterator itRow=cp.data[i].begin(); itRow!=cp.data[i].end(); itRow++,j++)
         {
             if(j<iCol)
             {

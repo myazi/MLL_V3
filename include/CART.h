@@ -11,25 +11,49 @@
 **/
 
 #include "MatrixOpe.h"
-struct twoSubData_C;
 
-struct split_C;
+namespace MLL
+{
+	class CART
+	{
+		struct twoSubData_C
+		{
+			Data left;
+			Data right;
+		};
+		struct split_C
+		{
+			int bestIndex;//表示最好的分类属性，当非叶子节点时，即表示分裂属性下标，否则为-1，表示为叶子节点标记
+			double value;//若为分裂节点，则表示分裂阈值，否则为叶子节点，用来记录叶子节点的均值
+		};
+		typedef struct bitnode
+		{
+			struct bitnode *left;//小于等于阈值的左子树
+			struct bitnode *right;//大于阈值的右子树
+			int feature;//只有非叶子节点才有分裂属性，叶子节点feature=-1
+			double meanValue;//如果是叶子节点为值型,非叶子节点为阈值
+			Data data;//每颗树都存储了该树下的数据
+			bitnode():left(NULL),right(NULL),feature(-1),meanValue(0),data() {};
+		} bitnode,*bitree;
+		
+		twoSubData_C binSplitDataSet(const Data &data,const int &axis,const double &value);
 
-typedef struct bitnode bitnode,*bitree;
-twoSubData_C binSplitDataSet(const Data &data,const int &axis,const double &value);
+		double mean_C(const Data &data);
 
-double mean_C(const Data &data);
+		double MeanErr_C(const Data &data);
 
-double MeanErr_C(const Data &data);
+		split_C chooseBestSplit(const Data &data,const double &minErr);
 
-split_C chooseBestSplit(const Data &data,const double &minErr);
+		int createBinTree(bitree &t,Data &data);
 
-int createBinTree(bitree &t,Data &data);
+		int preorder(bitree &t);//递归先序遍历二叉树
 
-int preorder(bitree &t);//递归先序遍历二叉树
+		int prune(bitree &t,const Data &testData);
 
-int prune(bitree &t,const Data &testData);
+		double predict(bitree t, const RowData &data);//bitree &t，不能引用，不能改变树根
 
-double predict(bitree t, const RowData &data);//bitree &t，不能引用，不能改变树根
+		CART(const string &file);
 
-int CART();
+		typedef std::shared_ptr<CART> CARTPtr;
+	};
+}

@@ -28,7 +28,7 @@ namespace MLL {
             {
                 return _w;
             };
-    typedef std::shared_ptr<LogReg> LogRegPtr;
+		typedef std::shared_ptr<LogReg> LogRegPtr;
 };
 }
 #endif

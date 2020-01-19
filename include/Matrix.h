@@ -21,7 +21,7 @@ public:
     
 	void print();
 
-    Matrix* copyMatrix();
+    Matrix& copyMatrix();
 
     Matrix getOneRow(unsigned int iRow);
 

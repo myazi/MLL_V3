@@ -10,20 +10,44 @@
 
 #include "MatrixOpe.h"
 #define MAX_SIZE_OF_TRAINING_SET 1000
-using namespace std;
 
-struct Tree;
+namespace MLL {
 
-vector<string> getkindattr(const DataStr &data,int axis);//获得axis属性的所有不同取值
+	class DTree
+	{
+		struct Tree
+		{
+			int id;
+			int split_feat;//分裂特征
+			string feat_value;//特征的值
+			string label;//树的类别
+			int size;
+			int kind;
+			int parent;
+			Tree *next;
+		};
+		private:
+			Tree tree[MAX_SIZE_OF_TRAINING_SET];//用作存储后序遍历生成树的序列
+			stack<Tree> s;
+			int node=0;//用作存储后序遍历生成树的序列数组的下标
+			vector<int> feat_flag;//初始化为0,最后一个用于统计还剩多少特征未使用
+			DataStr data;
 
-double calcShannonEntOrGini(const DataStr &data, const string &type);
+		public:
+			vector<string> getkindattr(const DataStr &data, const int &axis);//获得axis属性的所有不同取值
 
-DataStr splitDataSet(const DataStr &data,int axis,string value);
+			double calcShannonEntOrGini(const DataStr &data, const string &type);
 
-int chooseBestFectureTosplit(const DataStr &data, const string &type, double epsilon, int minLen);
+			DataStr splitDataSet(const DataStr &data,const int &axis, const string &value);
 
-Tree dataToTree(const DataStr &data,const string &type, int bbestFet);
+			int chooseBestFectureTosplit(const DataStr &data, const string &type, const double &epsilon, const int &minLen);
 
-int createTree();
+			Tree dataToTree(const DataStr &data,const string &type, const int &bbestFet);
 
-int DTree(const string &type);
+			int createTree();
+
+			DTree(const char *file, const string &type);
+			
+			typedef std::shared_ptr<DTree> DTreePtr;
+	};
+}
