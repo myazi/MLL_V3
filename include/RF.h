@@ -3,6 +3,8 @@
 采用CART构成森林
 
 **/
+#ifndef RF_H
+#define RF_H
 
 #include "MatrixOpe.h"
 
@@ -29,14 +31,13 @@ namespace MLL
 			Data data;//每颗树都存储了该树下的数据
 		} bitnode,*bitree;
 		public:
-
-			twoSubData binSplitDataSet(const Data &data,int axis,double value);
+			twoSubData binSplitDataSet(const Data &data, const int &axis, const double &value);
 
 			double mean(const Data &data);
 
 			double MeanErr(const Data &data);
 
-			split chooseBestSplit(const Data &data,const int &deep, double minErr,int minLen);
+			split chooseBestSplit(const Data &data, const int &deep, const double &minErr, const int &minLen);
 
 			int createBinTree(bitree &t,const Data &data, const int &deep, const int &epsilon);
 
@@ -51,3 +52,4 @@ namespace MLL
 			typedef std::shared_ptr<RF> RFPtr;
 	};
 }
+#endif

@@ -10,7 +10,7 @@
 
 namespace MLL
 {
-	RF::twoSubData RF::binSplitDataSet(const Data &data,int axis,double value)
+	RF::twoSubData RF::binSplitDataSet(const Data &data,const int &axis, const double &value)
 	{
 		twoSubData twosubdata;
 		int i,j,k;
@@ -54,7 +54,7 @@ namespace MLL
 		meanErr=sqrt(meanErr/data.size());
 		return meanErr;
 	}
-	RF::split RF::chooseBestSplit(const Data &data,const int &deep, double minErr,int minLen)
+	RF::split RF::chooseBestSplit(const Data &data,const int &deep, const double &minErr, const int &minLen)
 	{
 		int signvalue=1;
 		twoSubData twosubdata;

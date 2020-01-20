@@ -9,6 +9,7 @@
 #include "CART.h"
 #include "RF.h"
 #include "kMeans.h"
+#include "KNN.h"
 /*#include "SVM.h"
 #include "Bayes.h"
 #include "HMM.h"
@@ -192,12 +193,19 @@ int KMeans(const char *file = "kmeans.txt")
 	MLL::KMeans::KMeansPtr kmeans = std::make_shared<MLL::KMeans>(path_file);
 
 }
+int KNN(const char *file = "knn.txt")
+{
+    string path_file = "data/";
+    path_file.append(file);
+	MLL::KNN::KNNPtr knn = std::make_shared<MLL::KNN>(path_file);
+	return 0;
+}
 int main(int argc, char* argv[])
 {
     
-    string models[10] ={"LineReg","LogReg","SoftMaxReg","DNN","SVM","DTree","CART","Adaboost","RF","KMeans"};
-    vector<string> models_pos(models, models + 10); 
-    int (*models_list[])(const char *file) = {LineReg, LogReg,SoftMaxReg,trainDNN,SVM,DTree,CART,Adaboost,RF,KMeans};
+    string models[11] ={"LineReg","LogReg","SoftMaxReg","DNN","SVM","DTree","CART","Adaboost","RF","KMeans","KNN"};
+    vector<string> models_pos(models, models + 11); 
+    int (*models_list[])(const char *file) = {LineReg, LogReg,SoftMaxReg,trainDNN,SVM,DTree,CART,Adaboost,RF,KMeans,KNN};
     int (*models_ptr) (const char *file) = LogReg;
     if(argc < 2)
     {
