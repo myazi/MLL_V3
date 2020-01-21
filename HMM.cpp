@@ -25,11 +25,10 @@ HMM模型中三个基本问题，概率计算问题，学习参数问题，预测问题。
 #define STATE 3
 #define T 1000
 #define double_min -1
-using namespace std;
 
 struct HMM_Pra
 {
-    string dic[VEC_LEN];
+	std::string dic[VEC_LEN];
     double arg[VEC_LEN];//词频
     double a[STATE][STATE];//参数A
     double b[STATE][VEC_LEN];//参数B
@@ -48,9 +47,9 @@ HMM_Pra hmm_pra;
 
 void createOset(const DataStr &data)
 {
-    ofstream ofile_arg;
-    ofstream ofile;
-    ofile.open("data\\hmm_dic.txt");
+	std::ofstream ofile_arg;
+	std::ofstream ofile;
+	ofile.open("data\\hmm_dic.txt");
     int i,j,k,vl;
     int dic_len=0;
     int length=0;
@@ -82,9 +81,9 @@ void createOset(const DataStr &data)
     for(i=0; i<hmm_pra.len; i++)
         ofile_arg<<hmm_pra.arg[i]<<"  ";
     ofile_arg.close();
-    cout<<"vec_len="<<dic_len<<endl;
+	std::cout<<"vec_len="<<dic_len<<std::endl;
 }
-int getPos_O(string str)
+int getPos_O(std::string str)
 {
     int i=0,j;
     for(i=0; i<hmm_pra.len; i++)
@@ -92,7 +91,7 @@ int getPos_O(string str)
         if(!str.compare(hmm_pra.dic[i]))
             return i;
     }
-    cout<<"状态字典中不存在该状态"<<endl;
+	std::cout<<"状态字典中不存在该状态"<<std::endl;
     return -1;
 }
 
@@ -163,7 +162,7 @@ void forwardBack(const DataStr &data)
     {
         sumall+=alpha[data[0].size()-1][i];
     }
-    cout<<"FORWARD："<<"sum="<<sumall<<endl;
+	std::cout<<"FORWARD："<<"sum="<<sumall<<std::endl;
 
     //后向算法
     for(i=0; i<STATE; i++)
@@ -189,7 +188,7 @@ void forwardBack(const DataStr &data)
     {
         sumall+=bata[0][i]*hmm_pra.pi[i]*hmm_pra.b[i][pos];
     }
-    cout<<"BACK："<<"sum="<<sumall<<endl;
+	std::cout<<"BACK："<<"sum="<<sumall<<std::endl;
 }
 
 void Baum_Weach(const DataStr &data)
@@ -204,7 +203,7 @@ void Baum_Weach(const DataStr &data)
         /**
         参数A
         **/
-        cout<<"A-----------------"<<endl;
+		std::cout<<"A-----------------"<<std::endl;
         for(i=0; i<STATE; i++)
         {
             for(j=0; j<STATE; j++)
@@ -243,14 +242,14 @@ void Baum_Weach(const DataStr &data)
             for(j=0; j<STATE; j++)
             {
                 hmm_pra.a[i][j]=Epsion[i][j]/Gam[i];
-                cout<<hmm_pra.a[i][j]<<"  ";
+				std::cout<<hmm_pra.a[i][j]<<"  ";
             }
-            cout<<endl;
+			std::cout<<std::endl;
         }
         /**
         参数B
         **/
-        cout<<"B----------------"<<endl;
+		std::cout<<"B----------------"<<std::endl;
         for(i=0; i<STATE; i++)
         {
             for(t=0; t<data[0].size(); t++)
@@ -288,21 +287,21 @@ void Baum_Weach(const DataStr &data)
             for(k=0; k<hmm_pra.len; k++)
             {
                 hmm_pra.b[i][k]=Gamvk[i][k]/Gam[i];
-                cout<<hmm_pra.b[i][k]<<"  ";
+				std::cout<<hmm_pra.b[i][k]<<"  ";
             }
-            cout<<endl;
+			std::cout<<std::endl;
         }
 
         /**
         参数pi
         **/
-        cout<<"pi----------------"<<endl;
+		std::cout<<"pi----------------"<<std::endl;
         for(i=0; i<STATE; i++)
         {
             hmm_pra.pi[i]=(alpha[0][i]*bata[0][i])/sumall;
-            cout<<hmm_pra.pi[i]<<"  ";
+			std::cout<<hmm_pra.pi[i]<<"  ";
         }
-        cout<<endl;
+		std::cout<<std::endl;
     }
 }
 
@@ -352,12 +351,12 @@ void Viterbi_O(const DataStr &data)
             max_deta=deta[data[0].size()-1][i];
             max_i=i;
         }
-        cout<<"P*="<<deta[data[0].size()-1][i]<<endl;
+		std::cout<<"P*="<<deta[data[0].size()-1][i]<<std::endl;
     }
-    cout<<max_i;
+	std::cout<<max_i;
     for(t=data[0].size()-2; t>=0; t--)
     {
-        cout<<fai[t+1][max_i];
+		std::cout<<fai[t+1][max_i];
         max_deta=double_min;
         for(i=0; i<STATE; i++)
         {
@@ -376,11 +375,11 @@ int HMM()
     LoadDataStr(data,"data\\Ntest.txt");//加载训练集，亦为测试集，只考虑了一个样本
     createOset(data);//建立词典
     init_test();
-    cout<<"-------------forwardBack-----------------"<<endl;
+    std::cout<<"-------------forwardBack-----------------"<<std::endl;
     forwardBack(data);
-    cout<<"-------------Baum_Weach-----------------"<<endl;
+    std::cout<<"-------------Baum_Weach-----------------"<<std::endl;
     Baum_Weach(data);
-    cout<<"-------------Viterbi-----------------"<<endl;
+    std::cout<<"-------------Viterbi-----------------"<<std::endl;
     init_test();
     Viterbi_O(data);
     return 0;

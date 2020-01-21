@@ -11,7 +11,7 @@ namespace MLL {
     {
         if(_y.col!=1)
         {
-            cout<<"logReg is two class"<<endl;
+            std::cout<<"logReg is two class"<<std::endl;
             return -1;
         }
         Matrix weights(_x.col,_y.col,0.1,"T");
@@ -37,7 +37,7 @@ namespace MLL {
             error=0;
             for(i=0; i<_x.row; i++)///统计错误率
                 error+=z.data[i][0];
-            cout<<"error="<<error<<endl;
+            std::cout<<"error="<<error<<std::endl;
             //if(error<x.row/100 && error>x.row/100)///设置错误率小于一定值时退出迭代
                // break;
             grad = xT * z ;///计算负梯度方向
@@ -58,30 +58,30 @@ namespace MLL {
 		{
 			for(int j=0; j < weights.col; j++)
 			{
-				weight_file<< weights.data[i][j]<<endl;
+				weight_file<< weights.data[i][j]<<std::endl;
 			}
 		}
 		weight_file.close();
-		cout<<"----------train-------"<<endl;
+		std::cout<<"----------train-------"<<std::endl;
         for(i=0; i<_y.row; i++)
         {
             if(train.data[i][0]>0)
             {
-				cout<<1<<endl;
-                //cout<<1-_y.data[i][0]<<endl;
+				std::cout<<1<<std::endl;
+                //std::cout<<1-_y.data[i][0]<<std::endl;
                 er1+=(1-_y.data[i][0]);
             }
             else
             {
-				cout<<0<<endl;
-                //cout<<0-_y.data[i][0]<<endl;
+				std::cout<<0<<std::endl;
+                //std::cout<<0-_y.data[i][0]<<std::endl;
                 er2-=(0-_y.data[i][0]);
             }
         }
-        cout<<"er1="<<er1<<endl;
-        cout<<"er2="<<er2<<endl;
+        std::cout<<"er1="<<er1<<std::endl;
+        std::cout<<"er2="<<er2<<std::endl;
 		
-		cout<<"-------test-------"<<endl;
+		std::cout<<"-------test-------"<<std::endl;
 		Matrix test_x;
 		Matrix test_y;
 		const char *test_file= "sample_100";
@@ -89,14 +89,14 @@ namespace MLL {
 
 		test_y=test_x.getOneCol(test_x.col-1);
 		test_x.deleteOneCol(test_x.col-1);
-		cout<<"test_x" << test_x.row<<"&&"<<test_x.col<<endl;
-		cout<<"test_y" << test_y.row<<"&&"<<test_y.col<<endl;
+		std::cout<<"test_x" << test_x.row<<"&&"<<test_x.col<<std::endl;
+		std::cout<<"test_y" << test_y.row<<"&&"<<test_y.col<<std::endl;
 		Matrix test= test_x * weights;
         er1 = 0;
 		er2 = 0;
 		for(i=0; i<test_y.row; i++)
         {
-			cout<<test_y.data[i][0]<<endl;
+			std::cout<<test_y.data[i][0]<<std::endl;
             if(test.data[i][0]>0)
             {
                 er1+=(1-test_y.data[i][0]);
@@ -106,8 +106,8 @@ namespace MLL {
                 er2-=(0-test_y.data[i][0]);
             }
         }
-        cout<<"er1="<<er1<<endl;
-        cout<<"er2="<<er2<<endl;
+        std::cout<<"er1="<<er1<<std::endl;
+        std::cout<<"er2="<<er2<<std::endl;
     }
     /**
     随机梯度下降与梯度下降法不同的是在负梯度方向的确定，梯度下降是根据所有的样本来确定负梯度方向，
@@ -141,24 +141,24 @@ namespace MLL {
             }
             }
         //验证算法的正确性
-        cout<<"test"<<endl;
+        std::cout<<"test"<<std::endl;
         Matrix test = _x * weights;
         for(i=0; i<_y.row; i++)
         {
             if(test.data[i][0]>0)
             {
-                cout<<1-_y.data[i][0]<<endl;
+                std::cout<<1-_y.data[i][0]<<std::endl;
             }
             else
             {
-                cout<<0-_y.data[i][0]<<endl;
+                std::cout<<0-_y.data[i][0]<<std::endl;
             }
         }
     }
-    LogReg::LogReg(const string &file, const string &model, const double alpha,const int iter)
+    LogReg::LogReg(const std::string &file, const std::string &model, const double alpha,const int iter)
     {
-        cout<<"loadData:"<< file<<endl;
-        cout<<"----------------------"<<endl;
+        std::cout<<"loadData:"<< file<<std::endl;
+        std::cout<<"----------------------"<<std::endl;
         _x.LoadData(file);
 		_y=_x.getOneCol(_x.col-1);
 		_x.deleteOneCol(_x.col-1);
@@ -166,18 +166,18 @@ namespace MLL {
 		//const char *file2 = "LDA_sample";
 		//_x.LoadData_spare(file2, 17880,2000);
         //_x.print();
-		cout<<_x.row<<"&"<<_x.col<<endl;
+		std::cout<<_x.row<<"&"<<_x.col<<std::endl;
         _y.print();
 		int sum = 0;
 		for(int i=0; i<_y.row; i++)
 		{
 			for (int j=0;j<_y.col; j++)
 			{
-				cout<<"y="<< "\t"<<i <<"\t" << j <<"\t"<<_y.data[i][j] <<endl;
+				std::cout<<"y="<< "\t"<<i <<"\t" << j <<"\t"<<_y.data[i][j] <<std::endl;
 				sum += _y.data[i][j];
 			}
 		}
-		cout<<"sum=" << sum<< endl;
+		std::cout<<"sum=" << sum<< std::endl;
 		_alpha = alpha;
         _iter = iter;
     }

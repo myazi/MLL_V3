@@ -15,7 +15,7 @@ namespace MLL{
         Matrix xTx_1xT=xTx_1xT.multsMatrix(xTx_1,xT);
         Matrix ws;
         ws=ws.multsMatrix(xTx_1xT,_y);
-        cout<<"ws"<<endl;
+        std::cout<<"ws"<<std::endl;
         ws.print();
         return 0;
     }
@@ -33,7 +33,7 @@ namespace MLL{
         Matrix xTx_1=xTx.niMatrix();
         Matrix xTx_1xT=xTx_1xT.multsMatrix(xTx_1,xT);
         Matrix ws=ws.multsMatrix(xTx_1xT,_y);
-        cout<<"ws"<<endl;
+        std::cout<<"ws"<<std::endl;
         ws.print();
         return 0;
     }
@@ -103,9 +103,9 @@ namespace MLL{
         {
             for(j=0;j<ws.col;j++)
             {
-                cout<<ws.data[j][i]<<"  ";
+                std::cout<<ws.data[j][i]<<"  ";
             }
-            cout<<endl;
+            std::cout<<std::endl;
         }
 
         /**验证局部加权线性回归的正确性*/
@@ -117,15 +117,15 @@ namespace MLL{
             {
                 yy+=ws.data[j][i] * _x.data[i][j];
             }
-            cout<<"y="<<yy<<endl;
+            std::cout<<"y="<<yy<<std::endl;
         }
         return 0;
     }
 
-    LineReg::LineReg(const string &file, const string &model, const double &lamd, const double &k)
+    LineReg::LineReg(const std::string &file, const std::string &model, const double &lamd, const double &k)
     {
-        cout<<"loadData"<<endl;
-        cout<<"----------------------"<<endl;
+        std::cout<<"loadData"<<std::endl;
+        std::cout<<"----------------------"<<std::endl;
         _x.LoadData(file);
         _y = _x.getOneCol(_x.col-1);
         _x.deleteOneCol(_x.col-1);

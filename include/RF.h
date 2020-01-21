@@ -47,7 +47,7 @@ namespace MLL
 
 			Data Bootstrap(const Data &data);
 
-			RF(const string &file, const int &numIt, const int &deep, const int &epsilon);
+			RF(const std::string &file, const int &numIt, const int &deep, const int &epsilon);
 
 			typedef std::shared_ptr<RF> RFPtr;
 	};

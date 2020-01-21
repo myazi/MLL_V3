@@ -52,7 +52,7 @@ namespace MLL
 
 			double predict(bitree t, const RowData &data);//bitree &t，不能引用，不能改变树根
 
-			CART(const string &file);
+			CART(const std::string &file);
 
 			typedef std::shared_ptr<CART> CARTPtr;
 	};

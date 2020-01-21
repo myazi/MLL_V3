@@ -75,7 +75,7 @@ namespace MLL
 		}
 		if(signvalue)
 		{
-			cout<<"signvalue"<<endl;
+			std::cout<<"signvalue"<<std::endl;
 			sp.bestIndex=-1;
 			sp.value=mean(data);
 			return sp;
@@ -88,7 +88,7 @@ namespace MLL
 				if(twosubdata.left.size()==0 || twosubdata.right.size()==0)
 					continue;
 				newMeanErr=MeanErr(twosubdata.left) + MeanErr(twosubdata.right);
-				//cout<<"id="<<j<<"  newMeanErr="<<newMeanErr<<endl;
+				//std::cout<<"id="<<j<<"  newMeanErr="<<newMeanErr<<std::endl;
 				if(newMeanErr<bestMeanErr)
 				{
 					sp.bestIndex=i;
@@ -97,23 +97,23 @@ namespace MLL
 				}
 			}
 		}
-		//cout<<"value="<<sp.value<<"  index="<<sp.bestIndex<<endl;
+		//std::cout<<"value="<<sp.value<<"  index="<<sp.bestIndex<<std::endl;
 		if(oldMeanErr-bestMeanErr<minErr||oldMeanErr-bestMeanErr<MIN)
 		{
 			sp.bestIndex=-1;
 			sp.value=mean(data);
-			//cout<<"minErr"<<endl;
+			//std::cout<<"minErr"<<std::endl;
 			return sp;
 		}
-		//cout<<sp.bestIndex<<"&"<<sp.value<<"  ";
-		//cout<<oldMeanErr<<"&"<<bestMeanErr<<endl;
+		//std::cout<<sp.bestIndex<<"&"<<sp.value<<"  ";
+		//std::cout<<oldMeanErr<<"&"<<bestMeanErr<<std::endl;
 		return sp;
 	}
 	int RF::createBinTree(bitree &t,const Data &data, const int &deep, const int &epsilon)
 	{
 		if(!(t=(bitnode *)malloc(sizeof(bitnode)))) exit(-1);
 		split sp=chooseBestSplit(data,deep,epsilon,10);
-		cout<<"index="<<sp.bestIndex<<endl;
+		std::cout<<"index="<<sp.bestIndex<<std::endl;
 		t->feature=sp.bestIndex;
 		t->meanValue=sp.value;
 		//t->data=data;
@@ -122,12 +122,12 @@ namespace MLL
 			t->left=NULL;
 			t->right=NULL;
 			//t->data=data;
-			cout<<"feat-1"<<endl;
+			std::cout<<"feat-1"<<std::endl;
 			return 0;
 		}
 		else
 		{
-			cout<<"feature="<<t->feature<<"  value="<<t->meanValue<<endl;
+			std::cout<<"feature="<<t->feature<<"  value="<<t->meanValue<<std::endl;
 			twoSubData twosubdata=binSplitDataSet(data,sp.bestIndex,sp.value);
 			createBinTree((t->left),twosubdata.left,deep,epsilon);
 			createBinTree((t->right),twosubdata.right,deep,epsilon);
@@ -139,7 +139,7 @@ namespace MLL
 		if(t!=NULL)
 		{
 			if(t->feature==-1)
-				cout<<t->feature<<"  "<<t->meanValue<<"  "<<endl;//<<t->data.size()<<endl;//只输出叶子节点
+				std::cout<<t->feature<<"  "<<t->meanValue<<"  "<<std::endl;//<<t->data.size()<<std::endl;//只输出叶子节点
 			if(t->left!=NULL)
 				preorder(t->left);
 			if(t->right!=NULL)
@@ -174,7 +174,7 @@ namespace MLL
 		}
 		return bdata;
 	}
-	RF::RF(const string &file, const int &numIt,const int &deep,const int &epsilon)
+	RF::RF(const std::string &file, const int &numIt,const int &deep,const int &epsilon)
 	{
 		Data data;
 		Data bdata;
@@ -183,15 +183,15 @@ namespace MLL
 		if(!(t=(bitree*)malloc(sizeof(bitree)*numIt))) exit(-1);
 		for(int i=0;i<numIt;i++)
 		{
-			cout<<"It="<<i+1<<"---------------------"<<endl;
+			std::cout<<"It="<<i+1<<"---------------------"<<std::endl;
 			bdata = Bootstrap(data);
 			createBinTree(t[i],bdata,deep,epsilon);
 			preorder(t[i]);
 		}
 		Data testdata;
 		LoadDataNum(testdata,"data/rftest.txt");
-		vector<double> labels(testdata.size(),0);
-		vector<double> bs(numIt,0);
+		std::vector<double> labels(testdata.size(),0);
+		std::vector<double> bs(numIt,0);
 		for(size_t i =0; i<testdata.size(); i++)
 		{
 			for(size_t it=0;it<numIt;it++)
@@ -200,7 +200,7 @@ namespace MLL
 				labels[i]+=bs[it];
 			}
 			labels[i]/=double(numIt);
-			cout<<labels[i]<<"&&"<<testdata[i][testdata[0].size()-1]<<endl;
+			std::cout<<labels[i]<<"&&"<<testdata[i][testdata[0].size()-1]<<std::endl;
 		}
 	}
 }

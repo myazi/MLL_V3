@@ -1,7 +1,7 @@
+#include <iostream>
 #include "LineReg.h"
 #include "LogReg.h"
 #include "SoftMaxReg.h"
-//#include "ME.h"//
 #include "DNN.h"
 #include "SVM.h"
 #include "DTree.h"
@@ -10,8 +10,9 @@
 #include "RF.h"
 #include "kMeans.h"
 #include "KNN.h"
-/*#include "SVM.h"
 #include "Bayes.h"
+#include "GMM.h"
+/*#include "SVM.h"
 #include "HMM.h"
 #include "MEMM.h"
 #include "CRF.h"
@@ -21,74 +22,34 @@
 #include "Adaboost.h"
 #include "RF.h"
 #include "kMeans.h"
-#include "GMM.h"
 #include "PCA.h"//
 #include "SVD.h"//
 #include "KNN.h"
 #include "Hash.h"//
 */
-#include <iostream>
 int LogReg(const char *file = "logReg.txt")
 {
-    string path_file = "data/";
+	std::string path_file = "data/";
     path_file.append(file);
-    string model = "gradAscent";
+	std::string model = "gradAscent";
     double alpha = 0.001;
     double iter = 10000;
-    /**
-    file: data/logReg.txt
-    *file: d
-    **/
-    ///test
-
     MLL::LogReg::LogRegPtr logreg = std::make_shared<MLL::LogReg>(path_file,model,alpha,iter);
-    //MLL::LogReg::LogRegPtr logreg(new MLL::LogReg(file,model,alpha,iter));
     if(model=="gradAscent")
         logreg->gradAscent_Log();
     if(model=="stoGradAscent")
        logreg->stoGradAscent_Log();
 
-	cout<<"-------test-------"<<endl;
-	Matrix test_x;
-	Matrix test_y;
-	Matrix weights;
-	const char *test_file= "sample_28";
-	test_x.LoadData(test_file);
-	weights.LoadData("weight");
-
-	test_y=test_x.getOneCol(test_x.col-1);
-	test_x.deleteOneCol(test_x.col-1);
-	cout<<"test_x" << test_x.row<<"&&"<<test_x.col<<endl;
-	cout<<"test_y" << test_y.row<<"&&"<<test_y.col<<endl;
-	Matrix test= test_x * weights;
-	int er1 = 0;
-	int er2 = 0;
-	for(int i=0; i<test_y.row; i++)
-	{
-		if(test.data[i][0]>0)
-		{
-			cout<<1<<endl;
-			er1+=(1-test_y.data[i][0]);
-		}
-		else
-		{
-			cout<<0<<endl;
-			er2-=(0-test_y.data[i][0]);
-		}
-	}
-	cout<<"er1="<<er1<<endl;
-	cout<<"er2="<<er2<<endl;
     return 0;
 }
 int SoftMaxReg(const char *file = "logReg.txt")
 {
-    string path_file = "data/";
+	std::string path_file = "data/";
     path_file.append(file);
-    string model = "gradAscent";
+	std::string model = "gradAscent";
     double alpha = 0.001;
     double iter = 100;
     MLL::SoftMaxReg::SoftMaxRegPtr softmaxreg = std::make_shared<MLL::SoftMaxReg>(path_file,model,alpha,iter);
-    //MLL::LogReg::LogRegPtr logreg(new MLL::LogReg(file,model,alpha,iter));
     if(model=="gradAscent")
         softmaxreg->gradAscent_SoftMax();
     if(model=="stoGradAscent")
@@ -99,9 +60,9 @@ int SoftMaxReg(const char *file = "logReg.txt")
 }
 int LineReg(const char *file = "lineReg.txt")
 {
-    string path_file = "data/";
+	std::string path_file = "data/";
     path_file.append(file);
-    string model = "regression";
+	std::string model = "regression";
     double lamd = 0.001;
     double k = 100;
     MLL::LineReg::LineRegPtr linereg = std::make_shared<MLL::LineReg>(path_file,model,lamd,k);
@@ -121,7 +82,7 @@ int LineReg(const char *file = "lineReg.txt")
 }
 int trainDNN(const char *file = "logReg.txt")
 {
-    string path_file = "data/";
+	std::string path_file = "data/";
     path_file.append(file);
     const char *initialization="he";
     double learn_rateing=0.1;
@@ -134,15 +95,13 @@ int trainDNN(const char *file = "logReg.txt")
     double beta1=0.9;
     double beta2=0.999;
     double epsilon=0.00000001;
-
-    //MLL::DNN::DNNPtr dnn = std::make_shared<MLL::DNN>(DNN(file,optimizer="gd",learn_rateing=0.001,initialization="he",lambd=0.001,keep_prob = 1,mini_batch_size=64,beta1=0.9, beta2=0.999, epsilon=0.00000001, iter=5000, print_cost=true);
     MLL::DNN::DNNPtr dnn = std::make_shared<MLL::DNN>(path_file,"gd",0.1,"he",0.01,1,64,0.9, 0.999, 0.0000001, 500, true);
     //dnn->predict(dnn->_x,dnn->_y);
     return 0;
 }
 int SVM(const char *file = "logReg.txt")
 {
-    string path_file = "data/";
+	std::string path_file = "data/";
     path_file.append(file);
     double C = 0.6;
     double soft = 0.001;
@@ -157,69 +116,91 @@ int SVM(const char *file = "logReg.txt")
 }
 int Adaboost(const char *file = "adaboost.txt")
 {
-	int numIt = 100;
-    string path_file = "data/";
+	std::string path_file = "data/";
     path_file.append(file);
+	int numIt = 100;
 	MLL::Adaboost::AdaboostPtr adaboost = std::make_shared<MLL::Adaboost>(path_file,numIt);
 	adaboost->AdaboostTrainDS();
+	return 0;
 }
 int DTree(const char *file = "id3.txt")
 {
-    string path_file = "data/";
+	std::string path_file = "data/";
     path_file.append(file);
-	string type = "ID3";
+	std::string type = "ID3";
 	MLL::DTree::DTreePtr dtree = std::make_shared<MLL::DTree>(path_file,type);
+	return 0;
 }
 
 int CART(const char *file = "cart.txt")
 {
-    string path_file = "data/";
+	std::string path_file = "data/";
     path_file.append(file);
 	MLL::CART::CARTPtr cart = std::make_shared<MLL::CART>(path_file);
+	return 0;
 }
 int RF(const char *file = "rf.txt")
 {
-    string path_file = "data/";
+	std::string path_file = "data/";
     path_file.append(file);
 	int numIt = 50;
 	int deep = 5;
 	double epsilon = 0.01;
 	MLL::RF::RFPtr rf = std::make_shared<MLL::RF>(path_file, numIt, deep, epsilon);
+	return 0;
 }
 int KMeans(const char *file = "kmeans.txt")
 {
-    string path_file = "data/";
+	std::string path_file = "data/";
     path_file.append(file);
 	MLL::KMeans::KMeansPtr kmeans = std::make_shared<MLL::KMeans>(path_file);
+	return 0;
 
 }
 int KNN(const char *file = "knn.txt")
 {
-    string path_file = "data/";
+	std::string path_file = "data/";
     path_file.append(file);
 	MLL::KNN::KNNPtr knn = std::make_shared<MLL::KNN>(path_file);
+	return 0;
+}
+
+int Bayes(const char *file = "bayes.txt")
+{
+	std::string path_file = "data/";
+    path_file.append(file);
+	MLL::Bayes::BayesPtr bayes = std::make_shared<MLL::Bayes>(path_file);
+	return 0;
+}
+int GMM(const char *file = "GMM.txt")
+{
+	std::string path_file = "data/";
+    path_file.append(file);
+	int K = 10;
+	int Iter = 100;
+	MLL::GMM::GMMPtr gmm = std::make_shared<MLL::GMM>(path_file,K,Iter);
 	return 0;
 }
 int main(int argc, char* argv[])
 {
     
-    string models[11] ={"LineReg","LogReg","SoftMaxReg","DNN","SVM","DTree","CART","Adaboost","RF","KMeans","KNN"};
-    vector<string> models_pos(models, models + 11); 
-    int (*models_list[])(const char *file) = {LineReg, LogReg,SoftMaxReg,trainDNN,SVM,DTree,CART,Adaboost,RF,KMeans,KNN};
+	std::string models[13] ={"LineReg","LogReg","SoftMaxReg","DNN","SVM","DTree","CART","Adaboost","RF","KMeans","KNN","Bayes","GMM"};
+	std::vector<std::string> models_pos(models, models + 13); 
+    int (*models_list[])(const char *file) = {LineReg, LogReg,SoftMaxReg,trainDNN,SVM,DTree,CART,Adaboost,RF,KMeans,KNN,Bayes,GMM};
     int (*models_ptr) (const char *file) = LogReg;
     if(argc < 2)
     {
-        cout<<"arg is error"<<endl;
+		std::cout<<"arg is error"<<std::endl;
         return -1;
     }
-    string type = argv[1];
+	std::string type = argv[1];
 	char *file_name = argv[2];
-    cout<< type  << endl;
+	std::cout<< type  << std::endl;
     //int pos = 1;//logreg
 	int ret = 0;
     for(int i = 0; i < models_pos.size(); i++)
     {
-        cout<< models_pos[i] << endl;
+		std::cout<< models_pos[i] << std::endl;
         if(type == models_pos[i])
         {
             models_ptr = models_list[i];
@@ -252,12 +233,5 @@ int main(int argc, char* argv[])
 
     //kmeans();
     //GMM(3,5);
-
-    //PCA();
-    //SVD();
-
-    //KNN();
-    //Hash();
-
     return 0;
 }

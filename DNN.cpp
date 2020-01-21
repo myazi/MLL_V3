@@ -101,10 +101,10 @@ namespace MLL{
             }
             p->A = p->A * p->D;
         }
-        cout<<"zzz"<<p->Z.row<<"&&"<<p->Z.col<<endl;
-        cout<<"www"<<p->W.row<<"&&"<<p->W.col<<endl;
-        cout<<"aaa"<<p->A.row<<"&&"<<p->A.col<<endl;
-        cout<<"bbb"<<p->b.row<<"&&"<<p->b.col<<endl;
+        std::cout<<"zzz"<<p->Z.row<<"&&"<<p->Z.col<<std::endl;
+        std::cout<<"www"<<p->W.row<<"&&"<<p->W.col<<std::endl;
+        std::cout<<"aaa"<<p->A.row<<"&&"<<p->A.col<<std::endl;
+        std::cout<<"bbb"<<p->b.row<<"&&"<<p->b.col<<std::endl;
         p->Z.print();
         p->b.print();
         p->Z = p->W * p->A;
@@ -149,7 +149,7 @@ namespace MLL{
         }
     }
 
-    void DNN::line_active_forward(parameters *p,string active, double keep_prob)
+    void DNN::line_active_forward(parameters *p,std::string active, double keep_prob)
     {
         line_forward(p,keep_prob);
         if(active=="relu")
@@ -242,8 +242,8 @@ namespace MLL{
 		if(keep_prob!=1)
         {
             //这里p指向的D与对应A的dropout层，而等于1的情况下，D是只有初始化，无关赋值，所以对应dropout关系是正确的
-            //cout<<p->D.col<<"&"<<p->D.row<<endl;
-            //cout<<g->pre->grad_A.col<<"&"<<g->pre->grad_A.row<<endl;
+            //std::cout<<p->D.col<<"&"<<p->D.row<<std::endl;
+            //std::cout<<g->pre->grad_A.col<<"&"<<g->pre->grad_A.row<<std::endl;
 
             g->pre->grad_A = g->pre->grad_A.multsMatrix(g->pre->grad_A,p->D);//由于keep_prob扩充已经放到D上了
         }
@@ -251,9 +251,9 @@ namespace MLL{
         //WT.clear();
     }
 
-    void DNN::line_active_backword(parameters *p,grad *g,string active, double keep_prob)
+    void DNN::line_active_backword(parameters *p,grad *g,std::string active, double keep_prob)
     {
-		cout<<"active_backword_start"<<endl;
+		std::cout<<"active_backword_start"<<std::endl;
         if(active=="sigmoid")
         {
             sigmoid_backword(p,g);
@@ -262,7 +262,7 @@ namespace MLL{
         {
             relu_backword(p,g);
         }
-		cout<<"line_backword_start"<<endl;
+		std::cout<<"line_backword_start"<<std::endl;
         line_backword(p->pre,g,keep_prob);
 
     }
@@ -471,11 +471,11 @@ namespace MLL{
                 pre+=1;
         }
         pre/=_y.col;
-        cout<<"pre="<<pre<<endl;
+        std::cout<<"pre="<<pre<<std::endl;
         return 0;
     }
 
-    DNN::DNN(const string &file, const char *optimizer,double learn_rateing,const char *initialization, double lambd, double keep_prob, \
+    DNN::DNN(const std::string &file, const char *optimizer,double learn_rateing,const char *initialization, double lambd, double keep_prob, \
             int mini_batch_size,double beta1, double beta2, double epsilon, int iter, bool print_cost)
     {
         /**
@@ -493,8 +493,8 @@ namespace MLL{
         _x.deleteOneRow(_x.row-1);
         //_y=one_hot(_y,2);
         //_y.print();
-        cout<<"_x:row&col"<<_x.row << _x.col<<endl; 
-        cout<<"_y:row&col"<<_y.row << _y.col<<endl; 
+        std::cout<<"_x:row&col"<<_x.row << _x.col<<std::endl; 
+        std::cout<<"_y:row&col"<<_y.row << _y.col<<std::endl; 
         
         _initialization = initialization;
         _learn_rateing = learn_rateing;
@@ -511,7 +511,7 @@ namespace MLL{
         int lay_dim=3;
         int lay_n[3]= {500,3,1};
         lay_n[0]=_x.row;
-        string lay_active[3]= {"relu","relu","sigmoid"};
+        std::string lay_active[3]= {"relu","relu","sigmoid"};
         _sup_par.layer_dims=lay_dim;
         for(i=0; i<lay_dim; i++)
         {
@@ -548,20 +548,20 @@ namespace MLL{
         }
         for(i=0; i<iter; i++)
         {
-            cout<<"-----------forward------------"<<"i="<<i<<endl;
+            std::cout<<"-----------forward------------"<<"i="<<i<<std::endl;
             AL=model_forward(keep_probs);
-            cout<<"-----------loss--------------"<<endl;
+            std::cout<<"-----------loss--------------"<<std::endl;
             loss=cost_cumpter(AL);
             if(i%100==0)
-                cout<<"loss="<<loss<<endl;
-            cout<<"-----------backword-----------"<<endl;
+                std::cout<<"loss="<<loss<<std::endl;
+            std::cout<<"-----------backword-----------"<<std::endl;
             model_backword(AL,keep_probs);
 
-            cout<<"-----------update--------------"<<endl;
+            std::cout<<"-----------update--------------"<<std::endl;
             updata_parameters(i+1);
         }
         AL=model_forward(keep_probs);
-        cout<<"train_end"<<endl;
+        std::cout<<"train_end"<<std::endl;
         predict();
     }
 

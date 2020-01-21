@@ -41,11 +41,11 @@ typedef struct DICOS
     bool flag;
 }*one;
 
-string dic_ci[CI_LEN];
+std::string dic_ci[CI_LEN];
 int dic_ci_num[CI_LEN];
 int dic_ci_len=0;
-string dic[VEC_LEN];///utf8×Öµä
-string dic_ansi[VEC_LEN];///ansi×Öµä
+std::string dic[VEC_LEN];///utf8×Öµä
+std::string dic_ansi[VEC_LEN];///ansi×Öµä
 int dic_len=2;
 DICOS *dicos;
 int NONO=0;
@@ -58,14 +58,14 @@ double stateTostate_two[INDEX][INDEX];
 int no_state[INDEX]= {0,0,0,0,0,0,0,0};
 //double ADD_ONE=0.01;
 //double MUL=2;
-ofstream f1file;
+std::ofstream f1file;
 bool flag=0;
-string bd[BD]= {"£¬","¡£","¡°","¡±","£º","¡¢","¡¶","¡·","£¨","£©","£¿","¡º","¡»","¡æ","¡ñ","£¡","¡¤",":","¡®","¡¯","¡ª",",","¡Á","/","(",")","[","]"};
-string zm[ZM]= {"a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z",
+std::string bd[BD]= {"£¬","¡£","¡°","¡±","£º","¡¢","¡¶","¡·","£¨","£©","£¿","¡º","¡»","¡æ","¡ñ","£¡","¡¤",":","¡®","¡¯","¡ª",",","¡Á","/","(",")","[","]"};
+std::string zm[ZM]= {"a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z",
                 "A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"
                };
 
-int getPos(string str,int ii)
+int getPos(std::string str,int ii)
 {
     int i=0;
     for(i=0; i<dic_len; i++)
@@ -77,14 +77,14 @@ int getPos(string str,int ii)
     return -1;
 }
 
-string getWord(int pos)
+std::string getWord(int pos)
 {
     if(pos>=0)
         return dic[pos];
     else
     {
-        cout<<"pos="<<pos<<endl;
-        cin>>pos;
+		std::cout<<"pos="<<pos<<std::endl;
+		std::cin>>pos;
     }
     return "#";
 }
@@ -102,12 +102,12 @@ int getState(char str)
     return 0;
 }
 
-int senToword(string sen,string *word)
+int senToword(std::string sen,std::string *word)
 {
     int i=0,j=0,k=0;
     int num = sen.size();
-    string qj[QJBJ]= {"£°","£±","£²","£³","£´","£µ","£¶","£·","£¸","£¹","£®"};
-    string bj[QJBJ]= {"0","1","2","3","4","5","6","7","8","9","."};
+	std::string qj[QJBJ]= {"£°","£±","£²","£³","£´","£µ","£¶","£·","£¸","£¹","£®"};
+	std::string bj[QJBJ]= {"0","1","2","3","4","5","6","7","8","9","."};
     while(i < num)
     {
         int size = 1;
@@ -153,7 +153,7 @@ int stateToindex(int state1,int state2)
         return 6;
     if(state1==3&&state2==3)
         return 7;
-    cout<<state1<<"&"<<state2<<endl;
+	std::cout<<state1<<"&"<<state2<<std::endl;
     return -1;
 }
 int stateToindex3(int state1,int state2,int state3)
@@ -190,24 +190,24 @@ int stateToindex3(int state1,int state2,int state3)
         return 14;
     if(state1==3&&state2==3&&state3==3)
         return 15;
-    cout<<state1<<"&"<<state2<<"&"<<state3<<endl;
+	std::cout<<state1<<"&"<<state2<<"&"<<state3<<std::endl;
     return -1;
 }
 
 void createVocabList_C(const DataStr &data)
 {
-    ofstream ofile;
-    ofstream ofile_ci;
-    ofstream ofile_ci_dic;
-    ofstream ofile_arg;
-    ofstream ofile_state;
+	std::ofstream ofile;
+	std::ofstream ofile_ci;
+	std::ofstream ofile_ci_dic;
+	std::ofstream ofile_arg;
+	std::ofstream ofile_state;
     ofile.open("data\\dic.utf8");
     ofile_ci.open("data\\dic_ci.utf8");
     ofile_ci_dic.open("data\\ci_dic.utf8");
     ofile_state.open("data\\state.utf8");
     ofile_arg.open("data\\arg.utf8");
     int i,j,k,vl,n,m;
-    string words[2000];
+	std::string words[2000];
     int wordLen=0;
     double sum_ci=0;
     dicos=new DICOS;
@@ -219,8 +219,8 @@ void createVocabList_C(const DataStr &data)
     dicos->word2->word3=new Word3;
     dicos->word2->word3->word=-1;
     dicos->word2->word3->next=NULL;
-    string senall;
-    string stateall;
+	std::string senall;
+	std::string stateall;
     DICOS *word1;
     Word2 *word2;
     Word3 *word3;
@@ -470,10 +470,10 @@ void createVocabList_C(const DataStr &data)
 
     ofile_ci.close();
 
-    cout<<"writing arg"<<endl;
-    string argall;
+	std::cout<<"writing arg"<<std::endl;
+	std::string argall;
     char arg[20];
-    string word;
+	std::string word;
     int numi=0;
     int numj=0;
     word1=dicos->next;
@@ -593,7 +593,7 @@ void createVocabList_C(const DataStr &data)
     ofile_arg.close();
     ofile_ci_dic.close();
 }
-void bdzm(string pre_word,string next_word,double *word_times)
+void bdzm(std::string pre_word, std::string next_word,double *word_times)
 {
     int n,j,m;
     for(n=0; bd[n]!=""; n++)
@@ -652,9 +652,9 @@ int FenCi(DataStr &testdata)
 {
     int i,j,l,m,n,k;
     int pos1,pos2,pos3;
-    string stateall;
-    string resultall;
-    string stateall_copy;
+	std::string stateall;
+	std::string resultall;
+	std::string stateall_copy;
     DICOS *word1,*word12;
     Word2 *word2;
     Word3 *word3;
@@ -667,13 +667,13 @@ int FenCi(DataStr &testdata)
     double word_times[INDEX];
     double pre_pro[INDEX];
     int max_i;
-    string words[2000];
-    string states[2000];
+	std::string words[2000];
+	std::string states[2000];
     //double no_pre[INDEX]= {0.043,0.042,0.066,0.030,0.39,0.154,0.153,0.123};
     char ch;
-    ofstream resultfile;
-    ofstream word12no;
-    ofstream profile;
+	std::ofstream resultfile;
+	std::ofstream word12no;
+	std::ofstream profile;
     resultfile.open("data\\result.utf8");
     word12no.open("data\\word12no.utf8");
     profile.open("data\\profile.utf8");
@@ -982,7 +982,7 @@ int PingCe(const DataStr &resultdata,const DataStr &golddata)
 {
     int i,j,k;
     int ACC=0,resultALL=0,goldALL=0;
-    ofstream errfile;
+	std::ofstream errfile;
     errfile.open("data\\error.utf8");
     for(i=0; i<resultdata.size()&&i<golddata.size(); i++)
     {
@@ -995,7 +995,7 @@ int PingCe(const DataStr &resultdata,const DataStr &golddata)
         {
             for(k=0; k<golddata[i].size(); k++)
             {
-                if(!resultdata[i][j].compare(golddata[i][k])||resultdata[i][j].find('.',0)!= string::npos)
+                if(!resultdata[i][j].compare(golddata[i][k])||resultdata[i][j].find('.',0)!= std::string::npos)
                 {
                     ACC++;
                     break;
@@ -1009,32 +1009,32 @@ int PingCe(const DataStr &resultdata,const DataStr &golddata)
         errfile<<'\n';
     }
     errfile.close();
-    cout<<"resultALL="<<resultALL<<endl;
-    cout<<"goldALL="<<goldALL<<endl;
-    cout<<"ACC="<<ACC<<endl;
-    cout<<"Precision:"<<ACC*1.0/resultALL<<endl;
-    cout<<"Recall:"<<ACC*1.0/goldALL<<endl;
-    cout<<"F Measure:"<<2*ACC*1.0/resultALL*ACC*1.0/goldALL/(ACC*1.0/resultALL+ACC*1.0/goldALL)<<endl;
+	std::cout<<"resultALL="<<resultALL<<std::endl;
+	std::cout<<"goldALL="<<goldALL<<std::endl;
+	std::cout<<"ACC="<<ACC<<std::endl;
+	std::cout<<"Precision:"<<ACC*1.0/resultALL<<std::endl;
+	std::cout<<"Recall:"<<ACC*1.0/goldALL<<std::endl;
+	std::cout<<"F Measure:"<<2*ACC*1.0/resultALL*ACC*1.0/goldALL/(ACC*1.0/resultALL+ACC*1.0/goldALL)<<std::endl;
     return 0;
 }
 
 int CRF_CWS()
 {
-    cout<<"-----------training-----------"<<endl;
+	std::cout<<"-----------training-----------"<<std::endl;
     DataStr traindata;
     LoadDataStr(traindata,"data\\pku_training.utf8");
     createVocabList_C(traindata);
 
 
-    cout<<"------------test-------------"<<endl;
+	std::cout<<"------------test-------------"<<std::endl;
     DataStr testdata;;//¼ÓÔØ²âÊÔÊý¾Ý
     LoadDataStr(testdata,"data\\pku_test.utf8");
 
-    cout<<"------------FenCi--------------"<<endl;
+	std::cout<<"------------FenCi--------------"<<std::endl;
 
     FenCi(testdata);
 
-    cout<<"-----------PingCe---------------"<<endl;
+	std::cout<<"-----------PingCe---------------"<<std::endl;
 
     DataStr resultdata;
     LoadDataStr(resultdata,"data\\result.utf8");

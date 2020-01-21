@@ -2,11 +2,10 @@
 #define VEC_LEN 5000
 #define STATE 4
 #define double_min -1
-using namespace std;
 
 struct DICOS_M
 {
-    string dic[VEC_LEN];//观测值字典
+	std::string dic[VEC_LEN];//观测值字典
     double pos[VEC_LEN][STATE];//参数p(si|oi)
     double pss[STATE][STATE];//参数p(si|si-1)
     double ps0[STATE];//参数p(s0)            //p(s1|o1,s0)=p(s1|o1)*p(s0)=p(s1|o1)*p(s0)
@@ -15,7 +14,7 @@ struct DICOS_M
 DICOS_M dicos_m;
 
 
-int getPos(string str)
+int getPos(std::string str)
 {
     int i=0;
     for(i=0; i<dicos_m.len; i++)
@@ -23,11 +22,11 @@ int getPos(string str)
         if(!str.compare(dicos_m.dic[i]))
             return i;
     }
-    cout<<"状态字典中不存在该状态"<<endl;
+	std::cout<<"状态字典中不存在该状态"<<std::endl;
     return -1;
 }
 
-int getState_M(string str)
+int getState_M(std::string str)
 {
     if(str=="0")
         return 0;
@@ -40,7 +39,7 @@ int getState_M(string str)
     return 0;
 }
 
-int wordToState_M(const RowDataStr &str,int word,int j,int vl,string &state)
+int wordToState_M(const RowDataStr &str,int word,int j,int vl,std::string &state)
 {
     char ch;
     if(str[j].length()==2)
@@ -96,15 +95,15 @@ int wordToState_M(const RowDataStr &str,int word,int j,int vl,string &state)
 
 void createVocabList_M(const DataStr &data)
 {
-    ofstream ofile;
-    ofstream ofile_arg;
-    ofstream ofile_state;
+	std::ofstream ofile;
+	std::ofstream ofile_arg;
+	std::ofstream ofile_state;
     ofile.open("data\\memm_dic.txt");
     ofile_state.open("data\\memm_state.txt");
     int i,j,k,vl;
     int dic_len=0;
     int word;
-    string state;
+	std::string state;
     char ch;
     double sum;
     /**
@@ -142,8 +141,8 @@ void createVocabList_M(const DataStr &data)
     ofile.close();
     ofile_state.close();
     dicos_m.len=dic_len;
-    cout<<"row="<<data.size()<<endl;
-    cout<<"vec_len="<<dic_len<<endl;
+	std::cout<<"row="<<data.size()<<std::endl;
+	std::cout<<"vec_len="<<dic_len<<std::endl;
 
     /**
     参数估计
@@ -177,8 +176,8 @@ void createVocabList_M(const DataStr &data)
             dicos_m.pss[getState_M(state_data[i][j-1])][getState_M(state_data[i][j])]++;//统计参数pss
         }
     }
-    cout<<"i="<<i<<endl;
-    cout<<"pss:--------------"<<endl;
+	std::cout<<"i="<<i<<std::endl;
+	std::cout<<"pss:--------------"<<std::endl;
     for(i=0; i<STATE; i++)
     {
         sum=0;
@@ -189,11 +188,11 @@ void createVocabList_M(const DataStr &data)
         for(j=0; j<STATE; j++)
         {
             dicos_m.pss[i][j]/=sum;
-            cout<<dicos_m.pss[i][j]<<"  ";
+			std::cout<<dicos_m.pss[i][j]<<"  ";
         }
-        cout<<endl;
+		std::cout<<std::endl;
     }
-    cout<<"PI:--------------"<<endl;
+	std::cout<<"PI:--------------"<<std::endl;
     sum=0;
     for(i=0; i<STATE; i++)
     {
@@ -202,9 +201,9 @@ void createVocabList_M(const DataStr &data)
     for(i=0; i<STATE; i++)
     {
         dicos_m.ps0[i]/=sum;
-        cout<<dicos_m.ps0[i]<<"  ";
+		std::cout<<dicos_m.ps0[i]<<"  ";
     }
-    cout<<endl;
+	std::cout<<std::endl;
 
 }
 
@@ -257,11 +256,11 @@ int Viterbi_M(const DataStr &testdata)
                 max_i=i;
             }
         }
-        cout<<max_i;
+		std::cout<<max_i;
         for(t=testdata[k].size()-2; t>=0; t--)
         {
             max_deta=double_min;
-            cout<<fai[t+1][max_i];
+			std::cout<<fai[t+1][max_i];
             for(i=0; i<STATE; i++)
             {
                 if(deta[t][i]>max_deta)
@@ -271,7 +270,7 @@ int Viterbi_M(const DataStr &testdata)
                 }
             }
         }
-        cout<<endl;
+		std::cout<<std::endl;
     }
 }
 void init_DICOS_M()

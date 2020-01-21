@@ -13,7 +13,7 @@ namespace MLL{
             int _iter; 
             enum moedl {gradAscent, stoGradAscent};
         public:
-            SoftMaxReg(const string &file, const string &model, const double &alpha, const int &iter);
+            SoftMaxReg(const std::string &file, const std::string &model, const double &alpha, const int &iter);
             int gradAscent_SoftMax();
             int stoGradAscent_SoftMax();//随机梯度下降每一次选择m个样本进行求梯度下降方向，该代码中只选择一个样本进行求解梯度下降方向与数值
             inline Matrix get_x() const

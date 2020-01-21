@@ -10,7 +10,7 @@
 #define double_min -1
 struct DICOS_H
 {
-    string dic[VEC_LEN];
+    std::string dic[VEC_LEN];
     double a[STATE][STATE];//参数A
     double b[STATE][VEC_LEN];//参数B
     double pi[STATE];//参数pi
@@ -18,7 +18,7 @@ struct DICOS_H
 };
 DICOS_H dicos_h;
 
-int getPos_H(string str)
+int getPos_H(std::string str)
 {
     int i=0;
     for(i=0; i<dicos_h.len; i++)
@@ -26,11 +26,11 @@ int getPos_H(string str)
         if(!str.compare(dicos_h.dic[i]))
             return i;
     }
-    cout<<str<<endl;
-    cout<<"状态字典中不存在该状态"<<endl;
+    std::cout<<str<<std::endl;
+    std::cout<<"状态字典中不存在该状态"<<std::endl;
     return -1;
 }
-int getState(string str)
+int getState(std::string str)
 {
     if(str=="0")
         return 0;
@@ -45,7 +45,7 @@ int getState(string str)
 /**
     映射策略对分词的质量影响非常之大
 **/
-int wordToState(const RowDataStr &str,int word,int j,int vl, string &state)
+int wordToState(const RowDataStr &str,int word,int j,int vl, std::string &state)
 {
     char ch;
     if(str[j].length()==2)
@@ -100,16 +100,16 @@ int wordToState(const RowDataStr &str,int word,int j,int vl, string &state)
 }
 void createVocabList(const DataStr &data)
 {
-    ofstream ofile;
-    ofstream ofile_arg;
-    ofstream ofile_state;
+	std::ofstream ofile;
+	std::ofstream ofile_arg;
+	std::ofstream ofile_state;
     ofile.open("data\\hmm_dic.txt");
     ofile_state.open("data\\hmm_state.txt");
     int i,j,k,vl;
     int dic_len=0;
     int length=0;
     int word;
-    string state;
+    std::string state;
     char ch;
     double sum;
     for(i=0; i<data.size(); i++)
@@ -161,8 +161,8 @@ void createVocabList(const DataStr &data)
         ofile_arg<<'\n';
     }
     ofile_arg.close();
-    cout<<"row="<<data.size()<<endl;
-    cout<<"vec_len="<<dic_len<<endl;
+    std::cout<<"row="<<data.size()<<std::endl;
+    std::cout<<"vec_len="<<dic_len<<std::endl;
 
     DataStr state_data;
     LoadDataStr(state_data,"data\\hmm_state.txt");
@@ -174,8 +174,8 @@ void createVocabList(const DataStr &data)
             dicos_h.a[getState(state_data[i][j-1])][getState(state_data[i][j])]++;//统计参数a
         }
     }
-    cout<<"i="<<i<<endl;
-    cout<<"A:--------------"<<endl;
+    std::cout<<"i="<<i<<std::endl;
+    std::cout<<"A:--------------"<<std::endl;
     for(i=0; i<STATE; i++)
     {
         sum=0;
@@ -186,11 +186,11 @@ void createVocabList(const DataStr &data)
         for(j=0; j<STATE; j++)
         {
             dicos_h.a[i][j]/=sum;
-            cout<<dicos_h.a[i][j]<<"  ";
+            std::cout<<dicos_h.a[i][j]<<"  ";
         }
-        cout<<endl;
+        std::cout<<std::endl;
     }
-    cout<<"PI:--------------"<<endl;
+    std::cout<<"PI:--------------"<<std::endl;
     sum=0;
     for(i=0; i<STATE; i++)
     {
@@ -199,9 +199,9 @@ void createVocabList(const DataStr &data)
     for(i=0; i<STATE; i++)
     {
         dicos_h.pi[i]/=sum;
-        cout<<dicos_h.pi[i]<<"  ";
+        std::cout<<dicos_h.pi[i]<<"  ";
     }
-    cout<<endl;
+    std::cout<<std::endl;
 }
 
 int Viterbi(const DataStr &testdata)
@@ -253,11 +253,11 @@ int Viterbi(const DataStr &testdata)
                 max_i=i;
             }
         }
-        cout<<max_i;
+        std::cout<<max_i;
         for(t=testdata[k].size()-2; t>=0; t--)
         {
             max_deta=double_min;
-            cout<<fai[t+1][max_i];
+            std::cout<<fai[t+1][max_i];
             for(i=0; i<STATE; i++)
             {
                 if(deta[t][i]>max_deta)
@@ -267,7 +267,7 @@ int Viterbi(const DataStr &testdata)
                 }
             }
         }
-        cout<<endl;
+        std::cout<<std::endl;
     }
 }
 void init_DICOS_H()

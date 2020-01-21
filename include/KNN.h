@@ -15,7 +15,7 @@ namespace MLL
 
 			int classfiy(Matrix &testData,const Matrix &testDatay, Matrix &x, const Matrix &y,const int &K);
 
-			KNN(const string &file);
+			KNN(const std::string &file);
 
 			typedef std::shared_ptr<KNN> KNNPtr;
 	};

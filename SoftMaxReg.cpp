@@ -26,17 +26,17 @@ namespace MLL {
                 zRowSum.data[i][0]=0;
                 for(j=0;j<z.col;j++)
                 {
-                    sigmoid(&z.data[i][j]);
+					MLL::sigmoid(&z.data[i][j]);
                     zRowSum.data[i][0]+=z.data[i][j];//求和
                 }
                 for(j=0;j<z.col;j++)
                 {
                     z.data[i][j]/=zRowSum.data[i][0];//归一化
                     //if(iter%5000==0)
-                        //cout<<z.data[i][j] <<"  ";
+                        //std::cout<<z.data[i][j] <<"  ";
                 }
                 //if(iter%5000==0)
-                    //cout<<endl;
+                    //std::cout<<std::endl;
             }
             z = _y - z;
 
@@ -56,15 +56,15 @@ namespace MLL {
         验证算法的正确性
         **/
         Matrix test=_x * weights;
-        cout<<"test"<<endl;
+        std::cout<<"test"<<std::endl;
         for(i=0; i<_y.row; i++)
         {
             //for(j=0; j<y.col; j++)
             if(test.data[i][0]>test.data[i][1])
-                cout<<0-_y.data[i][1]<<"  ";
+                std::cout<<0-_y.data[i][1]<<"  ";
             else
-                cout<<1-_y.data[i][1]<<"  ";
-            cout<<endl;
+                std::cout<<1-_y.data[i][1]<<"  ";
+            std::cout<<std::endl;
         }
     }
     /**
@@ -100,10 +100,10 @@ namespace MLL {
                 {
                     z.data[0][j]/=zRowSum;//归一化
                     if(iter%1000==0)
-                        cout<<z.data[0][j] <<" s ";
+                        std::cout<<z.data[0][j] <<" s ";
                 }
                 if(iter%1000==0)
-                    cout<<endl;
+                    std::cout<<std::endl;
                 for(j=0;j<_y.col;j++)
                 {
                     z.data[0][j]=_y.data[i][j]-z.data[0][j];
@@ -125,21 +125,21 @@ namespace MLL {
         验证算法的正确性
         **/
         Matrix test = _x * weights;
-        cout<<"test"<<endl;
+        std::cout<<"test"<<std::endl;
         for(i=0; i < _y.row; i++)
         {
             if(test.data[i][0]>test.data[i][1])
-                cout<<0 - _y.data[i][1]<<"  ";
+                std::cout<<0 - _y.data[i][1]<<"  ";
             else
-                cout<<1 - _y.data[i][1]<<"  ";
-            cout<<endl;
+                std::cout<<1 - _y.data[i][1]<<"  ";
+            std::cout<<std::endl;
         }
     }
 
-    SoftMaxReg::SoftMaxReg(const string &file, const string &model, const double &alpha, const int &iter)
+    SoftMaxReg::SoftMaxReg(const std::string &file, const std::string &model, const double &alpha, const int &iter)
     {
-        cout<<"loadData"<<endl;
-        cout<<"----------------------"<<endl;
+        std::cout<<"loadData"<<std::endl;
+        std::cout<<"----------------------"<<std::endl;
         _x.LoadData(file);
         _y=_x.getOneCol(_x.col-1);
         _y=one_hot(_y,2);

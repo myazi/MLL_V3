@@ -50,7 +50,7 @@ namespace MLL
 				distances.data[i][0]+=pow((x.data[i][j]-test.data[0][j]),2);
 			}
 			distances.data[i][0]=sqrt(distances.data[i][0]);
-			//cout<<"dis="<<distances.data[i][0]<<endl;
+			//std::cout<<"dis="<<distances.data[i][0]<<std::endl;
 		}
 		return distances;
 	}
@@ -122,20 +122,20 @@ namespace MLL
 					sumz++;
 				else
 					sumf++;
-				cout<<y.data[int(knn.data[j][1])][0]<<"  ";
+				std::cout<<y.data[int(knn.data[j][1])][0]<<"  ";
 			}
 			if(sumz>sumf)
-				cout<<"juece="<<"1"<<"&"<<"shiji="<<testDatay.data[i][0]<<endl;
+				std::cout<<"juece="<<"1"<<"&"<<"shiji="<<testDatay.data[i][0]<<std::endl;
 			else
-				cout<<"juece="<<"-1"<<"&"<<"shiji="<<testDatay.data[i][0]<<endl;
+				std::cout<<"juece="<<"-1"<<"&"<<"shiji="<<testDatay.data[i][0]<<std::endl;
 		}
 		return 0;
 	}
-	KNN::KNN(const string &file)
+	KNN::KNN(const std::string &file)
 	{
 		Matrix x;
-		cout<<"loadData"<<endl;
-		cout<<"----------------------"<<endl;
+		std::cout<<"loadData"<<std::endl;
+		std::cout<<"----------------------"<<std::endl;
 		char filetrain[20]="data/knn.txt";
 		x.LoadData(filetrain);
 		Matrix y;
@@ -145,8 +145,8 @@ namespace MLL
 		y.print();
 		Matrix testx;
 		char testFile[20]="data/knnTest.txt";
-		cout<<"loadData"<<endl;
-		cout<<"----------------------"<<endl;
+		std::cout<<"loadData"<<std::endl;
+		std::cout<<"----------------------"<<std::endl;
 		testx.LoadData(testFile);
 		Matrix testy;
 		testy=testx.getOneCol(testx.col-1);

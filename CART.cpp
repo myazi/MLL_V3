@@ -80,7 +80,7 @@ namespace MLL
 		}
 		if(signvalue)
 		{
-			cout<<"signvalue"<<endl;
+			std::cout<<"signvalue"<<std::endl;
 			sp.bestIndex=-1;
 			sp.value=mean_C(data);
 			return sp;
@@ -121,10 +121,10 @@ namespace MLL
 		{
 			t->left=NULL;
 			t->right=NULL;
-			cout<<"feat-1"<<endl;
+			std::cout<<"feat-1"<<std::endl;
 			return 0;
 		}
-		//cout<<"feature="<<t->feature<<"  value="<<t->meanValue<<endl;
+		//std::cout<<"feature="<<t->feature<<"  value="<<t->meanValue<<std::endl;
 		twoSubData_C twosubdata=binSplitDataSet(data,sp.bestIndex,sp.value);
 		createBinTree((t->left),twosubdata.left);
 		createBinTree((t->right),twosubdata.right);
@@ -135,7 +135,7 @@ namespace MLL
 		if(t!=NULL)
 		{
 			if(t->feature==-1)
-				cout<<t->feature<<"  "<<t->meanValue<<"  "<<endl;//<<t->data.size()<<endl;//只输出叶子节点
+				std::cout<<t->feature<<"  "<<t->meanValue<<"  "<<std::endl;//<<t->data.size()<<std::endl;//只输出叶子节点
 			if(t->left!=NULL)
 				preorder(t->left);
 			if(t->right!=NULL)
@@ -170,7 +170,7 @@ namespace MLL
 			double errorone=MeanErr_C(testData);
 			if(errorone<errortwo)
 			{
-				cout<<"merge"<<endl;
+				std::cout<<"merge"<<std::endl;
 				t->left=NULL;
 				t->right=NULL;
 				t->feature=-1;
@@ -196,7 +196,7 @@ namespace MLL
 		}
 		return 0;
 	}
-	CART::CART(const string &file)
+	CART::CART(const std::string &file)
 	{
 		Data data;
 		LoadDataNum(data,"data/cart.txt");
@@ -207,11 +207,11 @@ namespace MLL
 		LoadDataNum(testdata,"data/carttest.txt");
 		prune(t,testdata);
 		preorder(t);
-		vector<double> labels(testdata.size(),0);
+		std::vector<double> labels(testdata.size(),0);
 		for(size_t i =0; i<testdata.size(); i++)
 		{
 			labels[i]=predict(t,testdata[i]);
-			cout<<labels[i]<<"&&"<<testdata[i][testdata[0].size()-1]<<endl;
+			std::cout<<labels[i]<<"&&"<<testdata[i][testdata[0].size()-1]<<std::endl;
 		}
 	}
 }

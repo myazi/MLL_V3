@@ -48,7 +48,7 @@ namespace MLL{
     {
         int layer_dims;//神经网络层数
         int layer_n[MAX_LAYER_N];//每层神经元个数
-        string layer_active[MAX_LAYER_N];//每层激活函数
+		std::string layer_active[MAX_LAYER_N];//每层激活函数
     };
 
         private:
@@ -90,7 +90,7 @@ namespace MLL{
 
             void relu_forward(parameters *p);
 
-            void line_active_forward(parameters *p,string active, double keep_prob);
+            void line_active_forward(parameters *p,std::string active, double keep_prob);
 
             Matrix model_forward(double *keep_probs);
 
@@ -100,7 +100,7 @@ namespace MLL{
 
             void line_backword(parameters *p,grad *g, double keep_prob);
 
-            void line_active_backword(parameters *p,grad *g,string active, double keep_prob);
+            void line_active_backword(parameters *p,grad *g,std::string active, double keep_prob);
 
             void model_backword(Matrix AL,double *keep_probs);
 
@@ -116,7 +116,7 @@ namespace MLL{
 
             int predict();
         public:
-            DNN(const string &file, const char *optimizer,double learn_rateing,const char *initialization, double lambd, double keep_prob, \
+            DNN(const std::string &file, const char *optimizer,double learn_rateing,const char *initialization, double lambd, double keep_prob, \
                 int mini_batch_size,double beta1, double beta2, double epsilon, int iter, bool _print_cost);
 
     typedef std::shared_ptr<DNN> DNNPtr;

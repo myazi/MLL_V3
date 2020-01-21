@@ -18,10 +18,10 @@ namespace MLL
     //for(int i=x.row-1;i>100;i--)
     //x.deleteOneCol(x.col-1);
     //    x.deleteOneRow(i);
-    cout<<x.row<<"*"<<x.col<<endl;
-    cout<<y.row<<"*"<<y.col<<endl;
+    std::cout<<x.row<<"*"<<x.col<<std::endl;
+    std::cout<<y.row<<"*"<<y.col<<std::endl;
     ///调用SMO函数求解SVM模型
-    cout<<"SVM"<<endl;
+    std::cout<<"SVM"<<std::endl;
     SMOP smop;
     kTup ktup;//核函数的定义，其中type元素为0表示不适用核函数，非0分别对应不同的核函数
     ktup.type=1;
@@ -33,15 +33,15 @@ namespace MLL
     /**
     结构体OS的初始化，用于保存所以SMO算法中需要用到的参数
     */
-    SVM::SVM(const string &file, const double C, const double soft, const double b, const int iter,kTup ktup)
+    SVM::SVM(const std::string &file, const double C, const double soft, const double b, const int iter,kTup ktup)
     {
-        cout<<"loadData:"<< file<<endl;
-        cout<<"----------------------"<<endl;
+        std::cout<<"loadData:"<< file<<std::endl;
+        std::cout<<"----------------------"<<std::endl;
         _x.LoadData(file);
         _x.print(); 
         _y=_x.getOneCol(_x.col-1);
         _x.deleteOneCol(_x.col-1);
-        cout<<"xxxxxxx"<<endl; 
+        std::cout<<"xxxxxxx"<<std::endl; 
         _eCache.initMatrix(_x.row,2,0,"ss");
         _alphas.initMatrix(_x.row,1,0,"ss");
         _kernel.initMatrix(_x.row,_x.row,0,"s");
@@ -50,7 +50,7 @@ namespace MLL
         _C=C;
         _iter = iter;
         _soft=soft;
-        cout<<"dd"<<endl;
+        std::cout<<"dd"<<std::endl;
         if(ktup.type!=0)
         {
             int i=0,j=0;
@@ -65,7 +65,7 @@ namespace MLL
             }
             _k=true;
         }
-        cout<<"aaa"<<endl;
+        std::cout<<"aaa"<<std::endl;
         _k=false;
     }
     /**
@@ -201,17 +201,17 @@ namespace MLL
             alphaJOld= _alphas.data[j][0];
             if(_y.data[i][0]!= _y.data[j][0])
             {
-                L=max<double>(0.0, _alphas.data[j][0] - _alphas.data[i][0]);
-                H=min<double>(_C, _alphas.data[j][0] - _alphas.data[i][0] + _C);
+                L=std::max<double>(0.0, _alphas.data[j][0] - _alphas.data[i][0]);
+                H=std::min<double>(_C, _alphas.data[j][0] - _alphas.data[i][0] + _C);
             }
             else
             {
-                L=max<double>(0.0, _alphas.data[j][0] + _alphas.data[i][0] - _C);
-                H=min<double>(_C, _alphas.data[j][0] + _alphas.data[i][0]);
+                L=std::max<double>(0.0, _alphas.data[j][0] + _alphas.data[i][0] - _C);
+                H=std::min<double>(_C, _alphas.data[j][0] + _alphas.data[i][0]);
             }
             if(L==H)
             {
-                cout<<"l=h------------------"<<endl;
+                std::cout<<"l=h------------------"<<std::endl;
                 return 0;
             }
             if(!_k)
@@ -236,7 +236,7 @@ namespace MLL
             eta=temp[0]+temp[1]-2*temp[2];
             if(eta<0)
             {
-                cout<<"eta<0-----------------"<<endl;
+                std::cout<<"eta<0-----------------"<<std::endl;
                 return 0;
             }
             _alphas.data[j][0] += _y.data[j][0]*(Ei-Ej)/eta;
@@ -244,7 +244,7 @@ namespace MLL
             updataEk(j);//更新误差值
             if(fabs(_alphas.data[j][0]-alphaJOld)<0.00000000001)
             {
-                cout<<"j not moving enough---------------"<<endl;
+                std::cout<<"j not moving enough---------------"<<std::endl;
                 return 0;
             }
             _alphas.data[i][0] += _y.data[i][0] * _y.data[j][0]*(alphaJOld - _alphas.data[j][0]);
@@ -260,7 +260,7 @@ namespace MLL
                 _b=(b1+b2)/2;
             return 1;
         }
-        cout<<"kkt--------------------------"<<endl;
+        std::cout<<"kkt--------------------------"<<std::endl;
         return 0;
     }
 
@@ -289,7 +289,7 @@ namespace MLL
                 for(i=0; i<_x.row; i++)
                 {
                     alphaPairsChanged+=innerL(i);
-                    cout<<"iter="<<iter<<"  i="<<i<<"  alphachanged="<<alphaPairsChanged<<"  entireSet="<<entireSet<<endl;
+                    std::cout<<"iter="<<iter<<"  i="<<i<<"  alphachanged="<<alphaPairsChanged<<"  entireSet="<<entireSet<<std::endl;
                 }
                 iter++;
             }
@@ -300,7 +300,7 @@ namespace MLL
                     if(_alphas.data[i][0]>0 && _alphas.data[i][0] < _C)//只选择支持向量上的点
                         continue;
                     alphaPairsChanged+=innerL(i);
-                    cout<<"iter="<<iter<<"  i="<<i<<"  alphachanged="<<alphaPairsChanged<<alphaPairsChanged<<"  entireSet="<<entireSet<<endl;
+                    std::cout<<"iter="<<iter<<"  i="<<i<<"  alphachanged="<<alphaPairsChanged<<alphaPairsChanged<<"  entireSet="<<entireSet<<std::endl;
                 }
                 iter++;
             }
@@ -321,20 +321,20 @@ namespace MLL
         Matrix w = w.multsMatrix(xT,ay);
 
         Matrix label = label.multsMatrix(_x,w);
-        cout<<_b<<"  ";
+        std::cout<<_b<<"  ";
         for(i=0; i < _x.col; i++)
         {
-            cout<<w.data[i][0]<<"  ";
+            std::cout<<w.data[i][0]<<"  ";
         }
-        cout<<endl;
-        cout<<"-----------"<<endl;
+        std::cout<<std::endl;
+        std::cout<<"-----------"<<std::endl;
         ///验证训练样本数据，验证SVM实现的正确性
         for(i=0; i< _x.row; i++)
         {
             if((label.data[i][0] + _b)>0)
-                cout<<1 - _y.data[i][0]<<"  ";
+                std::cout<<1 - _y.data[i][0]<<"  ";
             else
-                cout<<0- _y.data[i][0]<<"  ";
+                std::cout<<0- _y.data[i][0]<<"  ";
         }
         return 0;
     }

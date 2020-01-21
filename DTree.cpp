@@ -10,13 +10,12 @@
 
 #include "DTree.h"
 #define MAX_SIZE_OF_TRAINING_SET 1000
-using namespace std;
 
 namespace MLL {
-	vector<string> DTree::getkindattr(const DataStr &data,const int &axis)//获得axis属性的所有不同取值
+	std::vector<std::string> DTree::getkindattr(const DataStr &data,const int &axis)//获得axis属性的所有不同取值
 	{
 		unsigned int i,j;
-		static vector<string> attr_value;
+		static std::vector<std::string> attr_value;
 		for(i=0; i<data.size(); i++)
 		{
 			for(j=0; j<attr_value.size(); j++)
@@ -32,14 +31,14 @@ namespace MLL {
 		return attr_value;
 	}
 
-	double DTree::calcShannonEntOrGini(const DataStr &data, const string &type)
+	double DTree::calcShannonEntOrGini(const DataStr &data, const std::string &type)
 	{
 		unsigned int i;
-		map<string,double> label_value;//每一类样本的个数统计
+		std::map<std::string,double> label_value;//每一类样本的个数统计
 		double prob=0;
 		double shannoEnt=0;
 		double Gini=1;
-		string label;
+		std::string label;
 		for(i=0; i<data.size(); i++)
 		{
 			label=data[i][data[0].size()-1];
@@ -49,7 +48,7 @@ namespace MLL {
 				label_value[label]=1;//如果类别未初始化，则把当前类别下样本数初始化为1
 		}
 		//统计该子数据集上的所有样本的决策属性以及不同决策属性上样本数
-		for(map<string,double>::iterator it=label_value.begin();it!=label_value.end();it++)
+		for(std::map<std::string,double>::iterator it=label_value.begin();it!=label_value.end();it++)
 		{
 			prob=it->second/data.size();
 			shannoEnt-=prob*log(prob);
@@ -63,7 +62,7 @@ namespace MLL {
 		return shannoEnt;
 	}
 
-	DataStr DTree::splitDataSet(const DataStr &data,const int &axis, const string &value)
+	DataStr DTree::splitDataSet(const DataStr &data,const int &axis, const std::string &value)
 	{
 		DataStr subData;
 		int i;
@@ -77,7 +76,7 @@ namespace MLL {
 		return subData;
 	}
 
-	int DTree::chooseBestFectureTosplit(const DataStr &data, const string &type, const double &epsilon, const int &minLen)
+	int DTree::chooseBestFectureTosplit(const DataStr &data, const std::string &type, const double &epsilon, const int &minLen)
 	{
 		int i,j,k;
 		double baseEnt;
@@ -97,7 +96,7 @@ namespace MLL {
 		double prob=0;
 		double len=0;
 		DataStr subData;
-		vector<vector<string> > feat_value(data[0].size()-1);
+		std::vector<std::vector<std::string> > feat_value(data[0].size()-1);
 		for(i=0; i<data.size(); i++)//初始化每个属性的不同取值的二维数组
 		{
 			for(j=0; j<data[0].size()-1; j++)
@@ -112,7 +111,7 @@ namespace MLL {
 		{
 			if(feat_flag[i]!=1)
 			{
-				cout<<"---------"<<"feat="<<i<<"--------"<<endl;
+				std::cout<<"---------"<<"feat="<<i<<"--------"<<std::endl;
 				newEnt=0;
 				newGini=0;
 				splitInfo=0;
@@ -127,7 +126,7 @@ namespace MLL {
 					}
 					prob=double(subData.size())/double(data.size());
 					splitInfo+=(-log(prob)*prob);//计算特征的信息熵
-					cout<<"splitInfo="<<splitInfo<<endl;
+					std::cout<<"splitInfo="<<splitInfo<<std::endl;
 					newEnt+=prob*calcShannonEntOrGini(subData,"Ent");
 					newGini+=prob*calcShannonEntOrGini(subData,"Gini");
 				}
@@ -136,7 +135,7 @@ namespace MLL {
 				giniGain=baseGini-newGini;//计算Gini增率
 				if(type=="ID3")
 				{
-					cout<<"fet="<<i<<"infogain="<<infoGain<<endl;
+					std::cout<<"fet="<<i<<"infogain="<<infoGain<<std::endl;
 					if(infoGain>bestInfoGain&&infoGain>epsilon)//信息增益必须大于阈值，才考虑用于属性分裂
 					{
 						bestInfoGain=infoGain;
@@ -145,7 +144,7 @@ namespace MLL {
 				}
 				if(type=="C4.5")
 				{
-					cout<<"fet="<<i<<"gainRatio="<<gainRatio<<endl;
+					std::cout<<"fet="<<i<<"gainRatio="<<gainRatio<<std::endl;
 					if(gainRatio>bestgainRatio&&gainRatio>epsilon)//信息增益必须大于阈值，才考虑用于属性分裂
 					{
 						bestgainRatio=gainRatio;
@@ -154,7 +153,7 @@ namespace MLL {
 				}
 				if(type=="CART")
 				{
-					cout<<"fet="<<i<<"giniGain="<<giniGain<<endl;
+					std::cout<<"fet="<<i<<"giniGain="<<giniGain<<std::endl;
 					if(giniGain>bestGini&&giniGain>epsilon)//信息增益必须大于阈值，才考虑用于属性分裂
 					{
 						bestGini=giniGain;
@@ -163,11 +162,11 @@ namespace MLL {
 				}
 			}
 		}
-		cout<<"bestFet="<<bestFeature<<endl;
+		std::cout<<"bestFet="<<bestFeature<<std::endl;
 		return bestFeature;
 	}
 
-	DTree::Tree DTree::dataToTree(const DataStr &data,const string &type, const int &bbestFet)
+	DTree::Tree DTree::dataToTree(const DataStr &data,const std::string &type, const int &bbestFet)
 	{
 		int i,j;
 		int signalflag=1;//所有样本是否同类别，特征是否全用完标志
@@ -185,7 +184,7 @@ namespace MLL {
 			tree[node].parent=bbestFet;
 			tree[node].size=data.size();
 			tree[node].id=node;
-			cout<<"fetflag=1----"<<tree[node].label<<endl;
+			std::cout<<"fetflag=1----"<<tree[node].label<<std::endl;
 			node++;
 			return tree[node];
 		}
@@ -199,7 +198,7 @@ namespace MLL {
 			tree[node].parent=bbestFet;
 			tree[node].size=data.size();
 			tree[node].id=node;
-			cout<<"fetflag=1----"<<tree[node].label<<endl;
+			std::cout<<"fetflag=1----"<<tree[node].label<<std::endl;
 			node++;
 			return tree[node];
 		}
@@ -212,12 +211,12 @@ namespace MLL {
 			tree[node].parent=bbestFet;
 			tree[node].size=data.size();
 			tree[node].id=node;
-			cout<<"fetflag=1----"<<tree[node].label<<endl;
+			std::cout<<"fetflag=1----"<<tree[node].label<<std::endl;
 			node++;
 			return tree[node];
 		}
 		feat_flag[bestFet]=1;//选出最好的分裂属性之后，在返回分裂之前，不必再考虑用该属性进行分裂
-		vector<string> feat_value=getkindattr(data,bestFet);//获得当前分裂属性有多少种取值
+		std::vector<std::string> feat_value=getkindattr(data,bestFet);//获得当前分裂属性有多少种取值
 		for(j=0; j<feat_value.size(); j++)//分裂后的子集按序建树，同样也可以先对样本多的子集先进行建树，方便决策的时候能更大概率的先找到匹配的
 		{
 			tree[node]=dataToTree(splitDataSet(data,bestFet,feat_value[j]), type, bestFet);
@@ -264,7 +263,7 @@ namespace MLL {
 		return 0;
 	}
 
-	DTree::DTree(const string &file, const string &type)
+	DTree::DTree(const std::string &file, const std::string &type)
 	{
 		LoadDataStr(data,file);
 		for(unsigned int i=0;i<data[0].size();i++)
@@ -277,10 +276,10 @@ namespace MLL {
 			p=&tree[i];
 			while(p!=NULL)
 			{
-				cout<<p->id<<"  ";
+				std::cout<<p->id<<"  ";
 				p=p->next;
 			}
-			cout<<endl;
+			std::cout<<std::endl;
 		}
 	}
 }

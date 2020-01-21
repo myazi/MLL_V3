@@ -71,9 +71,9 @@ namespace MLL
 			{
 				//改变初值的选取，得到的聚类中心会不一致，可见初值的选取的关键，
 				initmeans.data[k][j]=x.data[k][j];//min[j]+(max[j]-min[j])*(random(10)/10.0);
-				cout<<initmeans.data[k][j]<<"  ";
+				std::cout<<initmeans.data[k][j]<<"  ";
 			}
-			cout<<endl;
+			std::cout<<std::endl;
 		}
 		return initmeans;
 	}
@@ -129,14 +129,14 @@ namespace MLL
 				}
 			}
 			//输出当前次EM后的聚类中心
-			cout<<"--------------------"<<endl;
+			std::cout<<"--------------------"<<std::endl;
 			for(k=0; k<kNum; k++)
 			{
 				for(j=0; j<x.col; j++)
 				{
-					cout<<kmeans.data[k][j]<<"  ";
+					std::cout<<kmeans.data[k][j]<<"  ";
 				}
-				cout<<endl;
+				std::cout<<std::endl;
 			}
 		}
 		/**
@@ -161,7 +161,7 @@ namespace MLL
 		{
 			sum+=cendis.dis.data[i][0];
 		}
-		cout<<"err="<<sum<<endl;
+		std::cout<<"err="<<sum<<std::endl;
 		return cendis;
 	}
 
@@ -294,11 +294,11 @@ namespace MLL
 			{
 				sum+=clusterAssment.data[i][1];
 			}
-			cout<<"err==="<<sum<<endl;
+			std::cout<<"err==="<<sum<<std::endl;
 		}
 	}
 
-	KMeans::KMeans(const string &file)
+	KMeans::KMeans(const std::string &file)
 	{
 		Matrix x;
 		x.LoadData(file);

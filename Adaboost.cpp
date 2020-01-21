@@ -27,9 +27,9 @@ namespace MLL
 		range[1]=rangemax;
 		return range;
 	}
-	vector<int> Adaboost::Classify(const int &axis, const double &threshVal,const  string &threshIneq)
+	std::vector<int> Adaboost::Classify(const int &axis, const double &threshVal,const  std::string &threshIneq)
 	{
-		vector<int> label;
+		std::vector<int> label;
 		for(size_t i=0; i<data.size(); i++)
 		{
 			label.push_back(1);
@@ -48,7 +48,7 @@ namespace MLL
 		}
 		return label;
 	}
-	Adaboost::Stump Adaboost::buildStump(vector<double> &weight)
+	Adaboost::Stump Adaboost::buildStump(std::vector<double> &weight)
 	{
 		Stump stump;
 		int i,j,k,l;
@@ -62,8 +62,8 @@ namespace MLL
 		//int numSteps = data.size()/10;
 		double threshVal;
 		int label_index=data[0].size()-1;
-		vector<int> label;
-		string threshIneq[2]= {"lt","gt"};
+		std::vector<int> label;
+		std::string threshIneq[2]= {"lt","gt"};
 		for(i=0; i<data[0].size()-1; i++) //属性
 		{
 			range=rangeSize(i);
@@ -98,7 +98,7 @@ namespace MLL
 						stump.minErr=minErr;
 						stump.threshVal=threshVal;
 						stump.ltOrgt=threshIneq[k];
-						cout<<"minErr="<<minErr<<endl;
+						std::cout<<"minErr="<<minErr<<std::endl;
 						stump.alpha=0.5*log((1-minErr)/minErr);
 					}
 				}
@@ -110,11 +110,11 @@ namespace MLL
 	{
 		int i,j,k;
 		int label_index=data[0].size()-1;
-		vector<double> weight;
+		std::vector<double> weight;
 		double weightSum=0;
-		vector<double> aggErr;
+		std::vector<double> aggErr;
 		double sumErr=0;
-		vector<Stump> stump(numIt);
+		std::vector<Stump> stump(numIt);
 		for(i=0; i<data.size(); i++)
 		{
 			weight.push_back(1.0/data.size());
@@ -123,7 +123,7 @@ namespace MLL
 		for(i=0; i<numIt; i++)
 		{
 			stump[i] = buildStump(weight);//写成赋值语句结构体中的结构体复制出现问题
-			cout<<"alpha===="<<stump[i].alpha<<endl;
+			std::cout<<"alpha===="<<stump[i].alpha<<std::endl;
 			weightSum=0;
 			for(j=0; j<data.size(); j++)
 			{
@@ -152,17 +152,17 @@ namespace MLL
 			}
 			//if(sumErr/data.size()<0.01)
 			{
-				cout<<sumErr<<endl;
+				std::cout<<sumErr<<std::endl;
 				//break;
 			}
 		}
 		for(i=0; i<numIt; i++) //50为投票器个数，但不一定是50，只会小于等于50
 		{
-			cout<<stump[i].alpha<<"   "<<stump[i].bestIndex<<"   "<<stump[i].threshVal<<"   "<<stump[i].ltOrgt<<"   "<<stump[i].minErr<<endl;
+			std::cout<<stump[i].alpha<<"   "<<stump[i].bestIndex<<"   "<<stump[i].threshVal<<"   "<<stump[i].ltOrgt<<"   "<<stump[i].minErr<<std::endl;
 		}
 		return 0;
 	}
-	Adaboost::Adaboost(const string &file,const int &numIt)
+	Adaboost::Adaboost(const std::string &file,const int &numIt)
 	{
 		this->numIt = numIt;
 		LoadDataNum(data,file);

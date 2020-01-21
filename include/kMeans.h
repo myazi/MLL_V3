@@ -20,7 +20,7 @@ namespace MLL
 
 			int biKmeans(Matrix &x,const int &kNum,const int &Iter);
 
-			KMeans(const string &file);
+			KMeans(const std::string &file);
 
 			typedef std::shared_ptr<KMeans> KMeansPtr;
 	};

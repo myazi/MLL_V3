@@ -30,7 +30,7 @@ namespace  MLL
             kTup _ktup;
         public:
             //非常值得注意的是svm中训练样本按列排列，即每一列是一个样本，所以导致w是行向量
-            SVM(const string &file, const double C, const double soft, const double b, const int iter,kTup ktup);
+            SVM(const std::string &file, const double C, const double soft, const double b, const int iter,kTup ktup);
             Matrix kernelTran(Matrix xOneRow);
             double clipAlpha(double alpha,double L,double H);
             double calcEk(int k);
