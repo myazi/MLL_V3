@@ -1,5 +1,5 @@
 INCLUDE = ./include
-OBJS = main.o Adaboost.o Bayes.o CART.o CRF_CWS.o DNN.o DTree.o GMM.o Hash.o HMM_CWS.o HMM.o kMeans.o  KNN.o LineReg.o LogReg.o MDP.o ME.o MEMM-CWS.o PCA.o RF.o SoftMaxReg.o SVD.o SVM.o LoadData.o Matrix.o MatrixOpe.o
+OBJS = main.o Adaboost.o Bayes.o CART.o CRF_CWS.o DNN.o DTree.o GMM.o Hash.o HMM_CWS.o HMM.o kMeans.o  KNN.o LineReg.o LogReg.o MDP.o ME.o MEMM_CWS.o PCA.o RF.o SoftMaxReg.o SVD.o SVM.o LoadData.o Matrix.o MatrixOpe.o
 #H = ./include/Adaboost.h ./include/Bayes.h ./include/CART.h ./include/DNN.h ./include/DTree.h ./include/GMM.h ./include/Hash.h  ./include/HMM.h ./include/kMeans.h  ./include/KNN.h ./include/LineReg.h ./include/LogReg.h ./include/MDP.h ./include/ME.h ./include/PCA.h ./include/RF.h ./include/SoftMaxReg.h ./include/SVD.h ./include/SVM.h
 
 HH = ./include/LoadData.h ./include/Matrix.h ./include/MatrixOpe.h
@@ -60,8 +60,8 @@ MDP.o : MDP.cpp
 	$(CXX) $(CXXFLAGS) -c -I $(INCLUDE) MDP.cpp
 ME.o : ME.cpp
 	$(CXX) $(CXXFLAGS) -c -I $(INCLUDE) ME.cpp
-MEMM-CWS.o : MEMM-CWS.cpp
-	$(CXX) $(CXXFLAGS) -c -I $(INCLUDE) MEMM-CWS.cpp
+MEMM_CWS.o : MEMM_CWS.cpp
+	$(CXX) $(CXXFLAGS) -c -I $(INCLUDE) MEMM_CWS.cpp
 PCA.o : PCA.cpp
 	$(CXX) $(CXXFLAGS) -c -I $(INCLUDE) PCA.cpp
 RF.o : RF.cpp
