@@ -2,7 +2,6 @@
 #define LogReg_H
 #include "MatrixOpe.h"
 #include <iostream>
-#include <memory>
 namespace MLL {
     class LogReg {
         private:
@@ -29,6 +28,6 @@ namespace MLL {
                 return _w;
             };
 		typedef std::shared_ptr<LogReg> LogRegPtr;
-};
+	};
 }
 #endif

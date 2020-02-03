@@ -2,7 +2,6 @@
 #define LineReg_H
 #include "MatrixOpe.h"
 #include <iostream>
-#include <memory>
 namespace MLL{
     class LineReg{
         private:

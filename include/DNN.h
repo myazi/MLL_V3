@@ -2,7 +2,6 @@
 #define DNN_H
 #include "MatrixOpe.h"
 #define MAX_LAYER_N 1000
-#include <memory>
 namespace MLL{
     
     class DNN{

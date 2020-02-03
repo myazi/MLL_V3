@@ -1,5 +1,5 @@
 INCLUDE = ./include
-OBJS = main.o Adaboost.o Bayes.o CART.o CRF-CWS.o DNN.o DTree.o GMM.o Hash.o HMM-CWS.o HMM.o kMeans.o  KNN.o LineReg.o LogReg.o MDP.o ME.o MEMM-CWS.o PCA.o RF.o SoftMaxReg.o SVD.o SVM.o LoadData.o Matrix.o MatrixOpe.o
+OBJS = main.o Adaboost.o Bayes.o CART.o CRF_CWS.o DNN.o DTree.o GMM.o Hash.o HMM_CWS.o HMM.o kMeans.o  KNN.o LineReg.o LogReg.o MDP.o ME.o MEMM-CWS.o PCA.o RF.o SoftMaxReg.o SVD.o SVM.o LoadData.o Matrix.o MatrixOpe.o
 #H = ./include/Adaboost.h ./include/Bayes.h ./include/CART.h ./include/DNN.h ./include/DTree.h ./include/GMM.h ./include/Hash.h  ./include/HMM.h ./include/kMeans.h  ./include/KNN.h ./include/LineReg.h ./include/LogReg.h ./include/MDP.h ./include/ME.h ./include/PCA.h ./include/RF.h ./include/SoftMaxReg.h ./include/SVD.h ./include/SVM.h
 
 HH = ./include/LoadData.h ./include/Matrix.h ./include/MatrixOpe.h
@@ -34,8 +34,8 @@ Bayes.o : Bayes.cpp
 	$(CXX) $(CXXFLAGS) -c -I $(INCLUDE) Bayes.cpp
 CART.o : CART.cpp ./include/CART.h
 	$(CXX) $(CXXFLAGS) -c -I $(INCLUDE) CART.cpp
-CRF-CWS.o : CRF-CWS.cpp
-	$(CXX) $(CXXFLAGS) -c -I $(INCLUDE) CRF-CWS.cpp
+CRF_CWS.o : CRF_CWS.cpp
+	$(CXX) $(CXXFLAGS) -c -I $(INCLUDE) CRF_CWS.cpp
 DNN.o : DNN.cpp
 	$(CXX) $(CXXFLAGS) -c -I $(INCLUDE) DNN.cpp
 DTree.o : DTree.cpp
@@ -44,8 +44,8 @@ GMM.o : GMM.cpp
 	$(CXX) $(CXXFLAGS) -c -I $(INCLUDE) GMM.cpp
 Hash.o : Hash.cpp
 	$(CXX) $(CXXFLAGS) -c -I $(INCLUDE) Hash.cpp
-HMM-CWS.o : HMM-CWS.cpp
-	$(CXX) $(CXXFLAGS) -c -I $(INCLUDE) HMM-CWS.cpp
+HMM_CWS.o : HMM_CWS.cpp
+	$(CXX) $(CXXFLAGS) -c -I $(INCLUDE) HMM_CWS.cpp
 HMM.o : HMM.cpp
 	$(CXX) $(CXXFLAGS) -c -I $(INCLUDE) HMM.cpp
 kMeans.o : kMeans.cpp

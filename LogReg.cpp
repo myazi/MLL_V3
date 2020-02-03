@@ -30,7 +30,7 @@ namespace MLL {
                 sigmoid(&z.data[i][0]);
             }
             z = _y - z ;
-           for(i = 0; i < z.row; i++)
+			for(i = 0; i < z.row; i++)
             {
                 z.data[i][0] *= exp( -0.5 * _y.data[i][0]);
             }

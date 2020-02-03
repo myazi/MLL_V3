@@ -2,7 +2,6 @@
 #define SVM_H
 #include "MatrixOpe.h"
 #include <iostream>
-#include <memory>
 #define MAX 1000000
 #define MIN -100000
 //SMO参数结构体
