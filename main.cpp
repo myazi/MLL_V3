@@ -31,7 +31,7 @@ int LogReg(const char *file = "logReg.txt")
     path_file.append(file);
 	std::string model = "gradAscent";
     double alpha = 0.001;
-    double iter = 10000;
+    double iter = 10;
     MLL::LogReg::LogRegPtr logreg = std::make_shared<MLL::LogReg>(path_file,model,alpha,iter);
     if(model=="gradAscent")
         logreg->gradAscent_Log();

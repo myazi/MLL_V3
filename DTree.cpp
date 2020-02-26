@@ -265,7 +265,7 @@ namespace MLL {
 
 	DTree::DTree(const std::string &file, const std::string &type)
 	{
-		LoadDataStr(data,file);
+		LoadData_t(data,file);
 		for(unsigned int i=0;i<data[0].size();i++)
 			feat_flag.push_back(0);
 		dataToTree(data,type,0);//初值很重要，当返回到根节点时，如取-1，则会无法访问根节点上的属性特征值

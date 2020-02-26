@@ -155,7 +155,7 @@ namespace MLL
 		std::cout<<"vec_len="<<dic_len<<std::endl;
 
 		DataStr state_data;
-		LoadDataStr(state_data,"data/hmm_state.txt");
+		LoadData_t(state_data,"data/hmm_state.txt");
 		for(i=0; i<state_data.size(); i++)
 		{
 			dicos.pi[getState(state_data[i][0])]++;//统计参数pi
@@ -278,11 +278,11 @@ namespace MLL
 	HMM_CWS::HMM_CWS(const std::string &file)
 	{
 		DataStr data;
-		LoadDataStr(data,file);
+		LoadData_t(data,file);
 		init_DICOS();
 		createVocabList(data);//创建状态字典，用于存放参数值
 		DataStr testdata;
-		LoadDataStr(testdata,"data/hmm_test.txt");
+		LoadData_t(testdata,"data/hmm_test.txt");
 		Viterbi(testdata);
 	}
 }

@@ -6,6 +6,17 @@ namespace MLL
 		//Matrix(0);
 		//cout<<"matrix is no size"<<endl;
 	}
+	Matrix::~Matrix()
+	{
+		std::cout << "Destructor Matrix"<< std::endl;
+	}
+	Matrix::Matrix(const Matrix &rhs)
+	{
+		std::cout<<"(const A& rhs)"<<std::endl;
+		this->data = rhs.data;
+		this->row = rhs.row;
+		this->col = rhs.col;
+	}
 	Matrix::Matrix(const unsigned int &row, const unsigned int &col,const float &init_val, const std::string &type)
 	{
 		RowData cda(col);
@@ -104,7 +115,7 @@ namespace MLL
 	}
 	void Matrix::LoadData(const std::string &filename)
 	{
-		LoadDataNum(this->data,filename);
+		LoadData_t(this->data,filename);
 		row=data.size();
 		col=data[0].size();
 	}

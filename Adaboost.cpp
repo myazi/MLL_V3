@@ -165,7 +165,7 @@ namespace MLL
 	Adaboost::Adaboost(const std::string &file,const int &numIt)
 	{
 		this->numIt = numIt;
-		LoadDataNum(data,file);
+		LoadData_t(data,file);
 		int label_index=data[0].size()-1;
 		for(int l=0; l<data.size(); l++)
 		{

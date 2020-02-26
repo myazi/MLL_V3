@@ -37,7 +37,7 @@ namespace MLL {
             error=0;
             for(i=0; i<_x.row; i++)///统计错误率
                 error+=z.data[i][0];
-            std::cout<<"error="<<error<<std::endl;
+            //std::cout<<"error="<<error<<std::endl;
             //if(error<x.row/100 && error>x.row/100)///设置错误率小于一定值时退出迭代
                // break;
             grad = xT * z ;///计算负梯度方向

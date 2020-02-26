@@ -1,6 +1,7 @@
 #ifndef Matrix_H
 #define Matrix_H
 #include "LoadData.h"
+//#include "LoadData_new.h"
 namespace MLL
 {
 	class Matrix
@@ -11,7 +12,11 @@ namespace MLL
 		unsigned int col;
 	public:
 		Matrix();
+		
+		~Matrix();
 
+		Matrix(const Matrix &rhs);
+		
 		Matrix(const unsigned int &row, const unsigned int &col, const float &init_val, const std::string &type);
 
 		void initMatrix(const unsigned int &row, const unsigned int &col, const float &init_val, const std::string &type);

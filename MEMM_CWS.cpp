@@ -155,7 +155,7 @@ namespace MLL
 		ofile_arg.close();
 
 		DataStr state_data;
-		LoadDataStr(state_data,"data/memm_state.txt");
+		LoadData_t(state_data,"data/memm_state.txt");
 		for(i=0; i<state_data.size(); i++)
 		{
 			dicos.ps0[getState(state_data[i][0])]++;//统计参数ps0
@@ -279,11 +279,11 @@ namespace MLL
 	MEMM_CWS::MEMM_CWS(const std::string &file)
 	{
 		DataStr data;
-		LoadDataStr(data,file);
+		LoadData_t(data,file);
 		init_DICOS();
 		createVocabList(data);//创建状态字典，用于存放参数值
 		DataStr testdata;
-		LoadDataStr(testdata,"data/hmm_test.txt");
+		LoadData_t(testdata,"data/hmm_test.txt");
 		Viterbi(testdata);
 	}
 }
