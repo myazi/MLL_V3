@@ -2,38 +2,38 @@
 
 namespace MLL
 {
-	/***数据归一化处理，data[i][j]-min[j]/range[j]**/
+	/***数据归一化处理，_data[i][j]-min[j]/range[j]**/
 	int KNN::autoNorm(Matrix &x)
 	{
 		int j=0,i=0;
 
-		Matrix minVals(1,x.col,0,"ss");
-		Matrix maxVals(1,x.col,0,"ss");
-		Matrix ranges(1,x.col,0,"ss");
-		for(j=0; j<x.col; j++)
+		Matrix minVals(1,x._col,0,"ss");
+		Matrix maxVals(1,x._col,0,"ss");
+		Matrix ranges(1,x._col,0,"ss");
+		for(j=0; j<x._col; j++)
 		{
-			minVals.data[0][j]=x.data[0][j];
-			maxVals.data[0][j]=x.data[0][j];
+			minVals._data[0][j]=x._data[0][j];
+			maxVals._data[0][j]=x._data[0][j];
 		}
-		for(i=0; i<x.row; i++)
+		for(i=0; i<x._row; i++)
 		{
-			for(j=0; j<x.col; j++)
+			for(j=0; j<x._col; j++)
 			{
-				if(x.data[i][j]<minVals.data[0][j])
-					minVals.data[0][j]=x.data[i][j];
-				if(x.data[i][j]>maxVals.data[0][j])
-					maxVals.data[0][j]=x.data[i][j];
+				if(x._data[i][j]<minVals._data[0][j])
+					minVals._data[0][j]=x._data[i][j];
+				if(x._data[i][j]>maxVals._data[0][j])
+					maxVals._data[0][j]=x._data[i][j];
 			}
 		}
-		for(j=0; j<x.col; j++)
-			ranges.data[0][j]=maxVals.data[0][j]-minVals.data[0][j];
-		for(i=0; i<x.row; i++)
+		for(j=0; j<x._col; j++)
+			ranges._data[0][j]=maxVals._data[0][j]-minVals._data[0][j];
+		for(i=0; i<x._row; i++)
 		{
-			for(j=0; j<x.col; j++)
+			for(j=0; j<x._col; j++)
 			{
-				x.data[i][j]-=minVals.data[0][j];
-				if(ranges.data[0][j]!=0)
-					x.data[i][j]/=ranges.data[0][j];
+				x._data[i][j]-=minVals._data[0][j];
+				if(ranges._data[0][j]!=0)
+					x._data[i][j]/=ranges._data[0][j];
 			}
 		}
 		return 0;
@@ -42,15 +42,15 @@ namespace MLL
 	Matrix KNN::cdistances(const Matrix &test, const Matrix &x)
 	{
 		int i,j;
-		static Matrix distances(x.row,1,0,"ss");
-		for(i=0; i<x.row; i++)
+		static Matrix distances(x._row,1,0,"ss");
+		for(i=0; i<x._row; i++)
 		{
-			for(j=0; j<x.col; j++)
+			for(j=0; j<x._col; j++)
 			{
-				distances.data[i][0]+=pow((x.data[i][j]-test.data[0][j]),2);
+				distances._data[i][0]+=pow((x._data[i][j]-test._data[0][j]),2);
 			}
-			distances.data[i][0]=sqrt(distances.data[i][0]);
-			//std::cout<<"dis="<<distances.data[i][0]<<std::endl;
+			distances._data[i][0]=sqrt(distances._data[i][0]);
+			//std::cout<<"dis="<<distances._data[i][0]<<std::endl;
 		}
 		return distances;
 	}
@@ -58,34 +58,34 @@ namespace MLL
 	Matrix KNN::getK(const Matrix &oneTest, const Matrix &x, const int &K)
 	{
 		int i,j,k;
-		static Matrix distances(x.row,1,0,"xx");//为每一个测试样本初始化k个近邻为前k个训练样本，并记录近邻的id
+		static Matrix distances(x._row,1,0,"xx");//为每一个测试样本初始化k个近邻为前k个训练样本，并记录近邻的id
 		distances=cdistances(oneTest,x);
 		Matrix Kdistances(K,2,0,"x");
 		double Max=-1;
 		int Maxi=-1;
 		for(i=0; i<K; i++)
 		{
-			Kdistances.data[i][0]=distances.data[i][0];
-			Kdistances.data[i][1]=i;//记录近邻的id
-			if(Kdistances.data[i][0]>Max)
+			Kdistances._data[i][0]=distances._data[i][0];
+			Kdistances._data[i][1]=i;//记录近邻的id
+			if(Kdistances._data[i][0]>Max)
 			{
-				Max=Kdistances.data[i][0];
+				Max=Kdistances._data[i][0];
 				Maxi=i;//选出当前k个近邻中最大的一个
 			}
 		}
 		//为每一个测试样本从第K个训练样本中遍历更新新的k个近邻
-		for(i=K; i<x.row; i++)
+		for(i=K; i<x._row; i++)
 		{
-			if(distances.data[i][0]<Max)
+			if(distances._data[i][0]<Max)
 			{
-				Kdistances.data[Maxi][0]=distances.data[i][0];
-				Max=distances.data[i][0];//暂时更新当前替换的距离为最大距离，因为已经不能用之前的最大距离了
-				Kdistances.data[Maxi][1]=i;//记录近邻的id
+				Kdistances._data[Maxi][0]=distances._data[i][0];
+				Max=distances._data[i][0];//暂时更新当前替换的距离为最大距离，因为已经不能用之前的最大距离了
+				Kdistances._data[Maxi][1]=i;//记录近邻的id
 				for(k=0; k<K; k++)
 				{
-					if(Kdistances.data[k][0]>Max)
+					if(Kdistances._data[k][0]>Max)
 					{
-						Max=Kdistances.data[k][0];
+						Max=Kdistances._data[k][0];
 						Maxi=k;//选出当前k个近邻中最大的一个
 					}
 				}
@@ -101,56 +101,56 @@ namespace MLL
 	4，由k个样本加权投票得到最终的决策类别
 
 	***/
-	int KNN::classfiy(Matrix &testData,const Matrix &testDatay,Matrix &x, const Matrix &y,const int &K)
+	int KNN::classfiy(Matrix &test_data,const Matrix &test_datay,Matrix &x, const Matrix &y,const int &K)
 	{
 		int i,j,k;
 		int sumz=0,sumf=0;
 		Matrix knn(K,2,0,"s");
 		autoNorm(x);
-		autoNorm(testData);
-		for(i=0; i<testData.row; i++)
+		autoNorm(test_data);
+		for(i=0; i<test_data._row; i++)
 		{
 			sumz=0;
 			sumf=0;
 			Matrix oneTest;
-			oneTest=testData.getOneRow(i);
+			oneTest=test_data.getOneRow(i);
 			knn=getK(oneTest,x,K);
 			for(j=0; j<K; j++)
 			{
 
-				if(y.data[int(knn.data[j][1])][0]==1)
+				if(y._data[int(knn._data[j][1])][0]==1)
 					sumz++;
 				else
 					sumf++;
-				std::cout<<y.data[int(knn.data[j][1])][0]<<"  ";
+				std::cout<<y._data[int(knn._data[j][1])][0]<<"  ";
 			}
 			if(sumz>sumf)
-				std::cout<<"juece="<<"1"<<"&"<<"shiji="<<testDatay.data[i][0]<<std::endl;
+				std::cout<<"juece="<<"1"<<"&"<<"shiji="<<test_datay._data[i][0]<<std::endl;
 			else
-				std::cout<<"juece="<<"-1"<<"&"<<"shiji="<<testDatay.data[i][0]<<std::endl;
+				std::cout<<"juece="<<"-1"<<"&"<<"shiji="<<test_datay._data[i][0]<<std::endl;
 		}
 		return 0;
 	}
 	KNN::KNN(const std::string &file)
 	{
 		Matrix x;
-		std::cout<<"loadData"<<std::endl;
+		std::cout<<"load_data"<<std::endl;
 		std::cout<<"----------------------"<<std::endl;
 		char filetrain[20]="data/knn.txt";
 		x.LoadData(filetrain);
 		Matrix y;
-		y=x.getOneCol(x.col-1);
-		x.deleteOneCol(x.col-1);
+		y=x.getOneCol(x._col-1);
+		x.deleteOneCol(x._col-1);
 		x.print();
 		y.print();
 		Matrix testx;
 		char testFile[20]="data/knnTest.txt";
-		std::cout<<"loadData"<<std::endl;
+		std::cout<<"load_data"<<std::endl;
 		std::cout<<"----------------------"<<std::endl;
 		testx.LoadData(testFile);
 		Matrix testy;
-		testy=testx.getOneCol(testx.col-1);
-		testx.deleteOneCol(testx.col-1);
+		testy=testx.getOneCol(testx._col-1);
+		testx.deleteOneCol(testx._col-1);
 		classfiy(testx,testy,x,y,10);
 	}
 }

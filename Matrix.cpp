@@ -13,38 +13,38 @@ namespace MLL
 	Matrix::Matrix(const Matrix &rhs)
 	{
 		std::cout<<"(const A& rhs)"<<std::endl;
-		this->data = rhs.data;
-		this->row = rhs.row;
-		this->col = rhs.col;
+		this->_data = rhs._data;
+		this->_row = rhs._row;
+		this->_col = rhs._col;
 	}
 	Matrix::Matrix(const unsigned int &row, const unsigned int &col,const float &init_val, const std::string &type)
 	{
 		RowData cda(col);
 		Data da(row,cda);
-		this->data = da;
-		this->row = row;
-		this->col = col;
+		this->_data = da;
+		this->_row = row;
+		this->_col = col;
 		unsigned int i = 0, j = 0;
 		if(type!="diag")
 		{
-			for(i=0; i<row; i++)
+			for(i=0; i<_row; i++)
 			{
-				for(j=0; j<col; j++)
-					data[i][j] = init_val;
+				for(j=0; j<_col; j++)
+					this->_data[i][j] = init_val;
 			}
 		}
 		else
 		{
-			if(row==col)
+			if(_row == _col)
 			{
-				for(i=0; i<row; i++)
+				for(i=0; i<_row; i++)
 				{
-					for(j=0; j<col; j++)
+					for(j=0; j<_col; j++)
 					{
 						if(i == j)
-							data[i][j] = init_val;
+							this->_data[i][j] = init_val;
 						else
-							data[i][j] = 0;
+							this->_data[i][j] = 0;
 					}
 				}
 			}
@@ -63,30 +63,30 @@ namespace MLL
 		}
 		RowData cda(col);
 		Data da(row,cda);
-		this->data = da;
-		this->row = row;
-		this->col = col;
+		this->_data = da;
+		this->_row = row;
+		this->_col = col;
 		unsigned int i = 0, j = 0;
 		if(type!="diag")
 		{
-			for(i=0; i<row; i++)
+			for(i=0; i<_row; i++)
 			{
-				for(j=0; j<col; j++)
-					data[i][j] = init_val;
+				for(j=0; j<_col; j++)
+					this->_data[i][j] = init_val;
 			}
 		}
 		else
 		{
-			if(row == col)
+			if(_row == _col)
 			{
-				for(i=0; i<row; i++)
+				for(i=0; i<_row; i++)
 				{
-					for(j=0; j<col; j++)
+					for(j=0; j<_col; j++)
 					{
 						if(i == j)
-							data[i][j] = init_val;
+							this->_data[i][j] = init_val;
 						else
-							data[i][j] = 0;
+							this->_data[i][j] = 0;
 					}
 				}
 			}
@@ -100,34 +100,34 @@ namespace MLL
 	{
 		RowData cda(col);
 		Data da(row,cda);
-		this->data = da;
-		this->row = row;
-		this->col = col;
+		this->_data = da;
+		this->_row = row;
+		this->_col = col;
 		unsigned int i = 0, j = 0;
-		for(i=0; i<this->row; i++)
+		for(i=0; i<this->_row; i++)
 		{
-			for(j=0; j<this->col; j++)
+			for(j=0; j<this->_col; j++)
 			{
-				this->data[i][j] = 0;
+				this->_data[i][j] = 0;
 			}
 		}
-		LoadDataNum_spare(this->data, filename);
+		LoadDataNum_spare(this->_data, filename);
 	}
 	void Matrix::LoadData(const std::string &filename)
 	{
-		LoadData_t(this->data,filename);
-		row=data.size();
-		col=data[0].size();
+		LoadData_t(this->_data,filename);
+		_row=this->_data.size();
+		_col=this->_data[0].size();
 	}
 	void Matrix::print()
 	{
 		unsigned int i = 0, j = 0;
-		std::cout<<"matrix size:" << row<<"**"<<col<<std::endl;
-		for(i=0; i<row; i++)
+		std::cout<<"matrix size:" << _row<<"**"<< _col<<std::endl;
+		for(i=0; i<_row; i++)
 		{
-			for(j=0; j<col; j++)
+			for(j=0; j< _col; j++)
 			{
-				std::cout<<data[i][j]<<"  ";
+				std::cout<< _data[i][j]<<"  ";
 			}
 			std::cout<<std::endl;
 		}
@@ -135,17 +135,17 @@ namespace MLL
 	Matrix& Matrix::copyMatrix()
 	{
 		unsigned int i=0,j=0;
-		RowData cda(this->col);
-		Data da(this->row,cda);
+		RowData cda(this->_col);
+		Data da(this->_row,cda);
 		static Matrix cp;
-		cp.data=da;
-		cp.col=this->col;
-		cp.row=this->row;
-		for(i=0; i<this->row; i++)
+		cp._data=da;
+		cp._col=this->_col;
+		cp._row=this->_row;
+		for(i=0; i<this->_row; i++)
 		{
-			for(j=0; j<this->col; j++)
+			for(j=0; j<this->_col; j++)
 			{
-				cp.data[i][j] = this->data[i][j];
+				cp._data[i][j] = this->_data[i][j];
 			}
 		}
 		return cp;
@@ -154,15 +154,15 @@ namespace MLL
 	{
 		//this->data(matrix.data.size());
 		unsigned int j=0;
-		RowData cda(col);
+		RowData cda(_col);
 		Data da(1,cda);
 		static Matrix one_row_matrix;
-		one_row_matrix.data = da;
-		one_row_matrix.col = col;
-		one_row_matrix.row = 1;
-		for(j=0; j < this->data[iRow].size(); j++)
+		one_row_matrix._data = da;
+		one_row_matrix._col = _col;
+		one_row_matrix._row = 1;
+		for(j=0; j < this->_data[iRow].size(); j++)
 		{
-			one_row_matrix.data[0][j]=this->data[iRow][j];
+			one_row_matrix._data[0][j]=this->_data[iRow][j];
 		}
 
 		return one_row_matrix;
@@ -171,15 +171,15 @@ namespace MLL
 	{
 		unsigned int i=0;
 		ColData cda(1);
-		Data da(this->row,cda);
+		Data da(this->_row,cda);
 		static Matrix one_col_matrix;
-		one_col_matrix.data=da;
-		one_col_matrix.col=1;
-		one_col_matrix.row=row;
-		for(i=0; i<this->data.size(); i++)
+		one_col_matrix._data=da;
+		one_col_matrix._col=1;
+		one_col_matrix._row=_row;
+		for(i=0; i<this->_data.size(); i++)
 		{
-			//cout<<i<<"="<<this->data[i][jCol]<<endl;
-			one_col_matrix.data[i][0] = this->data[i][jCol];
+			//cout<<i<<"="<<this->_data[i][jCol]<<endl;
+			one_col_matrix._data[i][0] = this->_data[i][jCol];
 		}
 		return one_col_matrix;
 	}
@@ -189,27 +189,27 @@ namespace MLL
 		unsigned int i=0,j=0;
 		Matrix cp = this->copyMatrix();
 
-		this->row--;
-		//this->data.clear();
-		//RowData cda(this->col);
-		//Data da(this->row,cda);
-		//this->data=da;
+		this->_row--;
+		//this->_data.clear();
+		//RowData cda(this->_col);
+		//Data da(this->_row,cda);
+		//this->_data=da;
 
-		for(Data::iterator it=cp.data.begin(); it!=cp.data.end(); it++,i++)
+		for(Data::iterator it=cp._data.begin(); it!=cp._data.end(); it++,i++)
 		{
 			if(i < iRow)
 			{
-				//for(vector<float>::iterator itRow=cp.data[i].begin(); itRow!=cp.data[i].end(); itRow++,j++)
+				//for(vector<float>::iterator itRow=cp._data[i].begin(); itRow!=cp._data[i].end(); itRow++,j++)
 				for(std::vector<float>::iterator itRow = it->begin(); itRow != it->end(); itRow++)
 				{
-					this->data[i][j]=*itRow;
+					this->_data[i][j]=*itRow;
 				}
 			}
 			if(i > iRow)
 			{
 				for(std::vector<float>::iterator itRow = it->begin(); itRow != it->end(); itRow++)
 				{
-					this->data[i-1][j]=*itRow;
+					this->_data[i-1][j]=*itRow;
 				}
 			}
 		}
@@ -217,14 +217,14 @@ namespace MLL
 	/*void Matrix::deleteOneRow(unsigned int iRow)
 	{
 		unsigned int i=0;
-		for(Data::iterator it=data.begin(); it!=data.end(); it++,i++)
+		for(Data::iterator it=_data.begin(); it!=_data.end(); it++,i++)
 		{
 			if(i==iRow)
 			{
-				data.erase(it);
+				_data.erase(it);
 			}
 		}
-		this->row--;
+		this->_row--;
 	<<<<<<< HEAD
 	}
 	void Matrix::deleteOneCol(const unsigned int &iCol)
@@ -242,69 +242,69 @@ namespace MLL
 		unsigned int i=0,j=0;
 		Matrix cp=this->copyMatrix();
 
-		this->col--;
-		//this->data.clear();
-		//RowData cda(this->col);
-		//Data da(this->row,cda);
-		//this->data=da;
+		this->_col--;
+		//this->_data.clear();
+		//RowData cda(this->_col);
+		//Data da(this->_row,cda);
+		//this->_data=da;
 
-		for(Data::iterator it=cp.data.begin(); it!=cp.data.end(); it++,i++)
+		for(Data::iterator it=cp._data.begin(); it!=cp._data.end(); it++,i++)
 		{
 			j=0;
-			for(std::vector<float>::iterator itRow=cp.data[i].begin(); itRow!=cp.data[i].end(); itRow++,j++)
+			for(std::vector<float>::iterator itRow=cp._data[i].begin(); itRow!=cp._data[i].end(); itRow++,j++)
 			{
 				if(j < iCol)
 				{
-					this->data[i][j]=*itRow;
+					this->_data[i][j]=*itRow;
 				}
 				if(j > iCol)
 				{
-					this->data[i][j-1]=*itRow;
+					this->_data[i][j-1]=*itRow;
 				}
 			}
 
 		}
-		this->col--;
+		this->_col--;
 	}
 	Matrix& Matrix::transposeMatrix()//矩阵形式的转置
 	{
 		unsigned int i=0,j=0;
 		static Matrix matrixT;
-		ColData cda(row);
-		Data da(col,cda);
-		matrixT.data=da;
-		matrixT.row=col;
-		matrixT.col=row;
-		for(i=0; i<col; i++)
+		ColData cda(_row);
+		Data da(_col,cda);
+		matrixT._data=da;
+		matrixT._row=_col;
+		matrixT._col=_row;
+		for(i=0; i<_col; i++)
 		{
-			for(j=0; j<row; j++)
+			for(j=0; j<_row; j++)
 			{
-				matrixT.data[i][j] =this->data[j][i];
+				matrixT._data[i][j] =this->_data[j][i];
 			}
 		}
 		return matrixT;
 	}
 	Matrix& Matrix::addMatrix(const Matrix &matrix1,const Matrix &matrix2)
 	{
-		if(matrix1.col != matrix2.col || matrix1.row != matrix2.row)
+		if(matrix1._col != matrix2._col || matrix1._row != matrix2._row)
 		{
-			std::cout<<matrix1.row<<"*"<<matrix1.col<<std::endl;
-			std::cout<<matrix2.row<<"*"<<matrix2.col<<std::endl;
+			std::cout<<matrix1._row<<"*"<<matrix1._col<<std::endl;
+			std::cout<<matrix2._row<<"*"<<matrix2._col<<std::endl;
 			std::cout<<"addData data1 data2 is no"<<std::endl;
 			exit(-1);
 		}
 		unsigned int i,j;
-		RowData cda(matrix1.col);
-		Data da(matrix1.row,cda);
+		RowData cda(matrix1._col);
+		Data da(matrix1._row,cda);
 		static Matrix add;
-		add.data=da;
-		add.row=matrix1.row;
-		add.col=matrix1.col;
-		for(i=0; i<matrix1.row; i++)
+		add._data=da;
+		add._row=matrix1._row;
+		add._col=matrix1._col;
+		for(i=0; i<matrix1._row; i++)
 		{
-			for(j=0; j<matrix1.col; j++)
+			for(j=0; j<matrix1._col; j++)
 			{
-				add.data[i][j] = matrix1.data[i][j] + matrix2.data[i][j];
+				add._data[i][j] = matrix1._data[i][j] + matrix2._data[i][j];
 			}
 		}
 
@@ -313,25 +313,25 @@ namespace MLL
 
 	Matrix& Matrix::subMatrix(const Matrix &matrix1,const Matrix &matrix2)
 	{
-		if(matrix1.col!=matrix2.col||matrix1.row!=matrix2.row)
+		if(matrix1._col!=matrix2._col||matrix1._row!=matrix2._row)
 		{
-			std::cout<<matrix1.row<<"*"<<matrix1.col<<std::endl;
-			std::cout<<matrix2.row<<"*"<<matrix2.col<<std::endl;
+			std::cout<<matrix1._row<<"*"<<matrix1._col<<std::endl;
+			std::cout<<matrix2._row<<"*"<<matrix2._col<<std::endl;
 			std::cout<<"subData data1 data2 is no"<<std::endl;
 			exit(-1);
 		}
-		RowData cda(matrix1.col);
-		Data da(matrix1.row,cda);
+		RowData cda(matrix1._col);
+		Data da(matrix1._row,cda);
 		static Matrix sub;
-		sub.data=da;
-		sub.row=matrix1.row;
-		sub.col=matrix1.col;
+		sub._data=da;
+		sub._row=matrix1._row;
+		sub._col=matrix1._col;
 		unsigned int i,j;
-		for(i=0; i<matrix1.row; i++)
+		for(i=0; i<matrix1._row; i++)
 		{
-			for(j=0; j<matrix1.col; j++)
+			for(j=0; j<matrix1._col; j++)
 			{
-				sub.data[i][j]=matrix1.data[i][j]-matrix2.data[i][j];
+				sub._data[i][j]=matrix1._data[i][j]-matrix2._data[i][j];
 			}
 		}
 		//delete this;
@@ -340,38 +340,36 @@ namespace MLL
 
 	Matrix& Matrix::multsMatrix(const Matrix &matrix1, const Matrix &matrix2)//矩阵形式的相乘
 	{
-		if(matrix1.col!=matrix2.row)
+		if(matrix1._col!=matrix2._row)
 		{
-			std::cout<<matrix1.row<<"*"<<matrix1.col<<std::endl;
-			std::cout<<matrix2.row<<"*"<<matrix2.col<<std::endl;
+			std::cout<<matrix1._row<<"*"<<matrix1._col<<std::endl;
+			std::cout<<matrix2._row<<"*"<<matrix2._col<<std::endl;
 			std::cout<<"multsData error"<<std::endl;
 			exit(-1);
 		}
 		unsigned int i = 0, j =0, k = 0;
 		static Matrix mults;
-		ColData cda(matrix2.col);
-		Data da(matrix1.row,cda);
-		mults.data=da;
-		mults.row=matrix1.row;
-		mults.col=matrix2.col;
-		//cout<<this->row<<"&&&&"<<this->col<<endl;
-		//this->print();
-		for(i=0; i<matrix1.row; i++)
+		ColData cda(matrix2._col);
+		Data da(matrix1._row,cda);
+		mults._data=da;
+		mults._row=matrix1._row;
+		mults._col=matrix2._col;
+		for(i=0; i<matrix1._row; i++)
 		{
-			for(j=0; j<matrix2.col; j++)
+			for(j=0; j<matrix2._col; j++)
 			{
-				mults.data[i][j]=0;
-				//this->data[i][j]=0;
+				mults._data[i][j]=0;
+				//this->_data[i][j]=0;
 			}
 		}
-		for(i=0; i<matrix1.row; i++)
+		for(i=0; i<matrix1._row; i++)
 		{
-			for(j=0; j<matrix2.col; j++)
+			for(j=0; j<matrix2._col; j++)
 			{
-				for(k=0; k<matrix1.col; k++)
+				for(k=0; k<matrix1._col; k++)
 				{
-					mults.data[i][j]+=matrix1.data[i][k]*matrix2.data[k][j];
-					//this->data[i][j]+=matrix1.data[i][k]*matrix2.data[k][j];
+					mults._data[i][j]+=matrix1._data[i][k]*matrix2._data[k][j];
+					//this->data[i][j]+=matrix1._data[i][k]*matrix2._data[k][j];
 				}
 			}
 		}
@@ -380,25 +378,25 @@ namespace MLL
 
 	Matrix& Matrix::dotmultsMatrix(const Matrix &matrix1, const Matrix &matrix2)//矩阵形式的相乘
 	{
-		if(matrix1.row!=matrix2.row || matrix1.col!=matrix2.col)
+		if(matrix1._row!=matrix2._row || matrix1._col!=matrix2._col)
 		{
-			std::cout<<matrix1.row<<"*"<<matrix1.col<<std::endl;
-			std::cout<<matrix2.row<<"*"<<matrix2.col<<std::endl;
+			std::cout<<matrix1._row<<"*"<<matrix1._col<<std::endl;
+			std::cout<<matrix2._row<<"*"<<matrix2._col<<std::endl;
 			std::cout<<"multsData error"<<std::endl;
 			exit(-1);
 		}
 		unsigned int i,j;
 		static Matrix dotmults;
-		ColData cda(matrix1.col);
-		Data da(matrix1.row,cda);
-		dotmults.data=da;
-		dotmults.row=matrix1.row;
-		dotmults.col=matrix1.col;
-		for(i=0; i<matrix1.row; i++)
+		ColData cda(matrix1._col);
+		Data da(matrix1._row,cda);
+		dotmults._data=da;
+		dotmults._row=matrix1._row;
+		dotmults._col=matrix1._col;
+		for(i=0; i<matrix1._row; i++)
 		{
-			for(j=0; j<matrix2.col; j++)
+			for(j=0; j<matrix2._col; j++)
 			{
-				dotmults.data[i][j]=matrix1.data[i][j] * matrix2.data[i][j];
+				dotmults._data[i][j]=matrix1._data[i][j] * matrix2._data[i][j];
 			}
 		}
 		return dotmults;
@@ -407,7 +405,7 @@ namespace MLL
 	//行列式
 	double Matrix::detMatrix()
 	{
-		if(row!=col)
+		if(_row!=_col)
 		{
 			std::cout<<"Data det is no"<<std::endl;
 			exit(-1);
@@ -418,37 +416,37 @@ namespace MLL
 		double max=-9999999;
 		int swap=-1;
 		double temp;
-		ColData cda(col);
-		Data aij(row,cda);
-		for(k=0; k<mCopy.col-1; k++)//k表示第k次消元，一共需要n-1次
+		ColData cda(_col);
+		Data aij(_row,cda);
+		for(k=0; k<mCopy._col-1; k++)//k表示第k次消元，一共需要n-1次
 		{
-			for(i=0; i<mCopy.row; i++)
+			for(i=0; i<mCopy._row; i++)
 			{
-				if(mCopy.data[i][k]>max)//每一次消元都是比较第k列的元素，选出第k列中最大的一行
+				if(mCopy._data[i][k]>max)//每一次消元都是比较第k列的元素，选出第k列中最大的一行
 				{
 					swap=i;
 				}
 			}//找到第k次列主元消去的最大行的下标
-			if(swap==-1||mCopy.data[swap][k]==0)
+			if(swap==-1||mCopy._data[swap][k]==0)
 				return -1;//最大主元为0
-			for(j=0; j<mCopy.col; j++)
+			for(j=0; j<mCopy._col; j++)
 			{
-				temp=mCopy.data[k][j];
-				mCopy.data[k][j]=mCopy.data[swap][j];
-				mCopy.data[swap][j]=temp;
+				temp=mCopy._data[k][j];
+				mCopy._data[k][j]=mCopy._data[swap][j];
+				mCopy._data[swap][j]=temp;
 			}//第k次消元，选出最大的一行是swap行，与第k行交换
-			for(i=k+1; i<mCopy.row; i++)
+			for(i=k+1; i<mCopy._row; i++)
 			{
-				aij[i][k]=mCopy.data[i][k]/mCopy.data[k][k];// 第k次消元，主元素为第k行第k列，把第k行以下的行都进行消元
-				for(j=k; j<mCopy.col; j++)//对于k行以下的每一行的每一列元素都减去主行与消元因子的乘积
+				aij[i][k]=mCopy._data[i][k]/mCopy._data[k][k];// 第k次消元，主元素为第k行第k列，把第k行以下的行都进行消元
+				for(j=k; j<mCopy._col; j++)//对于k行以下的每一行的每一列元素都减去主行与消元因子的乘积
 				{
-					mCopy.data[i][j]-=aij[i][k]*mCopy.data[k][j];
+					mCopy._data[i][j]-=aij[i][k]*mCopy._data[k][j];
 				}
 			}
 		}
-		for(i=0; i<mCopy.row; i++)
+		for(i=0; i<mCopy._row; i++)
 		{
-			det*=mCopy.data[i][i];
+			det*=mCopy._data[i][i];
 		}
 		//cout<<"det="<<det<<endl;
 		return det;
@@ -456,7 +454,7 @@ namespace MLL
 	//高斯消元矩阵求逆,特别注意，LU分解不能进行行列式变换
 	Matrix& Matrix::niMatrix()
 	{
-		if(row!=col)
+		if(_row!=_col)
 		{
 			std::cout<<"Data ni is no "<<std::endl;
 			exit(-1);
@@ -473,40 +471,40 @@ namespace MLL
 		Matrix LMatrix = this->copyMatrix();
 		Matrix UniMatrix = this->copyMatrix();
 		Matrix LniMatrix = this->copyMatrix();
-		ColData cda(col);
-		Data aij(row,cda);
-		for(k=0; k<col-1; k++)//k表示第k次消元，一共需要n-1次
+		ColData cda(_col);
+		Data aij(_row,cda);
+		for(k=0; k<_col-1; k++)//k表示第k次消元，一共需要n-1次
 		{
-			for(i=k+1; i<row; i++)
+			for(i=k+1; i<_row; i++)
 			{
-				aij[i][k]=data[i][k]/data[k][k];// 第k次消元，主元素为第k行第k列，把第k行以下的行都进行消元
-				for(j=k; j<col; j++)//对于k行以下的每一行的每一列元素都减去主行与消元因子的乘积
+				aij[i][k]=_data[i][k]/_data[k][k];// 第k次消元，主元素为第k行第k列，把第k行以下的行都进行消元
+				for(j=k; j<_col; j++)//对于k行以下的每一行的每一列元素都减去主行与消元因子的乘积
 				{
-					data[i][j]-=aij[i][k]*data[k][j];
+					_data[i][j]-=aij[i][k]*_data[k][j];
 				}
 			}
 		}
 		UMatrix=*this;
-		for(j=0; j<col; j++)
+		for(j=0; j<_col; j++)
 		{
-			for(i=j+1; i<row; i++)
+			for(i=j+1; i<_row; i++)
 			{
 				temp=0;
 				for(k=0; k<j; k++)
 				{
-					temp=LMatrix.data[i][k]*UMatrix.data[k][j];
+					temp=LMatrix._data[i][k]*UMatrix._data[k][j];
 				}
-				LMatrix.data[i][j]=1/UMatrix.data[j][j]*(mCopy.data[i][j]-temp);
+				LMatrix._data[i][j]=1/UMatrix._data[j][j]*(mCopy._data[i][j]-temp);
 			}
 		}
-		for(i=0; i<row; i++)
+		for(i=0; i<_row; i++)
 		{
-			for(j=0; j<col; j++)
+			for(j=0; j<_col; j++)
 			{
 				if(i==j)
-					LMatrix.data[i][j]=1;
+					LMatrix._data[i][j]=1;
 				if(j>i)
-					LMatrix.data[i][j]=0;
+					LMatrix._data[i][j]=0;
 			}
 		}
 		static Matrix mults;
@@ -517,41 +515,41 @@ namespace MLL
 		//mults.print();
 
 		//计算u逆
-		for(j=0; j<col; j++)
+		for(j=0; j<_col; j++)
 		{
 			for(i=j; (int)i>=0; i--)
 			{
 				if(i==j)
-					UniMatrix.data[i][j]=1/UMatrix.data[i][j];
+					UniMatrix._data[i][j]=1/UMatrix._data[i][j];
 				else
 				{
 					temp=0;
 					for(k=j; k>i; k--)
 					{
-						temp+=UMatrix.data[i][k]*UniMatrix.data[k][j];
+						temp+=UMatrix._data[i][k]*UniMatrix._data[k][j];
 					}
-					UniMatrix.data[i][j]=-1/UMatrix.data[i][i]*temp;
+					UniMatrix._data[i][j]=-1/UMatrix._data[i][i]*temp;
 				}
 			}
 			///关键，将下三角清零
-			for(i=j+1; i<row; i++)
-				UniMatrix.data[i][j]=0;
+			for(i=j+1; i<_row; i++)
+				UniMatrix._data[i][j]=0;
 		}
 		//计算l逆
-		for(j=0; j<col; j++)
+		for(j=0; j<_col; j++)
 		{
-			for(i=0; i<row; i++)
+			for(i=0; i<_row; i++)
 			{
 				if(j==i)
-					LniMatrix.data[i][j]=1;
+					LniMatrix._data[i][j]=1;
 				else
 				{
 					temp=0;
 					for(k=j; k<i; k++)
 					{
-						temp+=(LMatrix.data[i][k]*LniMatrix.data[k][j]);
+						temp+=(LMatrix._data[i][k]*LniMatrix._data[k][j]);
 					}
-					LniMatrix.data[i][j]=-temp;
+					LniMatrix._data[i][j]=-temp;
 				}
 			}
 		}
@@ -567,13 +565,13 @@ namespace MLL
 	/*unsigned int LDL(Data x)//矩阵的LDL分解，不知道怎样用于矩阵特征值，特征向量求解
 	{
 		Data l;
-		l.initData(&l,x.col,x.row);
+		l.initData(&l,x._col,x._row);
 		Data d;
-		d.initData(&d,x.col,x.row);
+		d.initData(&d,x._col,x._row);
 		unsigned int i,j,k;
 		Data temp;
-		temp.initData(&temp,x.col,x.row);
-		for(i=0;i<x.col;i++)
+		temp.initData(&temp,x._col,x._row);
+		for(i=0;i<x._col;i++)
 		{
 			l.mat[i][i]=1;
 			for(j=0;j<i;j++)
@@ -592,17 +590,17 @@ namespace MLL
 				d.mat[i][i]-=temp.mat[i][k]*l.mat[i][k];
 			}
 		}
-		for(i=0;i<x.col;i++)
+		for(i=0;i<x._col;i++)
 		{
-			for(j=0;j<x.row;j++)
+			for(j=0;j<x._row;j++)
 			{
 				std::cout<<l.mat[i][j]<<"  ";
 			}
 			std::cout<<std::endl;
 		}
-		for(i=0;i<x.col;i++)
+		for(i=0;i<x._col;i++)
 		{
-			for(j=0;j<x.row;j++)
+			for(j=0;j<x._row;j++)
 			{
 			std::cout<<d.mat[i][j]<<"  ";
 			}

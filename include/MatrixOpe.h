@@ -21,11 +21,11 @@ namespace MLL
 
 	inline void sigmoid(Matrix *z)
 	{
-		for(size_t i=0;i<z->row;i++)
+		for(size_t i = 0; i < z->_row; i++)
 		{
-			for(size_t j=0;j<z->col;j++)
+			for(size_t j = 0; j < z->_col; j++)
 			{
-				z->data[i][j]=1.0 / (1.0 + exp(- z->data[i][j]));
+				z->_data[i][j] = 1.0 / (1.0 + exp(- z->_data[i][j]));
 			}
 		}
 	}

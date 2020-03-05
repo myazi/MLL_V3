@@ -49,14 +49,14 @@ namespace MLL
 		{
 			for(i=0; i<dataClass[k].size(); i++)//只有一行
 			{
-				vecX.data[iSample][dic.size()]=k;//标签
+				vecX._data[iSample][dic.size()]=k;//标签
 				for(j=0; j<dataClass[k][i].size(); j++)
 				{
 					for(vl=0; vl<dic.size(); vl++)
 					{
 						if(!dataClass[k][i][j].compare(dic[vl]))
 						{
-							vecX.data[iSample][vl]=1;//one-hot编码特征
+							vecX._data[iSample][vl]=1;//one-hot编码特征
 							break;
 						}
 					}
@@ -71,61 +71,61 @@ namespace MLL
 	{
 		//类，特征，特征取值
 		bayes.pY.initMatrix(CLASS_SUM,1,0,"ss");//两类初始化为2行的列向量
-		bayes.pX_1Y.initMatrix(CLASS_SUM,X.col,0,"ss");//X_1Y表示在Y下X=1的概率，反之X=0的概率为1-
-		bayes.pX.initMatrix(X.col,1,0,"ss");//
+		bayes.pX_1Y.initMatrix(CLASS_SUM,X._col,0,"ss");//X_1Y表示在Y下X=1的概率，反之X=0的概率为1-
+		bayes.pX.initMatrix(X._col,1,0,"ss");//
 
 		int i,j,k;
-		for(k=0; k<bayes.pX_1Y.row; k++)
+		for(k=0; k<bayes.pX_1Y._row; k++)
 		{
-			for(i=0; i<bayes.pX_1Y.col; i++)
+			for(i=0; i<bayes.pX_1Y._col; i++)
 			{
-				bayes.pX_1Y.data[k][i]=1;//平滑处理,默认出现一次，后期归一化时把特征向量的长度也考虑进去,这里的平滑是指每一类字典与整个字典的，未涉及测试
+				bayes.pX_1Y._data[k][i]=1;//平滑处理,默认出现一次，后期归一化时把特征向量的长度也考虑进去,这里的平滑是指每一类字典与整个字典的，未涉及测试
 				//样本中的未登入词
 			}
 		}
-		for(i=0; i<X.row; i++)
+		for(i=0; i<X._row; i++)
 		{
-			if(Y.data[i][0]==0)
+			if(Y._data[i][0]==0)
 			{
-				bayes.pY.data[0][0]++;
-				for(j=0; j<X.col; j++)
+				bayes.pY._data[0][0]++;
+				for(j=0; j<X._col; j++)
 				{
-					bayes.pX_1Y.data[0][j]+=X.data[i][j];
+					bayes.pX_1Y._data[0][j]+=X._data[i][j];
 				}
 			}
 			else
 			{
-				bayes.pY.data[1][0]++;
-				for(j=0; j<X.col; j++)
+				bayes.pY._data[1][0]++;
+				for(j=0; j<X._col; j++)
 				{
-					bayes.pX_1Y.data[1][j]+=X.data[i][j];
+					bayes.pX_1Y._data[1][j]+=X._data[i][j];
 				}
 			}
 		}
-		for(i=0; i<X.col; i++)
+		for(i=0; i<X._col; i++)
 		{
 			//所有类下x各个特征分量出现的概率
-			//bayes.pX.data[i][0]=(bayes.pX_1Y.data[0][i]-1) + (bayes.pX_1Y.data[1][i]-1) + 1;
-			//bayes.pX.data[i][0]/=bayes.pY.data[0][0] + bayes.pY.data[1][0] + 2;
+			//bayes.pX._data[i][0]=(bayes.pX_1Y._data[0][i]-1) + (bayes.pX_1Y._data[1][i]-1) + 1;
+			//bayes.pX._data[i][0]/=bayes.pY._data[0][0] + bayes.pY._data[1][0] + 2;
 
 			//某一类下x各个特征分量出现的概率
-			bayes.pX_1Y.data[0][i]/=bayes.pY.data[0][0] + 2;
-			bayes.pX_1Y.data[1][i]/=bayes.pY.data[1][0] + 2;
+			bayes.pX_1Y._data[0][i]/=bayes.pY._data[0][0] + 2;
+			bayes.pX_1Y._data[1][i]/=bayes.pY._data[1][0] + 2;
 
-			bayes.pX.data[i][0] = (bayes.pX_1Y.data[0][i] + bayes.pX_1Y.data[1][i])/2;
+			bayes.pX._data[i][0] = (bayes.pX_1Y._data[0][i] + bayes.pX_1Y._data[1][i])/2;
 		}
 		//计算出PY两类的概率
-		for(k=0; k<bayes.pY.row; k++)
+		for(k=0; k<bayes.pY._row; k++)
 		{
-			bayes.pY.data[k][0]/=X.row;
+			bayes.pY._data[k][0]/=X._row;
 		}
-		std::cout<<"pY="<<bayes.pY.data[0][0]<<std::endl;
+		std::cout<<"pY="<<bayes.pY._data[0][0]<<std::endl;
 
-		for(k=0; k<bayes.pX_1Y.row; k++)
+		for(k=0; k<bayes.pX_1Y._row; k++)
 		{
-			for(i=0; i<bayes.pX_1Y.col; i++)
+			for(i=0; i<bayes.pX_1Y._col; i++)
 			{
-				std::cout<<bayes.pX_1Y.data[k][i]<<" & ";
+				std::cout<<bayes.pX_1Y._data[k][i]<<" & ";
 			}
 			std::cout<<"---";
 		}
@@ -138,26 +138,26 @@ namespace MLL
 	{
 		double p0=1.0,p1=1.0;
 		int i,j;
-		for(i=0; i<testVecX.row; i++)
+		for(i=0; i<testVecX._row; i++)
 		{
 			p0=1.0,p1=1.0;
-			for(j=0; j<testVecX.col ; j++)
+			for(j=0; j<testVecX._col ; j++)
 			{
 				//特征分量不出现的概率为1-
-				if(testVecX.data[i][j]==0)
+				if(testVecX._data[i][j]==0)
 				{
-					p0*=(1-bayes.pX_1Y.data[0][j])/(1-bayes.pX.data[j][0]);
-					p1*=(1-bayes.pX_1Y.data[1][j])/(1-bayes.pX.data[j][0]);
+					p0*=(1-bayes.pX_1Y._data[0][j])/(1-bayes.pX._data[j][0]);
+					p1*=(1-bayes.pX_1Y._data[1][j])/(1-bayes.pX._data[j][0]);
 				}
 				//特征分量出现的概率
 				else
 				{
-					p0*=(bayes.pX_1Y.data[0][j])/bayes.pX.data[j][0];
-					p1*=(bayes.pX_1Y.data[1][j])/bayes.pX.data[j][0];
+					p0*=(bayes.pX_1Y._data[0][j])/bayes.pX._data[j][0];
+					p1*=(bayes.pX_1Y._data[1][j])/bayes.pX._data[j][0];
 				}
 			}
-			p0*=bayes.pY.data[0][0];
-			p1*=bayes.pY.data[1][0];
+			p0*=bayes.pY._data[0][0];
+			p1*=bayes.pY._data[1][0];
 			std::cout<<"p0="<<p0<<"&"<<"p1="<<p1;
 			if(p0<p1)
 				std::cout<<"class="<<1;
@@ -239,10 +239,10 @@ namespace MLL
 		生成样本标签
 		**/
 		Matrix Y;
-		Y = X.getOneCol(X.col-1);
-		X.deleteOneCol(X.col-1);
-		std::cout<<X.row<<"*"<<X.col<<std::endl;
-		std::cout<<Y.row<<"*"<<Y.col<<std::endl;
+		Y = X.getOneCol(X._col-1);
+		X.deleteOneCol(X._col-1);
+		std::cout<<X._row<<"*"<<X._col<<std::endl;
+		std::cout<<Y._row<<"*"<<Y._col<<std::endl;
 		Y.print();
 		trainNB(X,Y);///通过样本矩阵和标签矩阵调用参数求解函数求解bayes决策的参数
 

@@ -55,7 +55,5 @@ void LoadData_t(std::vector<std::vector<elemType> > &data, const std::string &in
     dataFile.close();
 }
 void LoadDataNum_spare(Data &data, const std::string &infile);
-void LoadDataNum(Data &data, const std::string &infile);
-void LoadDataStr(DataStr &data, const std::string &infile);
 void LoadDataStr(RowDataStr &data, const std::string &infile);
 #endif // LoadData_H

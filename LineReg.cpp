@@ -28,7 +28,7 @@ namespace MLL{
     {
         Matrix xT= _x.transposeMatrix();
         Matrix xTx=xTx.multsMatrix(xT,_x);
-        Matrix denom(xTx.row,xTx.col,_lamd,"diag");
+        Matrix denom(xTx._row,xTx._col,_lamd,"diag");
         xTx=xTx.addMatrix(xTx,denom);
         Matrix xTx_1=xTx.niMatrix();
         Matrix xTx_1xT=xTx_1xT.multsMatrix(xTx_1,xT);
@@ -47,21 +47,21 @@ namespace MLL{
     //需要注意的是局部加权线性回归是对每一个样本进行权重计算，所以对于每一个样本都有一个权重w，所以下面的函数只是局部线性回归的一个主要辅助函数
     Matrix LineReg::locWeightLineReg(Matrix &test)
     {
-        Matrix w(_x.row,_x.row,0,"T");
+        Matrix w(_x._row,_x._row,0,"T");
         double temp=0;
         int i,j;
 
         /**
         根据测试样本点与整个样本的距离已经选择的核确定局部加权矩阵，采用对角线上为局部加权值
         **/
-        for(i=0;i < _x.row;i++)
+        for(i=0;i < _x._row;i++)
         {
             temp=0;
-            for(j=0;j < _x.col;j++)
+            for(j=0;j < _x._col;j++)
             {
-                temp+=(test.data[0][j]- _x.data[i][j])*(test.data[0][j] - _x.data[i][j]);
+                temp+=(test._data[0][j]- _x._data[i][j])*(test._data[0][j] - _x._data[i][j]);
             }
-            w.data[i][i]=exp(temp/-2.0 *_k * _k);
+            w._data[i][i]=exp(temp/-2.0 *_k * _k);
         }
         Matrix xT = _x.transposeMatrix();
         Matrix wx=wx.multsMatrix(w,_x);
@@ -90,32 +90,32 @@ namespace MLL{
         /**
         每一个样本单独调用局部加权线性回归
         **/
-        for(i=0; i < _x.row;i++)///ws以列为一个权重参数向量，m列表示m个样本
+        for(i=0; i < _x._row;i++)///ws以列为一个权重参数向量，m列表示m个样本
         {
             test = _x.getOneRow(i);
             wsOne=locWeightLineReg(test);
-            for(j=0;j < _x.col;j++)
+            for(j=0;j < _x._col;j++)
             {
-                ws.data[i][j]=wsOne.data[0][j];
+                ws._data[i][j]=wsOne._data[0][j];
             }
         }
-        for(i=0;i<ws.row;i++)
+        for(i=0;i<ws._row;i++)
         {
-            for(j=0;j<ws.col;j++)
+            for(j=0;j<ws._col;j++)
             {
-                std::cout<<ws.data[j][i]<<"  ";
+                std::cout<<ws._data[j][i]<<"  ";
             }
             std::cout<<std::endl;
         }
 
         /**验证局部加权线性回归的正确性*/
         double yy;
-        for(i=0;i<ws.row;i++)
+        for(i=0;i<ws._row;i++)
         {
             yy=0;
-            for(j=0;j<ws.col;j++)
+            for(j=0;j<ws._col;j++)
             {
-                yy+=ws.data[j][i] * _x.data[i][j];
+                yy+=ws._data[j][i] * _x._data[i][j];
             }
             std::cout<<"y="<<yy<<std::endl;
         }
@@ -124,11 +124,11 @@ namespace MLL{
 
     LineReg::LineReg(const std::string &file, const std::string &model, const double &lamd, const double &k)
     {
-        std::cout<<"loadData"<<std::endl;
+        std::cout<<"load_data"<<std::endl;
         std::cout<<"----------------------"<<std::endl;
         _x.LoadData(file);
-        _y = _x.getOneCol(_x.col-1);
-        _x.deleteOneCol(_x.col-1);
+        _y = _x.getOneCol(_x._col-1);
+        _x.deleteOneCol(_x._col-1);
         _lamd = lamd;
         _k = k; 
     }

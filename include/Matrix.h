@@ -7,9 +7,9 @@ namespace MLL
 	class Matrix
 	{
 	public:
-		Data data;
-		unsigned int row;
-		unsigned int col;
+		Data _data;
+		unsigned int _row;
+		unsigned int _col;
 	public:
 		Matrix();
 		
