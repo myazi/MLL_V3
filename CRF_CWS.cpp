@@ -958,13 +958,13 @@ namespace MLL
 	{
 		std::cout<<"-----------training-----------"<<std::endl;
 		DataStr traindata;
-		LoadData_t(traindata,file);
+		LoadData(traindata,file);
 		createVocabList(traindata);
 
 
 		std::cout<<"------------test-------------"<<std::endl;
 		DataStr testdata;;//¼ÓÔØ²âÊÔÊý¾Ý
-		LoadData_t(testdata,"data/pku_test.utf8");
+		LoadData(testdata,"data/pku_test.utf8");
 
 		std::cout<<"------------FenCi--------------"<<std::endl;
 
@@ -973,10 +973,10 @@ namespace MLL
 		std::cout<<"-----------PingCe---------------"<<std::endl;
 
 		DataStr resultdata;
-		LoadData_t(resultdata,"data/result.utf8");
+		LoadData(resultdata,"data/result.utf8");
 
 		DataStr golddata;
-		LoadData_t(golddata,"data/pku_test_gold.utf8");
+		LoadData(golddata,"data/pku_test_gold.utf8");
 
 		PingCe(resultdata,golddata);
 	}

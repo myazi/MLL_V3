@@ -199,12 +199,12 @@ namespace MLL
 	CART::CART(const std::string &file)
 	{
 		Data data;
-		LoadData_t(data,"data/cart.txt");
+		LoadData(data,"data/cart.txt");
 		bitree t;
 		createBinTree(t,data);
 		preorder(t);
 		Data testdata;
-		LoadData_t(testdata,"data/carttest.txt");
+		LoadData(testdata,"data/carttest.txt");
 		prune(t,testdata);
 		preorder(t);
 		std::vector<double> labels(testdata.size(),0);

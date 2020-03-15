@@ -3,62 +3,21 @@ namespace MLL
 {
 	Matrix::Matrix()
 	{
-		//Matrix(0);
-		//cout<<"matrix is no size"<<endl;
+		std::cout << "Structor" << std::endl;
 	}
 	Matrix::~Matrix()
 	{
 		std::cout << "Destructor Matrix"<< std::endl;
 	}
-	Matrix::Matrix(const Matrix &rhs)
+	Matrix::Matrix(const Matrix &rhs): _data(rhs._data), _row(rhs._row), _col(rhs._col)
 	{
-		std::cout<<"(const A& rhs)"<<std::endl;
-		this->_data = rhs._data;
-		this->_row = rhs._row;
-		this->_col = rhs._col;
+		std::cout << "(const A& rhs)" << std::endl;
 	}
-	Matrix::Matrix(const unsigned int &row, const unsigned int &col,const float &init_val, const std::string &type)
-	{
-		RowData cda(col);
-		Data da(row,cda);
-		this->_data = da;
-		this->_row = row;
-		this->_col = col;
-		unsigned int i = 0, j = 0;
-		if(type!="diag")
-		{
-			for(i=0; i<_row; i++)
-			{
-				for(j=0; j<_col; j++)
-					this->_data[i][j] = init_val;
-			}
-		}
-		else
-		{
-			if(_row == _col)
-			{
-				for(i=0; i<_row; i++)
-				{
-					for(j=0; j<_col; j++)
-					{
-						if(i == j)
-							this->_data[i][j] = init_val;
-						else
-							this->_data[i][j] = 0;
-					}
-				}
-			}
-			else
-			{
-				std::cout<<"diag must row=col"<<std::endl;
-			}
-		}
-	}
-	void Matrix::initMatrix(const unsigned int &row, const unsigned int &col,const float &init_val, const std::string &type)
+	Matrix::Matrix(const unsigned int &row, const unsigned int &col, const float &init_val)
 	{
 		if(row==0 || col==0)
 		{
-			std::cout<<"no zero"<<std::endl;
+			std::cout<<"Structor no zero"<<std::endl;
 			return ;
 		}
 		RowData cda(col);
@@ -67,43 +26,63 @@ namespace MLL
 		this->_row = row;
 		this->_col = col;
 		unsigned int i = 0, j = 0;
-		if(type!="diag")
+		for(i = 0; i < _row; i++)
 		{
-			for(i=0; i<_row; i++)
-			{
-				for(j=0; j<_col; j++)
-					this->_data[i][j] = init_val;
-			}
-		}
-		else
-		{
-			if(_row == _col)
-			{
-				for(i=0; i<_row; i++)
-				{
-					for(j=0; j<_col; j++)
-					{
-						if(i == j)
-							this->_data[i][j] = init_val;
-						else
-							this->_data[i][j] = 0;
-					}
-				}
-			}
-			else
-			{
-				std::cout<<"diag must row=col"<<std::endl;
-			}
+			for(j = 0; j < _col; j++)
+				this->_data[i][j] = init_val;
 		}
 	}
-	void Matrix::LoadData_spare(const std::string &filename, const unsigned int &row, const unsigned int &col)
+	Matrix::Matrix(const unsigned int &row, const unsigned int &col, const float &init_val, const std::string &type)
 	{
+		if(row==0 || col==0)
+		{
+			std::cout << " Structor no zero" << std::endl;
+			return ;
+		}
+		if(row !=  col)
+		{
+			std::cout << "diag row != col" << std::endl;
+			return ;
+		}
 		RowData cda(col);
 		Data da(row,cda);
 		this->_data = da;
 		this->_row = row;
 		this->_col = col;
 		unsigned int i = 0, j = 0;
+		// 初始化diag矩阵
+		for(i=0; i<_row; i++)
+		{
+			this->_data[i][i] = init_val;
+		}
+	}
+	void Matrix::initMatrix(const unsigned int &row, const unsigned int &col, const float &init_val)
+	{
+		if(row==0 || col==0)
+		{
+			std::cout<<" Structor no zero"<<std::endl;
+			return ;
+		}
+		RowData cda(col);
+		Data da(row,cda);
+		this->_data = da;
+		this->_row = row;
+		this->_col = col;
+		unsigned int i = 0, j = 0;
+		for(i=0; i<_row; i++)
+		{
+			for(j=0; j<_col; j++)
+				this->_data[i][j] = init_val;
+		}
+	}
+	void Matrix::init_by_spare(const std::string &filename, const unsigned int &row, const unsigned int &col)
+	{
+		unsigned int i = 0, j = 0;
+		RowData cda(col);
+		Data da(row,cda);
+		this->_data = da;
+		this->_row = row;
+		this->_col = col;
 		for(i=0; i<this->_row; i++)
 		{
 			for(j=0; j<this->_col; j++)
@@ -111,74 +90,62 @@ namespace MLL
 				this->_data[i][j] = 0;
 			}
 		}
-		LoadDataNum_spare(this->_data, filename);
+		LoadData_spare(this->_data, filename);
 	}
-	void Matrix::LoadData(const std::string &filename)
-	{
-		LoadData_t(this->_data,filename);
-		_row=this->_data.size();
-		_col=this->_data[0].size();
-	}
-	void Matrix::print()
+	void Matrix::init_by_data(const std::string &filename)
 	{
 		unsigned int i = 0, j = 0;
-		std::cout<<"matrix size:" << _row<<"**"<< _col<<std::endl;
-		for(i=0; i<_row; i++)
+		LoadData(this->_data,filename);
+		_row=this->_data.size();
+		_col=this->_data[0].size();
+		for (i = 0; i < _row; i++)
 		{
-			for(j=0; j< _col; j++)
+			if(_col > _data[i].size()) //兼容多余数据
+				std::cout << "loaddata is error col" << std::endl;
+		}
+	}
+	void Matrix::print() const
+	{
+		std::cout<<"matrix size:" << _row<<"**"<< _col<<std::endl;
+		unsigned int i = 0, j = 0;
+		for(i = 0; i < _row; i++)
+		{
+			for(j = 0; j < _col; j++)
 			{
-				std::cout<< _data[i][j]<<"  ";
+				std::cout<< _data[i][j] <<"  ";
 			}
 			std::cout<<std::endl;
 		}
 	}
-	Matrix& Matrix::copyMatrix()
+	Matrix Matrix::copyMatrix() const
 	{
-		unsigned int i=0,j=0;
-		RowData cda(this->_col);
-		Data da(this->_row,cda);
-		static Matrix cp;
-		cp._data=da;
-		cp._col=this->_col;
-		cp._row=this->_row;
-		for(i=0; i<this->_row; i++)
+		unsigned int i = 0, j = 0;
+		Matrix cp(_row, _col, 0);
+		for(i = 0; i < this->_row; i++)
 		{
-			for(j=0; j<this->_col; j++)
+			for(j = 0; j < this->_col; j++)
 			{
 				cp._data[i][j] = this->_data[i][j];
 			}
 		}
 		return cp;
 	}
-	Matrix& Matrix::getOneRow (const unsigned int &iRow) const
+	Matrix Matrix::getOneRow (const unsigned int &iRow) const
 	{
-		//this->data(matrix.data.size());
-		unsigned int j=0;
-		RowData cda(_col);
-		Data da(1,cda);
-		static Matrix one_row_matrix;
-		one_row_matrix._data = da;
-		one_row_matrix._col = _col;
-		one_row_matrix._row = 1;
-		for(j=0; j < this->_data[iRow].size(); j++)
+		unsigned int j = 0;
+		Matrix one_row_matrix(1,_col,0);
+		for(j = 0; j < this->_data[iRow].size(); j++)
 		{
-			one_row_matrix._data[0][j]=this->_data[iRow][j];
+			one_row_matrix._data[0][j] = this->_data[iRow][j];
 		}
-
 		return one_row_matrix;
 	}
-	Matrix& Matrix::getOneCol (const unsigned int &jCol) const 
+	Matrix Matrix::getOneCol (const unsigned int &jCol) const 
 	{
-		unsigned int i=0;
-		ColData cda(1);
-		Data da(this->_row,cda);
-		static Matrix one_col_matrix;
-		one_col_matrix._data=da;
-		one_col_matrix._col=1;
-		one_col_matrix._row=_row;
-		for(i=0; i<this->_data.size(); i++)
+		unsigned int i = 0;
+		Matrix one_col_matrix(_row,1,0);
+		for(i = 0; i < this->_data.size(); i++)
 		{
-			//cout<<i<<"="<<this->_data[i][jCol]<<endl;
 			one_col_matrix._data[i][0] = this->_data[i][jCol];
 		}
 		return one_col_matrix;
@@ -186,105 +153,69 @@ namespace MLL
 	void Matrix::deleteOneRow(const unsigned int &iRow)
 	{
 
-		unsigned int i=0,j=0;
+		unsigned int i = 0, j = 0;
 		Matrix cp = this->copyMatrix();
-
 		this->_row--;
-		//this->_data.clear();
-		//RowData cda(this->_col);
-		//Data da(this->_row,cda);
-		//this->_data=da;
-
-		for(Data::iterator it=cp._data.begin(); it!=cp._data.end(); it++,i++)
+		for(Data::iterator it = cp._data.begin(); it != cp._data.end(); it++, i++)
 		{
 			if(i < iRow)
 			{
-				//for(vector<float>::iterator itRow=cp._data[i].begin(); itRow!=cp._data[i].end(); itRow++,j++)
 				for(std::vector<float>::iterator itRow = it->begin(); itRow != it->end(); itRow++)
 				{
-					this->_data[i][j]=*itRow;
+					this->_data[i][j] = *itRow;
 				}
 			}
 			if(i > iRow)
 			{
 				for(std::vector<float>::iterator itRow = it->begin(); itRow != it->end(); itRow++)
 				{
-					this->_data[i-1][j]=*itRow;
+					this->_data[i-1][j] = *itRow;
 				}
 			}
 		}
 	}
-	/*void Matrix::deleteOneRow(unsigned int iRow)
-	{
-		unsigned int i=0;
-		for(Data::iterator it=_data.begin(); it!=_data.end(); it++,i++)
-		{
-			if(i==iRow)
-			{
-				_data.erase(it);
-			}
-		}
-		this->_row--;
-	<<<<<<< HEAD
-	}
 	void Matrix::deleteOneCol(const unsigned int &iCol)
 	{
 
-		unsigned int i=0,j=0;
+		unsigned int i=0, j=0;
 		Matrix cp = this->copyMatrix();
-
-		//this->col--;
-	=======
-	}*/
-	void Matrix::deleteOneCol(const unsigned int &iCol)
-	{
-
-		unsigned int i=0,j=0;
-		Matrix cp=this->copyMatrix();
-
 		this->_col--;
 		//this->_data.clear();
 		//RowData cda(this->_col);
 		//Data da(this->_row,cda);
 		//this->_data=da;
 
-		for(Data::iterator it=cp._data.begin(); it!=cp._data.end(); it++,i++)
+		for(Data::iterator it = cp._data.begin(); it != cp._data.end(); it++, i++)
 		{
-			j=0;
-			for(std::vector<float>::iterator itRow=cp._data[i].begin(); itRow!=cp._data[i].end(); itRow++,j++)
+			j = 0;
+			for(std::vector<float>::iterator itRow = it->begin(); itRow != it->end(); itRow++, j++)
 			{
 				if(j < iCol)
 				{
-					this->_data[i][j]=*itRow;
+					this->_data[i][j] = *itRow;
 				}
 				if(j > iCol)
 				{
-					this->_data[i][j-1]=*itRow;
+					this->_data[i][j-1] = *itRow;
 				}
 			}
 
 		}
-		this->_col--;
 	}
-	Matrix& Matrix::transposeMatrix()//矩阵形式的转置
+	Matrix Matrix::transposeMatrix()//矩阵形式的转置
 	{
-		unsigned int i=0,j=0;
-		static Matrix matrixT;
-		ColData cda(_row);
-		Data da(_col,cda);
-		matrixT._data=da;
-		matrixT._row=_col;
-		matrixT._col=_row;
-		for(i=0; i<_col; i++)
+		unsigned int i = 0, j = 0;
+		Matrix matrixT(_col,_row,0);
+		for(i = 0; i < _col; i++)
 		{
-			for(j=0; j<_row; j++)
+			for(j = 0; j < _row; j++)
 			{
-				matrixT._data[i][j] =this->_data[j][i];
+				matrixT._data[i][j] = this->_data[j][i];
 			}
 		}
 		return matrixT;
 	}
-	Matrix& Matrix::addMatrix(const Matrix &matrix1,const Matrix &matrix2)
+	Matrix Matrix::addMatrix(const Matrix &matrix1, const Matrix &matrix2)
 	{
 		if(matrix1._col != matrix2._col || matrix1._row != matrix2._row)
 		{
@@ -293,110 +224,86 @@ namespace MLL
 			std::cout<<"addData data1 data2 is no"<<std::endl;
 			exit(-1);
 		}
-		unsigned int i,j;
-		RowData cda(matrix1._col);
-		Data da(matrix1._row,cda);
-		static Matrix add;
-		add._data=da;
-		add._row=matrix1._row;
-		add._col=matrix1._col;
-		for(i=0; i<matrix1._row; i++)
+		unsigned int i = 0, j = 0;
+		Matrix add(matrix1._row, matrix1._col,0);
+		for(i = 0; i < matrix1._row; i++)
 		{
-			for(j=0; j<matrix1._col; j++)
+			for(j = 0; j < matrix1._col; j++)
 			{
 				add._data[i][j] = matrix1._data[i][j] + matrix2._data[i][j];
 			}
 		}
-
 		return add;
 	}
 
-	Matrix& Matrix::subMatrix(const Matrix &matrix1,const Matrix &matrix2)
+	Matrix Matrix::subMatrix(const Matrix &matrix1,const Matrix &matrix2)
 	{
-		if(matrix1._col!=matrix2._col||matrix1._row!=matrix2._row)
+		if(matrix1._col != matrix2._col || matrix1._row != matrix2._row)
 		{
-			std::cout<<matrix1._row<<"*"<<matrix1._col<<std::endl;
-			std::cout<<matrix2._row<<"*"<<matrix2._col<<std::endl;
-			std::cout<<"subData data1 data2 is no"<<std::endl;
+			std::cout << matrix1._row << "*" << matrix1._col << std::endl;
+			std::cout << matrix2._row << "*" << matrix2._col << std::endl;
+			std::cout << "subData data1 data2 is no" << std::endl;
 			exit(-1);
 		}
-		RowData cda(matrix1._col);
-		Data da(matrix1._row,cda);
-		static Matrix sub;
-		sub._data=da;
-		sub._row=matrix1._row;
-		sub._col=matrix1._col;
 		unsigned int i,j;
-		for(i=0; i<matrix1._row; i++)
+		Matrix sub(matrix1._row, matrix1._col,0);
+		for(i = 0; i < matrix1._row; i++)
 		{
-			for(j=0; j<matrix1._col; j++)
+			for(j = 0; j < matrix1._col; j++)
 			{
-				sub._data[i][j]=matrix1._data[i][j]-matrix2._data[i][j];
+				sub._data[i][j] = matrix1._data[i][j] - matrix2._data[i][j];
 			}
 		}
-		//delete this;
 		return sub;
 	}
 
-	Matrix& Matrix::multsMatrix(const Matrix &matrix1, const Matrix &matrix2)//矩阵形式的相乘
+	Matrix Matrix::multsMatrix(const Matrix &matrix1, const Matrix &matrix2)//矩阵形式的相乘
 	{
-		if(matrix1._col!=matrix2._row)
+		if(matrix1._col != matrix2._row)
 		{
-			std::cout<<matrix1._row<<"*"<<matrix1._col<<std::endl;
-			std::cout<<matrix2._row<<"*"<<matrix2._col<<std::endl;
-			std::cout<<"multsData error"<<std::endl;
+			std::cout << matrix1._row << "*" << matrix1._col << std::endl;
+			std::cout << matrix2._row << "*" << matrix2._col << std::endl;
+			std::cout << "multsData error" << std::endl;
 			exit(-1);
 		}
 		unsigned int i = 0, j =0, k = 0;
-		static Matrix mults;
-		ColData cda(matrix2._col);
-		Data da(matrix1._row,cda);
-		mults._data=da;
-		mults._row=matrix1._row;
-		mults._col=matrix2._col;
-		for(i=0; i<matrix1._row; i++)
+		Matrix mults(matrix1._row,matrix2._col,0);
+		for(i = 0; i < matrix1._row; i++)
 		{
-			for(j=0; j<matrix2._col; j++)
+			for(j = 0; j < matrix2._col; j++)
 			{
-				mults._data[i][j]=0;
-				//this->_data[i][j]=0;
+				mults._data[i][j] = 0;
 			}
 		}
-		for(i=0; i<matrix1._row; i++)
+		for(i = 0; i < matrix1._row; i++)
 		{
-			for(j=0; j<matrix2._col; j++)
+			for(j = 0; j < matrix2._col; j++)
 			{
-				for(k=0; k<matrix1._col; k++)
+				for( k = 0; k < matrix1._col; k++)
 				{
-					mults._data[i][j]+=matrix1._data[i][k]*matrix2._data[k][j];
-					//this->data[i][j]+=matrix1._data[i][k]*matrix2._data[k][j];
+					mults._data[i][j] += matrix1._data[i][k] * matrix2._data[k][j];
 				}
 			}
 		}
 		return mults;
 	}
 
-	Matrix& Matrix::dotmultsMatrix(const Matrix &matrix1, const Matrix &matrix2)//矩阵形式的相乘
+	Matrix Matrix::dotmultsMatrix(const Matrix &matrix1, const Matrix &matrix2)//矩阵对应相乘
 	{
-		if(matrix1._row!=matrix2._row || matrix1._col!=matrix2._col)
+		if(matrix1._row != matrix2._row || matrix1._col != matrix2._col)
 		{
 			std::cout<<matrix1._row<<"*"<<matrix1._col<<std::endl;
 			std::cout<<matrix2._row<<"*"<<matrix2._col<<std::endl;
 			std::cout<<"multsData error"<<std::endl;
 			exit(-1);
 		}
-		unsigned int i,j;
-		static Matrix dotmults;
-		ColData cda(matrix1._col);
-		Data da(matrix1._row,cda);
-		dotmults._data=da;
-		dotmults._row=matrix1._row;
-		dotmults._col=matrix1._col;
-		for(i=0; i<matrix1._row; i++)
+		unsigned int i = 0, j = 0;
+		Matrix dotmults(matrix1._row, matrix2._col, 0);
+		for(i = 0; i < matrix1._row; i++)
 		{
-			for(j=0; j<matrix2._col; j++)
+			for(j = 0; j < matrix2._col; j++)
 			{
-				dotmults._data[i][j]=matrix1._data[i][j] * matrix2._data[i][j];
+				dotmults._data[i][j] = matrix1._data[i][j] * matrix2._data[i][j];
 			}
 		}
 		return dotmults;
@@ -411,60 +318,60 @@ namespace MLL
 			exit(-1);
 		}
 		Matrix mCopy = this->copyMatrix();
-		double det=1;
-		unsigned int i=0,j=0,k=0;
-		double max=-9999999;
-		int swap=-1;
+		double det = 1;
+		unsigned int i = 0, j = 0, k = 0;
+		double max = -9999999;
+		int swap = -1;
 		double temp;
 		ColData cda(_col);
 		Data aij(_row,cda);
-		for(k=0; k<mCopy._col-1; k++)//k表示第k次消元，一共需要n-1次
+		for(k = 0; k < mCopy._col-1; k++)//k表示第k次消元，一共需要n-1次
 		{
-			for(i=0; i<mCopy._row; i++)
+			for(i = 0; i < mCopy._row; i++)
 			{
-				if(mCopy._data[i][k]>max)//每一次消元都是比较第k列的元素，选出第k列中最大的一行
+				if(mCopy._data[i][k] > max)//每一次消元都是比较第k列的元素，选出第k列中最大的一行
 				{
-					swap=i;
+					swap = i;
 				}
 			}//找到第k次列主元消去的最大行的下标
-			if(swap==-1||mCopy._data[swap][k]==0)
+			if(swap == -1 || mCopy._data[swap][k] == 0)
 				return -1;//最大主元为0
-			for(j=0; j<mCopy._col; j++)
+			for(j = 0; j < mCopy._col; j++)
 			{
-				temp=mCopy._data[k][j];
-				mCopy._data[k][j]=mCopy._data[swap][j];
-				mCopy._data[swap][j]=temp;
+				temp = mCopy._data[k][j];
+				mCopy._data[k][j] = mCopy._data[swap][j];
+				mCopy._data[swap][j] = temp;
 			}//第k次消元，选出最大的一行是swap行，与第k行交换
-			for(i=k+1; i<mCopy._row; i++)
+			for(i = k+1; i < mCopy._row; i++)
 			{
-				aij[i][k]=mCopy._data[i][k]/mCopy._data[k][k];// 第k次消元，主元素为第k行第k列，把第k行以下的行都进行消元
-				for(j=k; j<mCopy._col; j++)//对于k行以下的每一行的每一列元素都减去主行与消元因子的乘积
+				aij[i][k] = mCopy._data[i][k] / mCopy._data[k][k];// 第k次消元，主元素为第k行第k列，把第k行以下的行都进行消元
+				for(j = k; j < mCopy._col; j++)//对于k行以下的每一行的每一列元素都减去主行与消元因子的乘积
 				{
-					mCopy._data[i][j]-=aij[i][k]*mCopy._data[k][j];
+					mCopy._data[i][j] -= aij[i][k] * mCopy._data[k][j];
 				}
 			}
 		}
-		for(i=0; i<mCopy._row; i++)
+		for(i = 0; i < mCopy._row; i++)
 		{
-			det*=mCopy._data[i][i];
+			det *= mCopy._data[i][i];
 		}
 		//cout<<"det="<<det<<endl;
 		return det;
 	}
 	//高斯消元矩阵求逆,特别注意，LU分解不能进行行列式变换
-	Matrix& Matrix::niMatrix()
+	Matrix Matrix::niMatrix()
 	{
-		if(_row!=_col)
+		if(_row != _col)
 		{
-			std::cout<<"Data ni is no "<<std::endl;
+			std::cout << "Data ni is no" << std::endl;
 			exit(-1);
 		}
-		if(this->detMatrix()==0)//这里调用求行列式进行了列主元消去改变了参数矩阵，如何传递不改变是一个问题
+		if(this->detMatrix() == 0)//这里调用求行列式进行了列主元消去改变了参数矩阵，如何传递不改变是一个问题
 		{
-			std::cout<<"Data det is no so ni is no "<<std::endl;
+			std::cout << "Data det is no so ni is no" << std::endl;
 			exit(-1);
 		}
-		unsigned int i=0,j=0,k=0;//这里存在-1的情况，务必定义为int型
+		unsigned int i = 0, j = 0, k = 0;//这里存在-1的情况，务必定义为int型
 		double temp;
 		Matrix mCopy = this->copyMatrix();
 		Matrix UMatrix = this->copyMatrix();
@@ -473,91 +380,91 @@ namespace MLL
 		Matrix LniMatrix = this->copyMatrix();
 		ColData cda(_col);
 		Data aij(_row,cda);
-		for(k=0; k<_col-1; k++)//k表示第k次消元，一共需要n-1次
+		for(k = 0; k < _col-1; k++)//k表示第k次消元，一共需要n-1次
 		{
-			for(i=k+1; i<_row; i++)
+			for(i = k+1; i < _row; i++)
 			{
-				aij[i][k]=_data[i][k]/_data[k][k];// 第k次消元，主元素为第k行第k列，把第k行以下的行都进行消元
-				for(j=k; j<_col; j++)//对于k行以下的每一行的每一列元素都减去主行与消元因子的乘积
+				aij[i][k] = _data[i][k] / _data[k][k];// 第k次消元，主元素为第k行第k列，把第k行以下的行都进行消元
+				for(j = k; j < _col; j++)//对于k行以下的每一行的每一列元素都减去主行与消元因子的乘积
 				{
-					_data[i][j]-=aij[i][k]*_data[k][j];
+					_data[i][j] -= aij[i][k] * _data[k][j];
 				}
 			}
 		}
-		UMatrix=*this;
-		for(j=0; j<_col; j++)
+		UMatrix = *this;
+		for(j = 0; j < _col; j++)
 		{
-			for(i=j+1; i<_row; i++)
+			for(i = j+1; i <_row; i++)
 			{
-				temp=0;
-				for(k=0; k<j; k++)
+				temp = 0;
+				for(k = 0; k < j; k++)
 				{
-					temp=LMatrix._data[i][k]*UMatrix._data[k][j];
+					temp = LMatrix._data[i][k] * UMatrix._data[k][j];
 				}
-				LMatrix._data[i][j]=1/UMatrix._data[j][j]*(mCopy._data[i][j]-temp);
+				LMatrix._data[i][j] = 1.0 / UMatrix._data[j][j] * (mCopy._data[i][j]-temp);
 			}
 		}
-		for(i=0; i<_row; i++)
+		for(i = 0; i < _row; i++)
 		{
-			for(j=0; j<_col; j++)
+			for(j = 0; j < _col; j++)
 			{
-				if(i==j)
-					LMatrix._data[i][j]=1;
+				if(i == j)
+					LMatrix._data[i][j] = 1;
 				if(j>i)
-					LMatrix._data[i][j]=0;
+					LMatrix._data[i][j] = 0;
 			}
 		}
-		static Matrix mults;
-		mults=*this;
-		mults=mults.multsMatrix(LMatrix,UMatrix);
-		Matrix LU=mults;
-		//cout<<"lu"<<endl;
+		Matrix mults;
+		mults = *this;
+		mults = mults.multsMatrix(LMatrix,UMatrix);
+		Matrix LU = mults;
+		//cout << "lu" << endl;
 		//mults.print();
 
 		//计算u逆
-		for(j=0; j<_col; j++)
+		for(j = 0; j < _col; j++)
 		{
-			for(i=j; (int)i>=0; i--)
+			for(i = j; (int) i >= 0; i--)
 			{
-				if(i==j)
-					UniMatrix._data[i][j]=1/UMatrix._data[i][j];
+				if(i == j)
+					UniMatrix._data[i][j] = 1.0 / UMatrix._data[i][j];
 				else
 				{
-					temp=0;
-					for(k=j; k>i; k--)
+					temp = 0;
+					for(k = j; k > i; k--)
 					{
-						temp+=UMatrix._data[i][k]*UniMatrix._data[k][j];
+						temp += UMatrix._data[i][k] * UniMatrix._data[k][j];
 					}
-					UniMatrix._data[i][j]=-1/UMatrix._data[i][i]*temp;
+					UniMatrix._data[i][j] = -1.0 / UMatrix._data[i][i]*temp;
 				}
 			}
 			///关键，将下三角清零
-			for(i=j+1; i<_row; i++)
-				UniMatrix._data[i][j]=0;
+			for(i = j+1; i < _row; i++)
+				UniMatrix._data[i][j] = 0;
 		}
 		//计算l逆
-		for(j=0; j<_col; j++)
+		for(j = 0; j < _col; j++)
 		{
-			for(i=0; i<_row; i++)
+			for(i = 0; i < _row; i++)
 			{
-				if(j==i)
-					LniMatrix._data[i][j]=1;
+				if(j == i)
+					LniMatrix._data[i][j] = 1;
 				else
 				{
-					temp=0;
-					for(k=j; k<i; k++)
+					temp = 0;
+					for(k = j; k < i; k++)
 					{
-						temp+=(LMatrix._data[i][k]*LniMatrix._data[k][j]);
+						temp += (LMatrix._data[i][k] * LniMatrix._data[k][j]);
 					}
-					LniMatrix._data[i][j]=-temp;
+					LniMatrix._data[i][j] = -temp;
 				}
 			}
 		}
 
-		mults=mults.multsMatrix(UniMatrix,LniMatrix);
-		*this=mCopy;
-		Matrix I=*this;
-		I=I.multsMatrix(LU,mults);
+		mults = mults.multsMatrix(UniMatrix,LniMatrix);
+		*this = mCopy;
+		Matrix I = *this;
+		I = I.multsMatrix(LU,mults);
 		//cout<<"LU"<<"*"<<"LUni"<<endl;
 		//I.print();
 		return mults;

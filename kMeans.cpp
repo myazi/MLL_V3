@@ -38,7 +38,7 @@ namespace MLL
 	{
 		int i,j,k;
 		Matrix initmeans;
-		initmeans.initMatrix(kNum,x._col,0,"ss");
+		initmeans.initMatrix(kNum,x._col,0);
 
 		double min[2];
 		double max[2];
@@ -88,7 +88,7 @@ namespace MLL
 		Matrix xOne;//存储一个样本
 		Matrix kOne;//存储一个聚类中心样本
 		Matrix kLabel;//存储每个样本的类别
-		kLabel.initMatrix(x._row,1,0,"ss");
+		kLabel.initMatrix(x._row,1,0);
 
 		double minDis=MAX;//最小的距离
 
@@ -143,8 +143,8 @@ namespace MLL
 		将聚类结果保存到结构体中
 		*/
 		CenAndDis cendis;
-		cendis.cen.initMatrix(kNum,x._col,0,"b");
-		cendis.dis.initMatrix(x._row,1,0,"ss");
+		cendis.cen.initMatrix(kNum,x._col,0);
+		cendis.dis.initMatrix(x._row,1,0);
 		cendis.cen = kmeans;
 
 		///保存所有样本到其类中心的距离到结构体中
@@ -194,20 +194,20 @@ namespace MLL
 	{
 		int i,j,k,d;
 		Matrix kmeans;
-		kmeans.initMatrix(kNum,x._col,0,"ss");///初始化聚为一类，
+		kmeans.initMatrix(kNum,x._col,0);///初始化聚为一类，
 
 		Matrix xOne;//一个样本
 		Matrix kOne;//一个聚类中心
 		Matrix clusterAssment;///矩阵的第一列保存其到所属类别，第二列保存样本到所属类别的距离
-		clusterAssment.initMatrix(x._row,2,0,"ss");
+		clusterAssment.initMatrix(x._row,2,0);
 
 		CenAndDis cenanddis;///聚类结果
-		cenanddis.cen.initMatrix(kNum,x._col,0,"ss");
-		cenanddis.dis.initMatrix(x._col,1,0,"ss");
+		cenanddis.cen.initMatrix(kNum,x._col,0);
+		cenanddis.dis.initMatrix(x._col,1,0);
 
 		CenAndDis bestCenanddis;///记录当前最好的距离结果
-		bestCenanddis.cen.initMatrix(kNum,x._col,0,"ss");
-		bestCenanddis.dis.initMatrix(x._row,1,0,"ss");
+		bestCenanddis.cen.initMatrix(kNum,x._col,0);
+		bestCenanddis.dis.initMatrix(x._row,1,0);
 
 		for(i=0; i<x._row; i++)
 		{
@@ -301,7 +301,7 @@ namespace MLL
 	KMeans::KMeans(const std::string &file)
 	{
 		Matrix x;
-		x.LoadData(file);
+		x.init_by_data(file);
 		kMeans(x,3,10);
 		biKmeans(x,3,10);
 	}

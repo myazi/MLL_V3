@@ -16,17 +16,17 @@ namespace MLL{
         /**
             随机初始化
         **/
-        //p->A.initMatrix(sup_par.layer_n[k],X._col,0,"ss");
+        //p->A.initMatrix(sup_par.layer_n[k],X._col,0);
 
-        //p->AT.initMatrix(X._col,X._row,0,"ss");
+        //p->AT.initMatrix(X._col,X._row,0);
         for(k=0; k<L-1; k++)
         {
-            p->A.initMatrix(_sup_par.layer_n[k],_x._col,0,"ss");
+            p->A.initMatrix(_sup_par.layer_n[k],_x._col,0);
             //用于dropout，这里初始化一次即可，后面当使用dropout时，D才会赋值，不使用则不赋值，且实际使用长度小于网络层数
-            p->D.initMatrix(_sup_par.layer_n[k],_x._col,0,"ss");
-            p->W.initMatrix(_sup_par.layer_n[k+1],_sup_par.layer_n[k],0,"ss");
-            p->b.initMatrix(_sup_par.layer_n[k+1],1,0,"ss");
-            p->Z.initMatrix(_sup_par.layer_n[k+1],_x._col,0,"ss");
+            p->D.initMatrix(_sup_par.layer_n[k],_x._col,0);
+            p->W.initMatrix(_sup_par.layer_n[k+1],_sup_par.layer_n[k],0);
+            p->b.initMatrix(_sup_par.layer_n[k+1],1,0);
+            p->Z.initMatrix(_sup_par.layer_n[k+1],_x._col,0);
 
             for(i=0; i<p->W._row; i++)
             {
@@ -53,31 +53,31 @@ namespace MLL{
             p->next->pre=p;
             p=p->next;
 
-            g->grad_A.initMatrix(_sup_par.layer_n[L-k-1],_x._col,0,"ss");
-            g->grad_Z.initMatrix(_sup_par.layer_n[L-k-1],_x._col,0,"ss");
-            g->grad_W.initMatrix(_sup_par.layer_n[L-k-1],_sup_par.layer_n[L-k-2],0,"ss");
-            g->grad_b.initMatrix(_sup_par.layer_n[L-k-1],1,0,"ss");
+            g->grad_A.initMatrix(_sup_par.layer_n[L-k-1],_x._col,0);
+            g->grad_Z.initMatrix(_sup_par.layer_n[L-k-1],_x._col,0);
+            g->grad_W.initMatrix(_sup_par.layer_n[L-k-1],_sup_par.layer_n[L-k-2],0);
+            g->grad_b.initMatrix(_sup_par.layer_n[L-k-1],1,0);
 
             //用于momentum 和adam优化中用于保存前n次加权平均值
-            g->V_dw.initMatrix(_sup_par.layer_n[L-k-1],_sup_par.layer_n[L-k-2],0,"ss");
-            g->V_db.initMatrix(_sup_par.layer_n[L-k-1],1,0,"ss");
+            g->V_dw.initMatrix(_sup_par.layer_n[L-k-1],_sup_par.layer_n[L-k-2],0);
+            g->V_db.initMatrix(_sup_par.layer_n[L-k-1],1,0);
 
-            g->S_dw.initMatrix(_sup_par.layer_n[L-k-1],_sup_par.layer_n[L-k-2],0,"ss");
-            g->S_db.initMatrix(_sup_par.layer_n[L-k-1],1,0,"ss");
+            g->S_dw.initMatrix(_sup_par.layer_n[L-k-1],_sup_par.layer_n[L-k-2],0);
+            g->S_db.initMatrix(_sup_par.layer_n[L-k-1],1,0);
 
             //用于修正的momentum 和adam
-            g->V_dw_corrected.initMatrix(_sup_par.layer_n[L-k-1],_sup_par.layer_n[L-k-2],0,"ss");
-            g->V_db_corrected.initMatrix(_sup_par.layer_n[L-k-1],1,0,"ss");
+            g->V_dw_corrected.initMatrix(_sup_par.layer_n[L-k-1],_sup_par.layer_n[L-k-2],0);
+            g->V_db_corrected.initMatrix(_sup_par.layer_n[L-k-1],1,0);
 
-            g->S_dw_corrected.initMatrix(_sup_par.layer_n[L-k-1],_sup_par.layer_n[L-k-2],0,"ss");
-            g->S_db_corrected.initMatrix(_sup_par.layer_n[L-k-1],1,0,"ss");
+            g->S_dw_corrected.initMatrix(_sup_par.layer_n[L-k-1],_sup_par.layer_n[L-k-2],0);
+            g->S_db_corrected.initMatrix(_sup_par.layer_n[L-k-1],1,0);
 
             g->pre=new grad();//上一层网络参数梯度
             g->pre->next=g;
             g=g->pre;
         }
-        p->A.initMatrix(_sup_par.layer_n[k],_x._col,0,"ss");
-        g->grad_A.initMatrix(_sup_par.layer_n[L-k-1],_x._col,0,"ss");
+        p->A.initMatrix(_sup_par.layer_n[k],_x._col,0);
+        g->grad_A.initMatrix(_sup_par.layer_n[L-k-1],_x._col,0);
 
         return 0;
     }
@@ -450,7 +450,7 @@ namespace MLL{
         //p = &_par;
         //p->A = _x.copyMatrix();
         //Matrix AL;
-        Matrix AL(_y._row,_y._col,0,"ss");
+        Matrix AL(_y._row,_y._col,0);
         double *keep_probs=new double [L];
         for(k=0;k<L;k++)
         {
@@ -483,7 +483,7 @@ namespace MLL{
 
         **/
 
-        _x.LoadData(file);
+        _x.init_by_data(file);
         //_x = _x.transposeMatrix();
        
         //_x = _x.transposeMatrix();
@@ -521,8 +521,8 @@ namespace MLL{
         init_parameters();
         double loss;
 
-        //Matrix AL(_y._row,_y._col,0,"ss");
-        Matrix AL(1,_y._col,0,"ss");
+        //Matrix AL(_y._row,_y._col,0);
+        Matrix AL(1,_y._col,0);
         double *keep_probs;
         keep_probs=new double [_sup_par.layer_dims];
         if(keep_prob==1)

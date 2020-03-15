@@ -9,14 +9,14 @@ namespace MLL
     {
         std::cout<<"load_data:"<< file<<std::endl;
         std::cout<<"----------------------"<<std::endl;
-        _x.LoadData(file);
+        _x.init_by_data(file);
         _x.print(); 
         _y=_x.getOneCol(_x._col-1);
         _x.deleteOneCol(_x._col-1);
         std::cout<<"xxxxxxx"<<std::endl; 
-        _eCache.initMatrix(_x._row,2,0,"ss");
-        _alphas.initMatrix(_x._row,1,0,"ss");
-        _kernel.initMatrix(_x._row,_x._row,0,"s");
+        _eCache.initMatrix(_x._row,2,0);
+        _alphas.initMatrix(_x._row,1,0);
+        _kernel.initMatrix(_x._row,_x._row,0);
 
         _b=b;
         _C=C;
@@ -26,8 +26,8 @@ namespace MLL
         if(ktup.type!=0)
         {
             int i=0,j=0;
-            Matrix xOnerow(1,_x._col,0,"ss");
-            Matrix kOnecol(_x._row,1,0,"ss");
+            Matrix xOnerow(1,_x._col,0);
+            Matrix kOnecol(_x._row,1,0);
             for(i=0; i<_x._row; i++)
             {
                 xOnerow=_x.getOneRow(i);
@@ -45,7 +45,7 @@ namespace MLL
     */
     Matrix SVM::kernelTran(Matrix xOnerow)
     {
-        Matrix K(_x._row,1,0,"ss");
+        Matrix K(_x._row,1,0);
         Matrix xOnerowT = xOnerow.transposeMatrix();
         if(_ktup.type==1)
         {
@@ -74,14 +74,14 @@ namespace MLL
     **/
     double SVM::calcEk(int k)
     {
-        Matrix ay(_x._row,1,0,"ss");
+        Matrix ay(_x._row,1,0);
         size_t i;
         for(i=0; i<ay._row; i++)
         {
             ay._data[i][0]=_alphas._data[i][0]*_y._data[i][0];
         }
         Matrix ayT =ay.transposeMatrix();
-        Matrix f(1,1,0,"ss");
+        Matrix f(1,1,0);
         if(!_k)
         {
             Matrix ayTx =ayTx.multsMatrix(ayT,_x);
@@ -282,7 +282,7 @@ namespace MLL
                 entireSet=true;
         }
         ///对SMO算法实现的正确性进行验证，输出预测值与实际值的差别，全为0表示在训练样本上预测全对
-        Matrix ay(_x._row,1,0,"ss");
+        Matrix ay(_x._row,1,0);
         for(i=0; i<_x._row; i++)
         {
             ay._data[i][0] = _alphas._data[i][0] * _y._data[i][0];
@@ -299,7 +299,7 @@ namespace MLL
             std::cout<<w._data[i][0]<<"  ";
         }
         std::cout<<std::endl;
-        std::cout<<"-----------"<<std::endl;
+        std::cout<<"----测试结果-------"<<std::endl;
         ///验证训练样本数据，验证SVM实现的正确性
         for(i=0; i< _x._row; i++)
         {

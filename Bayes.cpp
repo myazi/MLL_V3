@@ -11,7 +11,7 @@ namespace MLL
 	Bayes::DIC Bayes::createVocabList(const std::vector<DataStr> &dataClass)//生成单词字典
 	{
 		int i,j,k,vl;
-		static std::vector<std::string> dic;
+		std::vector<std::string> dic;
 		for(k=0; k<dataClass.size(); k++)
 		{
 			for(i=0; i<dataClass[k].size(); i++)
@@ -43,7 +43,7 @@ namespace MLL
 			sampleNum+=dataClass[k].size();
 		}
 		Matrix vecX;
-		vecX.initMatrix(sampleNum,dic.size()+1,0,"ss");
+		vecX.initMatrix(sampleNum, dic.size() + 1, 0);
 		int iSample=0;
 		for(k=0; k<dataClass.size(); k++)
 		{
@@ -70,9 +70,9 @@ namespace MLL
 	int Bayes::trainNB(const Matrix &X, const Matrix &Y)//训练函数的实现，注意对参数进行平滑处理
 	{
 		//类，特征，特征取值
-		bayes.pY.initMatrix(CLASS_SUM,1,0,"ss");//两类初始化为2行的列向量
-		bayes.pX_1Y.initMatrix(CLASS_SUM,X._col,0,"ss");//X_1Y表示在Y下X=1的概率，反之X=0的概率为1-
-		bayes.pX.initMatrix(X._col,1,0,"ss");//
+		bayes.pY.initMatrix(CLASS_SUM,1,0);//两类初始化为2行的列向量
+		bayes.pX_1Y.initMatrix(CLASS_SUM,X._col,0);//X_1Y表示在Y下X=1的概率，反之X=0的概率为1-
+		bayes.pX.initMatrix(X._col,1,0);//
 
 		int i,j,k;
 		for(k=0; k<bayes.pX_1Y._row; k++)

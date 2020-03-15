@@ -8,16 +8,16 @@ namespace MLL {
     **/
     int SoftMaxReg::gradAscent_SoftMax()
     {
-        Matrix weights(_x._col,_y._col,0.1,"T");
+        Matrix weights(_x._col,_y._col,0.1);
         Matrix xT = _x.transposeMatrix();
 
         //float alpha=0.001;///迭代步长
         float error=0;///记录错误率
         int iter=0;
         int i,j;
-        Matrix z(_y._row,_y._col,0,"T");//最好确定矩阵的大小
-        Matrix z_rowSum(z._row,1,0,"ss");//各个维度求和，归一化为概率形式
-        Matrix grad(_x._col,_y._col,0,"T");
+        Matrix z(_y._row,_y._col,0);//最好确定矩阵的大小
+        Matrix z_rowSum(z._row,1,0);//各个维度求和，归一化为概率形式
+        Matrix grad(_x._col,_y._col,0);
         for(iter=0; iter<_iter; iter++)
         {
             z = _x * weights;
@@ -74,12 +74,12 @@ namespace MLL {
     **/
     int SoftMaxReg::stoGradAscent_SoftMax()//随机梯度下降每一次选择m个样本进行求梯度下降方向，该代码中只选择一个样本进行求解梯度下降方向与数值
     {
-        Matrix xOne_row(1,_x._col,0,"T");
-        Matrix xOne_rowT(_x._col,1,0,"T");
+        Matrix xOne_row(1,_x._col,0);
+        Matrix xOne_rowT(_x._col,1,0);
 
-        Matrix weights(_x._col,_y._col,0.1,"T");
-        Matrix z(1,_y._col,0,"T");//最好确定矩阵的大小
-        Matrix grad(_x._col,_y._col,0,"T");
+        Matrix weights(_x._col,_y._col,0.1);
+        Matrix z(1,_y._col,0);//最好确定矩阵的大小
+        Matrix grad(_x._col,_y._col,0);
         double z_rowSum=0;
         //double alpha=0.001;///步长
         double error;
@@ -140,10 +140,11 @@ namespace MLL {
     {
         std::cout<<"load_data"<<std::endl;
         std::cout<<"----------------------"<<std::endl;
-        _x.LoadData(file);
+        _x.init_by_data(file);
         _y=_x.getOneCol(_x._col-1);
-        _y=one_hot(_y,2);
-        _x.deleteOneCol(_x._col-1);
+		one_hot(_y,2);
+        //_y.print();
+		_x.deleteOneCol(_x._col-1);
         _alpha = alpha;
         _iter = iter;
     }

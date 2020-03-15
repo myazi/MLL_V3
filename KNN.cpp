@@ -7,9 +7,9 @@ namespace MLL
 	{
 		int j=0,i=0;
 
-		Matrix minVals(1,x._col,0,"ss");
-		Matrix maxVals(1,x._col,0,"ss");
-		Matrix ranges(1,x._col,0,"ss");
+		Matrix minVals(1,x._col,0);
+		Matrix maxVals(1,x._col,0);
+		Matrix ranges(1,x._col,0);
 		for(j=0; j<x._col; j++)
 		{
 			minVals._data[0][j]=x._data[0][j];
@@ -42,7 +42,7 @@ namespace MLL
 	Matrix KNN::cdistances(const Matrix &test, const Matrix &x)
 	{
 		int i,j;
-		static Matrix distances(x._row,1,0,"ss");
+		Matrix distances(x._row,1,0);
 		for(i=0; i<x._row; i++)
 		{
 			for(j=0; j<x._col; j++)
@@ -58,9 +58,9 @@ namespace MLL
 	Matrix KNN::getK(const Matrix &oneTest, const Matrix &x, const int &K)
 	{
 		int i,j,k;
-		static Matrix distances(x._row,1,0,"xx");//为每一个测试样本初始化k个近邻为前k个训练样本，并记录近邻的id
+		Matrix distances(x._row,1,0);//为每一个测试样本初始化k个近邻为前k个训练样本，并记录近邻的id
 		distances=cdistances(oneTest,x);
-		Matrix Kdistances(K,2,0,"x");
+		Matrix Kdistances(K,2,0);
 		double Max=-1;
 		int Maxi=-1;
 		for(i=0; i<K; i++)
@@ -105,7 +105,7 @@ namespace MLL
 	{
 		int i,j,k;
 		int sumz=0,sumf=0;
-		Matrix knn(K,2,0,"s");
+		Matrix knn(K,2,0);
 		autoNorm(x);
 		autoNorm(test_data);
 		for(i=0; i<test_data._row; i++)
@@ -137,7 +137,7 @@ namespace MLL
 		std::cout<<"load_data"<<std::endl;
 		std::cout<<"----------------------"<<std::endl;
 		char filetrain[20]="data/knn.txt";
-		x.LoadData(filetrain);
+		x.init_by_data(filetrain);
 		Matrix y;
 		y=x.getOneCol(x._col-1);
 		x.deleteOneCol(x._col-1);
@@ -147,7 +147,7 @@ namespace MLL
 		char testFile[20]="data/knnTest.txt";
 		std::cout<<"load_data"<<std::endl;
 		std::cout<<"----------------------"<<std::endl;
-		testx.LoadData(testFile);
+		testx.init_by_data(testFile);
 		Matrix testy;
 		testy=testx.getOneCol(testx._col-1);
 		testx.deleteOneCol(testx._col-1);

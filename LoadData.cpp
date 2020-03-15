@@ -3,7 +3,7 @@
 加载数值型样本数据
 */
 
-void LoadDataNum_spare(Data &data, const std::string &infile)
+void LoadData_spare(Data &data, const std::string &infile)
 {
     std::cout<< "data filename is:"<< infile<<std::endl;
     std::ifstream dataFile;
@@ -40,9 +40,10 @@ void LoadDataNum_spare(Data &data, const std::string &infile)
     }
     dataFile.close();
 }
+
 void LoadDataStr(RowDataStr &data, const std::string &infile)
 {
-    std::cout<< "data filename is:"<< infile<<std::endl;
+    std::cout<< "loaddatastr filename is:"<< infile<<std::endl;
     std::ifstream dataFile;
     dataFile.open(infile);
     std::string tmpstrline;

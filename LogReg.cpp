@@ -14,14 +14,14 @@ namespace MLL {
             std::cout<<"logReg is two class"<<std::endl;
             return -1;
         }
-        Matrix weights(_x._col,_y._col,0.1,"T");
+        Matrix weights(_x._col,_y._col,0.1);
         Matrix xT = _x.transposeMatrix();
 
         float error=0;///记录错误率
         int iter=0;
         int i,j;
-        Matrix z(_y._row,_y._col,0,"T");//最好确定矩阵的大小
-        Matrix grad(_x._col,_y._col,0,"T");
+        Matrix z(_y._row,_y._col,0);//最好确定矩阵的大小
+        Matrix grad(_x._col,_y._col,0);
         for(iter=0; iter<_iter; iter++)
         {
             z = _x * weights;
@@ -85,7 +85,7 @@ namespace MLL {
 		Matrix test_x;
 		Matrix test_y;
 		const char *test_file= "sample_100";
-		test_x.LoadData(test_file);
+		test_x.init_by_data(test_file);
 
 		test_y=test_x.getOneCol(test_x._col-1);
 		test_x.deleteOneCol(test_x._col-1);
@@ -116,12 +116,12 @@ namespace MLL {
     **/
     int LogReg::stoGradAscent_Log()//随机梯度下降每一次选择m个样本进行求梯度下降方向，该代码中只选择一个样本进行求解梯度下降方向与数值
     {
-        Matrix xOnerow(1,_x._col,0,"T");
-        Matrix xOnerowT(_x._col,1,0,"T");
+        Matrix xOnerow(1,_x._col,0);
+        Matrix xOnerowT(_x._col,1,0);
 
-        Matrix weights(_x._col,_y._col,0.1,"T");
-        Matrix z(1,_y._col,0,"T");//最好确定矩阵的大小
-        Matrix grad(_x._col,_y._col,0,"T");
+        Matrix weights(_x._col,_y._col,0.1);
+        Matrix z(1,_y._col,0);//最好确定矩阵的大小
+        Matrix grad(_x._col,_y._col,0);
 
         double error;
         int i,j,c;
@@ -159,7 +159,7 @@ namespace MLL {
     {
         std::cout<<"load_data:"<< file<<std::endl;
         std::cout<<"----------------------"<<std::endl;
-        _x.LoadData(file);
+        _x.init_by_data(file);
 		_y=_x.getOneCol(_x._col-1);
 		_x.deleteOneCol(_x._col-1);
         _y.print();

@@ -15,7 +15,7 @@ namespace MLL {
 	std::vector<std::string> DTree::getkindattr(const DataStr &data,const int &axis)//获得axis属性的所有不同取值
 	{
 		unsigned int i,j;
-		static std::vector<std::string> attr_value;
+		std::vector<std::string> attr_value;
 		for(i=0; i<data.size(); i++)
 		{
 			for(j=0; j<attr_value.size(); j++)
@@ -265,7 +265,7 @@ namespace MLL {
 
 	DTree::DTree(const std::string &file, const std::string &type)
 	{
-		LoadData_t(data,file);
+		LoadData(data,file);
 		for(unsigned int i=0;i<data[0].size();i++)
 			feat_flag.push_back(0);
 		dataToTree(data,type,0);//初值很重要，当返回到根节点时，如取-1，则会无法访问根节点上的属性特征值

@@ -19,10 +19,10 @@ namespace MLL
 
 	Matrix GMM::E_step(const Matrix &x)
 	{
-		static Matrix w;
-		w.initMatrix(K,x._row,0,"s");
+		Matrix w;
+		w.initMatrix(K,x._row,0);
 		Matrix wNorm;
-		wNorm.initMatrix(1,x._row,0,"s");
+		wNorm.initMatrix(1,x._row,0);
 		Matrix xOne;
 		double p=0;
 		for(size_t i=0; i<x._row; i++)
@@ -48,9 +48,9 @@ namespace MLL
 		Mu.clear();
 		Sigma.clear();
 		Matrix mu;
-		mu.initMatrix(1,x._col,0,"ss");
+		mu.initMatrix(1,x._col,0);
 		Matrix sigma;
-		sigma.initMatrix(x._col,x._col,0,"s");
+		sigma.initMatrix(x._col,x._col,0);
 		for(size_t k=0; k<w._row; k++)
 		{
 			Phi.push_back(0);
@@ -90,9 +90,9 @@ namespace MLL
 	GMM::GMM(const std::string &file, const int &k, const int &Iter)
 	{
 		Matrix x;
-		x.LoadData("_data/GMM.txt");
+		x.init_by_data("_data/GMM.txt");
 		Matrix sigma(x._col,x._col,5,"diag");//³õÊ¼»¯·½²î
-		Matrix mu(k,x._col,0,"ss");
+		Matrix mu(k,x._col,0);
 		K=k;
 		Matrix onek;
 		for(int i=0; i<x._row; i++)

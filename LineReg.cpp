@@ -28,7 +28,7 @@ namespace MLL{
     {
         Matrix xT= _x.transposeMatrix();
         Matrix xTx=xTx.multsMatrix(xT,_x);
-        Matrix denom(xTx._row,xTx._col,_lamd,"diag");
+		Matrix denom(xTx._row,xTx._col,_lamd,"diag");
         xTx=xTx.addMatrix(xTx,denom);
         Matrix xTx_1=xTx.niMatrix();
         Matrix xTx_1xT=xTx_1xT.multsMatrix(xTx_1,xT);
@@ -47,7 +47,7 @@ namespace MLL{
     //需要注意的是局部加权线性回归是对每一个样本进行权重计算，所以对于每一个样本都有一个权重w，所以下面的函数只是局部线性回归的一个主要辅助函数
     Matrix LineReg::locWeightLineReg(Matrix &test)
     {
-        Matrix w(_x._row,_x._row,0,"T");
+        Matrix w(_x._row,_x._row,0);
         double temp=0;
         int i,j;
 
@@ -126,7 +126,7 @@ namespace MLL{
     {
         std::cout<<"load_data"<<std::endl;
         std::cout<<"----------------------"<<std::endl;
-        _x.LoadData(file);
+        _x.init_by_data(file);
         _y = _x.getOneCol(_x._col-1);
         _x.deleteOneCol(_x._col-1);
         _lamd = lamd;

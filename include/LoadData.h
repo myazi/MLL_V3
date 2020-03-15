@@ -25,9 +25,9 @@ typedef std::vector<std::string> ColDataStr;
 
 
 template<typename elemType>
-void LoadData_t(std::vector<std::vector<elemType> > &data, const std::string &infile)
+void LoadData(std::vector<std::vector<elemType> > &data, const std::string &infile)
 {
-    std::cout<< "data filename is:"<< infile<<std::endl;
+    std::cout << "locddata filename is:" << infile <<std::endl;
     std::ifstream dataFile;
     dataFile.open(infile);
     std::string tmpstrline;
@@ -54,6 +54,8 @@ void LoadData_t(std::vector<std::vector<elemType> > &data, const std::string &in
     }
     dataFile.close();
 }
-void LoadDataNum_spare(Data &data, const std::string &infile);
+
 void LoadDataStr(RowDataStr &data, const std::string &infile);
+void LoadData_spare(Data &data, const std::string &infile);
+
 #endif // LoadData_H
