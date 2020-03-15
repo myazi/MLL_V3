@@ -196,8 +196,10 @@ int main(int argc, char* argv[])
     
 	std::string models[20] ={"LineReg","LogReg","SoftMaxReg","DNN","SVM","DTree","CART","Adaboost","RF","KMeans","KNN","Bayes","GMM","HMM","HMM_CWS","MEMM_CWS","CRF_CWS"};
 	std::vector<std::string> models_pos(models, models + 20); 
-    int (*models_list[])(const char *file) = {LineReg, LogReg,SoftMaxReg,trainDNN,SVM,DTree,CART,Adaboost,RF,KMeans,KNN,Bayes,GMM,HMM,HMM_CWS,MEMM_CWS,CRF_CWS};
-    int (*models_ptr) (const char *file) = LogReg;
+    //int (*models_list[])(const char *file) = {LineReg, LogReg,SoftMaxReg,trainDNN,SVM,DTree,CART,Adaboost,RF,KMeans,KNN,Bayes,GMM,HMM,HMM_CWS,MEMM_CWS,CRF_CWS};
+    //int (*models_ptr) (const char *file) = LogReg;
+    int (*models_list[])(const char *file = "ss") = {LineReg, LogReg,SoftMaxReg,trainDNN,SVM,DTree,CART,Adaboost,RF,KMeans,KNN,Bayes,GMM,HMM,HMM_CWS,MEMM_CWS,CRF_CWS};
+    int (*models_ptr) (const char *file = "ss") = LogReg;
     if(argc < 2)
     {
 		std::cout<<"arg is error"<<std::endl;
@@ -213,7 +215,8 @@ int main(int argc, char* argv[])
         if(type == models_pos[i])
         {
             models_ptr = models_list[i];
-			ret = models_ptr(file_name);
+		    ret = models_ptr(file_name);
+			//ret = models_ptr();
 			return ret;
         }
     }

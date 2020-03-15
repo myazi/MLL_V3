@@ -5,6 +5,7 @@
 #ifndef Adaboost_H
 #define Adaboost_H
 #include "MatrixOpe.h"
+#include <memory>
 /*
 struct twoSubData_A;
 

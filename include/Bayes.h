@@ -1,7 +1,7 @@
 #ifndef Bayes_H
 #define Bayes_H
 #include "MatrixOpe.h"
-
+#include <memory>
 namespace MLL
 {
 	class Bayes

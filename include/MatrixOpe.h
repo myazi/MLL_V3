@@ -1,7 +1,7 @@
 #ifndef MatrixOpe_H
 #define MatrixOpe_H
 #include "Matrix.h"
-
+#include <memory>
 namespace MLL
 {
 	Matrix operator+(const Matrix &matrix1, const Matrix &matrix2);
