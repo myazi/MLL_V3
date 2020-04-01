@@ -36,7 +36,7 @@ namespace MLL
 			void init_test();
 			void forwardBack(const DataStr &data);
 			void Baum_Weach(const DataStr &data);
-			void Viterbi_O(const DataStr &data);
+			void Viterbi(const DataStr &data);
 			HMM(const std::string file);
 		typedef std::shared_ptr<HMM> HMMPtr;
 	};

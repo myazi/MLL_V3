@@ -168,7 +168,7 @@ namespace MLL
 		return 0;
 
 	}
-	/*
+	/*	
 	void Bayes::getAllFiles(const std::string &path, const std::vector<std::string> &files)
 	{
 		//нд╪Ч╬Д╠З
@@ -200,7 +200,7 @@ namespace MLL
 	Bayes::Bayes(const std::string &file)
 	{
 
-		int k,i,j;
+		int k = 0, i = 0, j = 0;
 		std::string path[CLASS_SUM]= {"data/email/ham/","data/email/spam/"};
 		std::vector<std::string> files;
 		std::vector< std::vector<std::string> > filess;
@@ -213,8 +213,6 @@ namespace MLL
 			filess.push_back(files);
 			files.clear();
 		}
-		std::cout<<"loadData"<<std::endl;
-		std::cout<<"----------------------"<<std::endl;
 		for(k=0; k<filess.size(); k++)
 		{
 			for(i=0; i<filess[k].size(); i++)
@@ -226,7 +224,7 @@ namespace MLL
 			dataClass.push_back(data);
 			data.clear();
 		}
-		
+		std::cout<<" -------------"<< std::endl;		
 		Bayes::DIC dic = createVocabList(dataClass);
 		
 		std::cout<<dic.size();

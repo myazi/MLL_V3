@@ -7,25 +7,21 @@ namespace MLL
     */
     SVM::SVM(const std::string &file, const double C, const double soft, const double b, const int iter,kTup ktup)
     {
-        std::cout<<"load_data:"<< file<<std::endl;
-        std::cout<<"----------------------"<<std::endl;
         _x.init_by_data(file);
-        _x.print(); 
         _y=_x.getOneCol(_x._col-1);
         _x.deleteOneCol(_x._col-1);
-        std::cout<<"xxxxxxx"<<std::endl; 
+		std::cout << "x:" << _x._row << "&" << _x._col << std::endl;
+		std::cout << "y:" <<  _y._row << "&" << _y._col << std::endl;
         _eCache.initMatrix(_x._row,2,0);
         _alphas.initMatrix(_x._row,1,0);
         _kernel.initMatrix(_x._row,_x._row,0);
-
         _b=b;
         _C=C;
         _iter = iter;
         _soft=soft;
-        std::cout<<"dd"<<std::endl;
         if(ktup.type!=0)
         {
-            int i=0,j=0;
+            int i=0, j=0;
             Matrix xOnerow(1,_x._col,0);
             Matrix kOnecol(_x._row,1,0);
             for(i=0; i<_x._row; i++)
@@ -37,7 +33,6 @@ namespace MLL
             }
             _k=true;
         }
-        std::cout<<"aaa"<<std::endl;
         _k=false;
     }
     /**
@@ -237,7 +232,6 @@ namespace MLL
     }
 
     /**
-
     SMO算法的入口函数，其主要功能是初始化SMO所有的参数到结构体OS
     确定迭代结束标志，并在所有样本和支持向量上循环的选择合适alpha1，调用inner确定alpha1，
     外层循环每一次是迭代优化一对alpha,内层循环才是正真实现迭代优化一对alpha
@@ -247,11 +241,11 @@ namespace MLL
 
     int SVM::smoP()
     {
-        int iter=0;
-        int i;
+        int it = 0;
+        int i = 0;
         bool entireSet=true;//标志用于判断当前迭代是针对所有alpha，还是针对0-C之间的部分alpha，这里其实第一个alpha的启发式选择，即选择落在支持向量上的点
         int alphaPairsChanged=0;//该参数判断在确定第一个参数之后，是否能选择出符合要求的第二alpha，返回值为1表示能，0为不能
-        for(iter=0; iter< _iter&&(alphaPairsChanged>0||entireSet); iter++)
+        for(it = 0; it < _iter && (alphaPairsChanged>0||entireSet); it++)
         {
             //循环结束标志为迭代次数已到预设值，或者是不能再继续优化（对于所有的支持向量上的点都找不到第二个alpha对第一个alpha进行优化后，重新再遍历所有的点寻找可优化的参数对）
             //还是找不到则再次遍历支持向量上的点，这次必然也是找不到，才结束迭代
@@ -261,9 +255,9 @@ namespace MLL
                 for(i=0; i<_x._row; i++)
                 {
                     alphaPairsChanged+=innerL(i);
-                    std::cout<<"iter="<<iter<<"  i="<<i<<"  alphachanged="<<alphaPairsChanged<<"  entireSet="<<entireSet<<std::endl;
+                    std::cout<<"it="<< it <<"  i="<<i<<"  alphachanged="<<alphaPairsChanged<<"  entireSet="<<entireSet<<std::endl;
                 }
-                iter++;
+                it++;
             }
             else
             {
@@ -272,9 +266,9 @@ namespace MLL
                     if(_alphas._data[i][0]>0 && _alphas._data[i][0] < _C)//只选择支持向量上的点
                         continue;
                     alphaPairsChanged+=innerL(i);
-                    std::cout<<"iter="<<iter<<"  i="<<i<<"  alphachanged="<<alphaPairsChanged<<alphaPairsChanged<<"  entireSet="<<entireSet<<std::endl;
+                    std::cout<<"it="<<it<<"  i="<<i<<"  alphachanged="<<alphaPairsChanged<<alphaPairsChanged<<"  entireSet="<<entireSet<<std::endl;
                 }
-                iter++;
+                it++;
             }
             if(entireSet)
                 entireSet=false;
@@ -292,7 +286,7 @@ namespace MLL
 
         Matrix w = w.multsMatrix(xT,ay);
 
-        Matrix label = label.multsMatrix(_x,w);
+        Matrix pre_label = pre_label.multsMatrix(_x,w);
         std::cout<<_b<<"  ";
         for(i=0; i < _x._col; i++)
         {
@@ -303,10 +297,10 @@ namespace MLL
         ///验证训练样本数据，验证SVM实现的正确性
         for(i=0; i< _x._row; i++)
         {
-            if((label._data[i][0] + _b)>0)
-                std::cout<<1 - _y._data[i][0]<<"  ";
+            if((pre_label._data[i][0] + _b) > 0)
+                std::cout<<"pre_label: 1" << "\t" << "fact_label: " << _y._data[i][0] <<std::endl;
             else
-                std::cout<<0- _y._data[i][0]<<"  ";
+                std::cout<<"pre_label: -1" << "\t" << "fact_label: " << _y._data[i][0] <<std::endl;
         }
         return 0;
     }

@@ -9,21 +9,26 @@ namespace MLL{
     **/
     int LineReg::regression()
     {
-        Matrix xT= _x.transposeMatrix();
-        Matrix xTx=xTx.multsMatrix(xT,_x);
-        Matrix xTx_1=xTx.niMatrix();
-        Matrix xTx_1xT=xTx_1xT.multsMatrix(xTx_1,xT);
+        Matrix xT = _x.transposeMatrix();
+        Matrix xTx = xTx.multsMatrix(xT,_x);
+        Matrix xTx_1 = xTx.niMatrix();
+        Matrix xTx_1xT = xTx_1xT.multsMatrix(xTx_1,xT);
         Matrix ws;
         ws=ws.multsMatrix(xTx_1xT,_y);
         std::cout<<"ws"<<std::endl;
         ws.print();
+		Matrix pre_y = _x * ws; 
+		for(int i = 0; i < _y._row; i++)
+		{
+			std::cout << "pre_y:" << pre_y._data[i][0] << "\t" << "fact_y:" << _y._data[i][0]<< "\t" << "error=" << pre_y._data[i][0] - _y._data[i][0] << std::endl;
+		}
         return 0;
     }
-    /**
+    
+	/**
     下面的岭回归函数只是在一般的线性回归函数的基础上在对角线上引入了岭的概念，不仅有解决矩阵不可逆的线性，同样也有正则项的目的，
     采用常用的二范数就得到了直接引入lam的形式。
     **/
-
     int LineReg::ridgeRegres()
     {
         Matrix xT= _x.transposeMatrix();
@@ -49,7 +54,7 @@ namespace MLL{
     {
         Matrix w(_x._row,_x._row,0);
         double temp=0;
-        int i,j;
+        int i = 0, j = 0;
 
         /**
         根据测试样本点与整个样本的距离已经选择的核确定局部加权矩阵，采用对角线上为局部加权值
@@ -124,11 +129,11 @@ namespace MLL{
 
     LineReg::LineReg(const std::string &file, const std::string &model, const double &lamd, const double &k)
     {
-        std::cout<<"load_data"<<std::endl;
-        std::cout<<"----------------------"<<std::endl;
         _x.init_by_data(file);
         _y = _x.getOneCol(_x._col-1);
         _x.deleteOneCol(_x._col-1);
+		std::cout << "x:" << _x._row << "&" << _x._col << std::endl;
+		std::cout << "y:" <<  _y._row << "&" << _y._col << std::endl;
         _lamd = lamd;
         _k = k; 
     }

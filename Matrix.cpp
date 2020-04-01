@@ -3,21 +3,21 @@ namespace MLL
 {
 	Matrix::Matrix()
 	{
-		std::cout << "Structor" << std::endl;
+		//std::cout << "Structor" << std::endl;
 	}
 	Matrix::~Matrix()
 	{
-		std::cout << "Destructor Matrix"<< std::endl;
+		//std::cout << "Destructor Matrix"<< std::endl;
 	}
 	Matrix::Matrix(const Matrix &rhs): _data(rhs._data), _row(rhs._row), _col(rhs._col)
 	{
-		std::cout << "(const A& rhs)" << std::endl;
+		//std::cout << "(const A& rhs)" << std::endl;
 	}
 	Matrix::Matrix(const unsigned int &row, const unsigned int &col, const float &init_val)
 	{
 		if(row==0 || col==0)
 		{
-			std::cout<<"Structor no zero"<<std::endl;
+			std::cout<<"Structor is zero"<<std::endl;
 			return ;
 		}
 		RowData cda(col);
@@ -36,7 +36,7 @@ namespace MLL
 	{
 		if(row==0 || col==0)
 		{
-			std::cout << " Structor no zero" << std::endl;
+			std::cout << " Structor is zero" << std::endl;
 			return ;
 		}
 		if(row !=  col)

@@ -90,8 +90,8 @@ namespace MLL
 	GMM::GMM(const std::string &file, const int &k, const int &Iter)
 	{
 		Matrix x;
-		x.init_by_data("_data/GMM.txt");
-		Matrix sigma(x._col,x._col,5,"diag");//初始化方差
+		x.init_by_data(file);
+		Matrix sigma(x._col,x._col,100,"diag");//初始化方差
 		Matrix mu(k,x._col,0);
 		K=k;
 		Matrix onek;

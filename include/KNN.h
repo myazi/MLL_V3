@@ -6,6 +6,9 @@ namespace MLL
 {
 	class KNN
 	{
+		private:
+            Matrix _x;
+            Matrix _y;
 		public:
 			int autoNorm(Matrix &x);
 

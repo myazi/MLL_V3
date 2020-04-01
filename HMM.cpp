@@ -284,7 +284,7 @@ namespace MLL
 		}
 	}
 
-	void HMM::Viterbi_O(const DataStr &data)
+	void HMM::Viterbi(const DataStr &data)
 	{
 		int t,i,j,k;
 		int pos;
@@ -360,6 +360,6 @@ namespace MLL
 		Baum_Weach(data);
 		std::cout<<"-------------Viterbi-----------------"<<std::endl;
 		init_test();
-		Viterbi_O(data);
+		Viterbi(data);
 	}
 }

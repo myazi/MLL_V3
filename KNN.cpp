@@ -125,32 +125,26 @@ namespace MLL
 				std::cout<<y._data[int(knn._data[j][1])][0]<<"  ";
 			}
 			if(sumz>sumf)
-				std::cout<<"juece="<<"1"<<"&"<<"shiji="<<test_datay._data[i][0]<<std::endl;
+				std::cout<<"juece="<<"1"<<"\t"<<"fact="<<test_datay._data[i][0]<<std::endl;
 			else
-				std::cout<<"juece="<<"-1"<<"&"<<"shiji="<<test_datay._data[i][0]<<std::endl;
+				std::cout<<"juece="<<"!1"<<"\t"<<"fact="<<test_datay._data[i][0]<<std::endl;
 		}
 		return 0;
 	}
 	KNN::KNN(const std::string &file)
 	{
-		Matrix x;
-		std::cout<<"load_data"<<std::endl;
-		std::cout<<"----------------------"<<std::endl;
-		char filetrain[20]="data/knn.txt";
-		x.init_by_data(filetrain);
-		Matrix y;
-		y=x.getOneCol(x._col-1);
-		x.deleteOneCol(x._col-1);
-		x.print();
-		y.print();
+		//char filetrain[20]="data/knn.txt";
+		_x.init_by_data(file);
+		std::cout<<"sss"<<std::endl;
+		_y = _x.getOneCol(_x._col-1);
+		_x.deleteOneCol(_x._col-1);
+		
 		Matrix testx;
 		char testFile[20]="data/knnTest.txt";
-		std::cout<<"load_data"<<std::endl;
-		std::cout<<"----------------------"<<std::endl;
 		testx.init_by_data(testFile);
 		Matrix testy;
 		testy=testx.getOneCol(testx._col-1);
 		testx.deleteOneCol(testx._col-1);
-		classfiy(testx,testy,x,y,10);
+		classfiy(testx,testy,_x,_y,10);
 	}
 }

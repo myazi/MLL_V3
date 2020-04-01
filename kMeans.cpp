@@ -17,8 +17,8 @@ namespace MLL
 	///返回一个样本与某一个聚类中心的距离
 	double KMeans::distances(Matrix xOne,Matrix kCen)
 	{
-		int i,j;
-		double dis;
+		int i = 0;
+		double dis = 0;
 		for(i=0; i<xOne._col; i++)
 		{
 			dis=pow((xOne._data[0][i]-kCen._data[0][i]),2);
@@ -300,9 +300,8 @@ namespace MLL
 
 	KMeans::KMeans(const std::string &file)
 	{
-		Matrix x;
-		x.init_by_data(file);
-		kMeans(x,3,10);
-		biKmeans(x,3,10);
+		_x.init_by_data(file);
+		kMeans(_x,3,10);
+		biKmeans(_x,3,10);
 	}
 }

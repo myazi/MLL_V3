@@ -9,6 +9,8 @@ namespace MLL
 			Matrix cen;//聚类中心
 			Matrix dis;//每一个样本到其聚类中心的距离，即为一个m行的列向量
 		};
+		private:
+			Matrix _x;
 		public:
 			double distances(Matrix xOne,Matrix kCen);
 
