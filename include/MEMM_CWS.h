@@ -15,7 +15,7 @@ namespace MLL
 			double pos[VEC_LEN][STATE];//参数p(si|oi)
 			double pss[STATE][STATE];//参数p(si|si-1)
 			double ps0[STATE];//参数p(s0)            //p(s1|o1,s0)=p(s1|o1)*p(s0)=p(s1|o1)*p(s0)
-			int len;
+			int len = 0;
 		};
 		private:
 			DICOS dicos;

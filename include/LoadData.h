@@ -1,6 +1,5 @@
 #ifndef LoadData_H
 #define LoadData_H
-#include <iostream>
 #include <string>
 #include <iostream>
 #include <fstream>

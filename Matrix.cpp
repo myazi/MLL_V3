@@ -13,9 +13,9 @@ namespace MLL
 	{
 		//std::cout << "(const A& rhs)" << std::endl;
 	}
-	Matrix::Matrix(const unsigned int &row, const unsigned int &col, const float &init_val)
+	Matrix::Matrix(const size_t  &row, const size_t  &col, const float &init_val)
 	{
-		if(row==0 || col==0)
+		if(row == 0 || col == 0)
 		{
 			std::cout<<"Structor is zero"<<std::endl;
 			return ;
@@ -25,16 +25,16 @@ namespace MLL
 		this->_data = da;
 		this->_row = row;
 		this->_col = col;
-		unsigned int i = 0, j = 0;
+		size_t  i = 0, j = 0;
 		for(i = 0; i < _row; i++)
 		{
 			for(j = 0; j < _col; j++)
 				this->_data[i][j] = init_val;
 		}
 	}
-	Matrix::Matrix(const unsigned int &row, const unsigned int &col, const float &init_val, const std::string &type)
+	Matrix::Matrix(const size_t  &row, const size_t  &col, const float &init_val, const std::string &type)
 	{
-		if(row==0 || col==0)
+		if(row == 0 || col == 0)
 		{
 			std::cout << " Structor is zero" << std::endl;
 			return ;
@@ -49,16 +49,16 @@ namespace MLL
 		this->_data = da;
 		this->_row = row;
 		this->_col = col;
-		unsigned int i = 0, j = 0;
+		size_t  i = 0, j = 0;
 		// 初始化diag矩阵
-		for(i=0; i<_row; i++)
+		for(i = 0; i< _row; i++)
 		{
 			this->_data[i][i] = init_val;
 		}
 	}
-	void Matrix::initMatrix(const unsigned int &row, const unsigned int &col, const float &init_val)
+	void Matrix::initMatrix(const size_t  &row, const size_t  &col, const float &init_val)
 	{
-		if(row==0 || col==0)
+		if(row == 0 || col == 0)
 		{
 			std::cout<<" Structor no zero"<<std::endl;
 			return ;
@@ -68,24 +68,24 @@ namespace MLL
 		this->_data = da;
 		this->_row = row;
 		this->_col = col;
-		unsigned int i = 0, j = 0;
-		for(i=0; i<_row; i++)
+		size_t  i = 0, j = 0;
+		for(i = 0; i < _row; i++)
 		{
-			for(j=0; j<_col; j++)
+			for(j = 0; j < _col; j++)
 				this->_data[i][j] = init_val;
 		}
 	}
-	void Matrix::init_by_spare(const std::string &filename, const unsigned int &row, const unsigned int &col)
+	void Matrix::init_by_spare(const std::string &filename, const size_t  &row, const size_t  &col)
 	{
-		unsigned int i = 0, j = 0;
+		size_t  i = 0, j = 0;
 		RowData cda(col);
 		Data da(row,cda);
 		this->_data = da;
 		this->_row = row;
 		this->_col = col;
-		for(i=0; i<this->_row; i++)
+		for(i = 0; i < this->_row; i++)
 		{
-			for(j=0; j<this->_col; j++)
+			for(j = 0; j < this->_col; j++)
 			{
 				this->_data[i][j] = 0;
 			}
@@ -94,10 +94,10 @@ namespace MLL
 	}
 	void Matrix::init_by_data(const std::string &filename)
 	{
-		unsigned int i = 0, j = 0;
+		size_t  i = 0, j = 0;
 		LoadData(this->_data,filename);
-		_row=this->_data.size();
-		_col=this->_data[0].size();
+		_row = this->_data.size();
+		_col = this->_data[0].size();
 		for (i = 0; i < _row; i++)
 		{
 			if(_col > _data[i].size()) //兼容多余数据
@@ -106,8 +106,8 @@ namespace MLL
 	}
 	void Matrix::print() const
 	{
-		std::cout<<"matrix size:" << _row<<"**"<< _col<<std::endl;
-		unsigned int i = 0, j = 0;
+		std::cout<< "matrix size:" << _row<<"*"<< _col<<std::endl;
+		size_t  i = 0, j = 0;
 		for(i = 0; i < _row; i++)
 		{
 			for(j = 0; j < _col; j++)
@@ -119,7 +119,7 @@ namespace MLL
 	}
 	Matrix Matrix::copyMatrix() const
 	{
-		unsigned int i = 0, j = 0;
+		size_t  i = 0, j = 0;
 		Matrix cp(_row, _col, 0);
 		for(i = 0; i < this->_row; i++)
 		{
@@ -130,9 +130,9 @@ namespace MLL
 		}
 		return cp;
 	}
-	Matrix Matrix::getOneRow (const unsigned int &iRow) const
+	Matrix Matrix::getOneRow (const size_t  &iRow) const
 	{
-		unsigned int j = 0;
+		size_t  j = 0;
 		Matrix one_row_matrix(1,_col,0);
 		for(j = 0; j < this->_data[iRow].size(); j++)
 		{
@@ -140,9 +140,9 @@ namespace MLL
 		}
 		return one_row_matrix;
 	}
-	Matrix Matrix::getOneCol (const unsigned int &jCol) const 
+	Matrix Matrix::getOneCol (const size_t  &jCol) const 
 	{
-		unsigned int i = 0;
+		size_t  i = 0;
 		Matrix one_col_matrix(_row,1,0);
 		for(i = 0; i < this->_data.size(); i++)
 		{
@@ -150,10 +150,10 @@ namespace MLL
 		}
 		return one_col_matrix;
 	}
-	void Matrix::deleteOneRow(const unsigned int &iRow)
+	void Matrix::deleteOneRow(const size_t  &iRow)
 	{
 
-		unsigned int i = 0, j = 0;
+		size_t  i = 0, j = 0;
 		Matrix cp = this->copyMatrix();
 		this->_row--;
 		for(Data::iterator it = cp._data.begin(); it != cp._data.end(); it++, i++)
@@ -174,10 +174,10 @@ namespace MLL
 			}
 		}
 	}
-	void Matrix::deleteOneCol(const unsigned int &iCol)
+	void Matrix::deleteOneCol(const size_t  &iCol)
 	{
 
-		unsigned int i=0, j=0;
+		size_t  i=0, j=0;
 		Matrix cp = this->copyMatrix();
 		this->_col--;
 		//this->_data.clear();
@@ -204,7 +204,7 @@ namespace MLL
 	}
 	Matrix Matrix::transposeMatrix()//矩阵形式的转置
 	{
-		unsigned int i = 0, j = 0;
+		size_t  i = 0, j = 0;
 		Matrix matrixT(_col,_row,0);
 		for(i = 0; i < _col; i++)
 		{
@@ -224,7 +224,7 @@ namespace MLL
 			std::cout<<"addData data1 data2 is no"<<std::endl;
 			exit(-1);
 		}
-		unsigned int i = 0, j = 0;
+		size_t  i = 0, j = 0;
 		Matrix add(matrix1._row, matrix1._col,0);
 		for(i = 0; i < matrix1._row; i++)
 		{
@@ -245,7 +245,7 @@ namespace MLL
 			std::cout << "subData data1 data2 is no" << std::endl;
 			exit(-1);
 		}
-		unsigned int i,j;
+		size_t  i,j;
 		Matrix sub(matrix1._row, matrix1._col,0);
 		for(i = 0; i < matrix1._row; i++)
 		{
@@ -266,7 +266,7 @@ namespace MLL
 			std::cout << "multsData error" << std::endl;
 			exit(-1);
 		}
-		unsigned int i = 0, j =0, k = 0;
+		size_t  i = 0, j =0, k = 0;
 		Matrix mults(matrix1._row,matrix2._col,0);
 		for(i = 0; i < matrix1._row; i++)
 		{
@@ -297,7 +297,7 @@ namespace MLL
 			std::cout<<"multsData error"<<std::endl;
 			exit(-1);
 		}
-		unsigned int i = 0, j = 0;
+		size_t  i = 0, j = 0;
 		Matrix dotmults(matrix1._row, matrix2._col, 0);
 		for(i = 0; i < matrix1._row; i++)
 		{
@@ -319,7 +319,7 @@ namespace MLL
 		}
 		Matrix mCopy = this->copyMatrix();
 		double det = 1;
-		unsigned int i = 0, j = 0, k = 0;
+		size_t  i = 0, j = 0, k = 0;
 		double max = -9999999;
 		int swap = -1;
 		double temp;
@@ -371,7 +371,7 @@ namespace MLL
 			std::cout << "Data det is no so ni is no" << std::endl;
 			exit(-1);
 		}
-		unsigned int i = 0, j = 0, k = 0;//这里存在-1的情况，务必定义为int型
+		size_t  i = 0, j = 0, k = 0;//这里存在-1的情况，务必定义为int型
 		double temp;
 		Matrix mCopy = this->copyMatrix();
 		Matrix UMatrix = this->copyMatrix();
@@ -469,13 +469,13 @@ namespace MLL
 		//I.print();
 		return mults;
 	}
-	/*unsigned int LDL(Data x)//矩阵的LDL分解，不知道怎样用于矩阵特征值，特征向量求解
+	/*size_t  LDL(Data x)//矩阵的LDL分解，不知道怎样用于矩阵特征值，特征向量求解
 	{
 		Data l;
 		l.initData(&l,x._col,x._row);
 		Data d;
 		d.initData(&d,x._col,x._row);
-		unsigned int i,j,k;
+		size_t  i,j,k;
 		Data temp;
 		temp.initData(&temp,x._col,x._row);
 		for(i=0;i<x._col;i++)

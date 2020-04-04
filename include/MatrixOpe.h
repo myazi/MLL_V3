@@ -35,7 +35,7 @@ namespace MLL
 		std::vector<double> label;
 		if(Y._row > Y._col)
 		{
-			unsigned int i = 0;
+			size_t i = 0;
 			for(i = 0; i < Y._row; i++){
 				label.push_back(Y._data[i][0]);
 			}
@@ -51,7 +51,7 @@ namespace MLL
 		}
 		else
 		{
-			unsigned int j = 0;
+			size_t j = 0;
 			for(j = 0; j < Y._col; j++){
 				label.push_back(Y._data[0][j]);
 			}

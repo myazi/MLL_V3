@@ -1,13 +1,13 @@
 #ifndef GMM_H
 #define GMM_H
 #include "MatrixOpe.h"
+#define PI 3.1415926
 
 namespace MLL
 {
 	class GMM
 	{
 		private:
-
 			std::vector<double> Phi;
 			std::vector<Matrix> Sigma;
 			std::vector<Matrix> Mu;

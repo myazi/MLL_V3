@@ -1,7 +1,6 @@
 ### 模型测试脚本，对应格式
 ### ./ML LogReg logreg.txt
-### ML为编译输出文件，LogReg为逻辑回归模型，logreg.txt为训练数据
-### 目前支持的模型有17个，分别如下
+### ML为编译产出，LogReg为逻辑回归模型，logreg.txt为训练数据
 # ./ML LogReg logreg.txt
 # ./ML LineReg linereg.txt
 # ./ML SoftMaxReg logreg.txt
@@ -14,9 +13,9 @@
 # ./ML KMeans kmeans.txt
 # ./ML KNN knn.txt
 ### ./ML Bayes email
-./ML GMM GMM.txt
+#./ML GMM GMM.txt
 # ./ML HMM hmm.txt
 # ./ML HMM_CWS pku_training.txt
-# ./ML MEMM_CWS pku_training.txt
+ ./ML MEMM_CWS pku_training.txt
 ### ./ML CRF_CWS pku_training.txt
 #./ML LogReg logreg.txt

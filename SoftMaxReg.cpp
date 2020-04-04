@@ -118,11 +118,11 @@ namespace MLL {
                 }
                 xOne_rowT = xOne_row.transposeMatrix();
                 grad = xOne_rowT * z;///根据一样样本的预测误差来确定负梯度方向
-                for(k=0; k<grad._row;k++)
+                for(k = 0; k < grad._row;k++)
                 {
-                    for(j=0;j<grad._col; j++)
+                    for(j = 0; j < grad._col; j++)
                     {
-                        grad._data[k][j]*= _alpha;///负梯度方向与步长的乘积确定迭代值
+                        grad._data[k][j] *= _alpha;///负梯度方向与步长的乘积确定迭代值
                     }
                 }
                 weights = weights + grad; ///迭代
@@ -134,7 +134,7 @@ namespace MLL {
         **/
         Matrix test = _x * weights;
         std::cout<<"test"<<std::endl;
-        for(i=0; i < _y._row; i++)
+        for(i = 0; i < _y._row; i++)
         {
             if(test._data[i][0] > test._data[i][1])
                 std::cout<<0 - _y._data[i][1]<<"  ";
@@ -150,7 +150,6 @@ namespace MLL {
         _y=_x.getOneCol(_x._col-1);
 		_x.deleteOneCol(_x._col-1);
 		one_hot(_y,2);
-        _y.print();
 		std::cout << "x:" << _x._row << "&" << _x._col << std::endl;
 		std::cout << "y:" <<  _y._row << "&" << _y._col << std::endl;
         _alpha = alpha;

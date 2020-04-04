@@ -1,7 +1,6 @@
 #ifndef SoftMaxReg_H
 #define SoftMaxReg_H
 #include "MatrixOpe.h"
-#include <iostream>
 #include <memory>
 namespace MLL{
     class SoftMaxReg{

@@ -5,7 +5,7 @@ Kmeans算法致命的就是聚成空类的出现，值得分析一下kmeans什么情况下会出现空类，
 #include "kMeans.h"
 #define MAX 1000000
 #define MIN -100000
-#define random(x) (rand()%x)
+#define random(x) (rand() % x)
 #define MAXK 10
 
 /**
@@ -15,13 +15,13 @@ Kmeans聚类中心数据结构
 namespace MLL
 {
 	///返回一个样本与某一个聚类中心的距离
-	double KMeans::distances(Matrix xOne,Matrix kCen)
+	double KMeans::distances(const Matrix &xOne, const Matrix &kCen)
 	{
 		int i = 0;
 		double dis = 0;
-		for(i=0; i<xOne._col; i++)
+		for(i = 0; i < xOne._col; i++)
 		{
-			dis=pow((xOne._data[0][i]-kCen._data[0][i]),2);
+			dis = pow((xOne._data[0][i] - kCen._data[0][i]), 2);
 		}
 		return dis;
 	}
@@ -34,107 +34,101 @@ namespace MLL
 
 	**/
 
-	Matrix KMeans::randCent(Matrix x,int kNum)
+	Matrix KMeans::randCent(const Matrix &x, const int &kNum)
 	{
-		int i,j,k;
+		int i = 0, j = 0, k = 0;
 		Matrix initmeans;
-		initmeans.initMatrix(kNum,x._col,0);
-
+		initmeans.initMatrix(kNum, x._col, 0);
 		double min[2];
 		double max[2];
-
 		/**
 		在样本空间内随机初始化k个类中心
 		**/
-		for(j=0; j<x._col; j++)
+		for(j = 0; j < x._col; j++)
 		{
-			min[j]=MAX;
-			max[j]=MIN;
-			for(i=0; i<x._row; i++)
+			min[j] = MAX;
+			max[j] = MIN;
+			for(i = 0; i < x._row; i++)
 			{
-				if(x._data[i][j]<min[j])
+				if(x._data[i][j] < min[j])
 				{
-					min[j]=x._data[i][j];
+					min[j] = x._data[i][j];
 				}
-				if(x._data[i][j]>max[j])
+				if(x._data[i][j] > max[j])
 				{
-					max[j]=x._data[i][j];
+					max[j] = x._data[i][j];
 				}
 			}
 		}
 		/**
 		随机从样本中选择k个样本作为类中心
 		*/
-		for(k=0; k<kNum; k++)
+		for(k = 0; k < kNum; k++)
 		{
-			for(j=0; j<x._col; j++)
+			for(j = 0; j < x._col; j++)
 			{
 				//改变初值的选取，得到的聚类中心会不一致，可见初值的选取的关键，
-				initmeans._data[k][j]=x._data[k][j];//min[j]+(max[j]-min[j])*(random(10)/10.0);
-				std::cout<<initmeans._data[k][j]<<"  ";
+				initmeans._data[k][j] = x._data[k][j];//min[j]+(max[j]-min[j])*(random(10)/10.0);
+				std::cout<< initmeans._data[k][j] <<"  ";
 			}
 			std::cout<<std::endl;
 		}
 		return initmeans;
 	}
-	KMeans::CenAndDis KMeans::kMeans(Matrix &x,const int &kNum, const int &Iter)
+	KMeans::CenAndDis KMeans::kMeans(const Matrix &x,const int &kNum, const int &Iter)
 	{
-		int i,j,k,it;
+		int i = 0, j = 0, k = 0, it = 0;
 		double dis[MAXK];///记录一个样本到k个类中心的距离，可以采用矩阵动态申请更好，这里默认最多MAXK个类中心
-
 		Matrix kmeans;//聚类中心
-		kmeans=randCent(x,kNum);//随机初始化k个类中心
-
+		kmeans=randCent(x, kNum);//随机初始化k个类中心
 		Matrix xOne;//存储一个样本
 		Matrix kOne;//存储一个聚类中心样本
 		Matrix kLabel;//存储每个样本的类别
 		kLabel.initMatrix(x._row,1,0);
-
-		double minDis=MAX;//最小的距离
-
-		for(it=0; it<Iter; it++)
+		double minDis = MAX;//最小的距离
+		for(it = 0; it < Iter; it++)
 		{
 			//根据k个聚类中心划分类标签
-			for(i=0; i<x._row; i++)
+			for(i = 0; i < x._row; i++)
 			{
 				xOne = x.getOneRow(i);
-				minDis=MAX;
-				for(k=0; k<kNum; k++)
+				minDis = MAX;
+				for(k = 0; k < kNum; k++)
 				{
 					kOne = kmeans.getOneRow(k);
-					dis[k]=distances(xOne,kOne);
-					if(dis[k]<minDis)
+					dis[k] = distances(xOne,kOne);
+					if(dis[k] < minDis)
 					{
-						kLabel._data[i][0]=k;
-						minDis=dis[k];
+						kLabel._data[i][0] = k;
+						minDis = dis[k];
 					}
 				}
 			}
 			//kmeans清零，当计算类中心采用+=的形式则需要清零，而下面更新kmeans同样是采用+=的形式，因为右边有一项就是kmeans
-			for(k=0; k<kNum; k++)
+			for(k = 0; k < kNum; k++)
 			{
-				for(j=0; j<x._col; j++)
+				for(j = 0; j < x._col; j++)
 				{
-					kmeans._data[k][j]=0;
+					kmeans._data[k][j] = 0;
 				}
 			}
 			//更新kmeans
-			for(i=0; i<x._row; i++)
+			for(i = 0; i < x._row; i++)
 			{
-				k=kLabel._data[i][0];
-				for(j=0; j<x._col; j++)
+				k = kLabel._data[i][0];
+				for(j = 0; j < x._col; j++)
 				{
-					kmeans._data[k][j]=(kmeans._data[k][j]*(i)+x._data[i][j])/(i+1);//采用累加方式求均值，该方法增加计算量
+					kmeans._data[k][j] = (kmeans._data[k][j] * i + x._data[i][j]) / (i+1);//采用累加方式求均值，该方法增加计算量
 					//当然也可以把一类的所有样本取出来，求和再取均值，这里没有这样做，而是来一个加一个
 				}
 			}
 			//输出当前次EM后的聚类中心
 			std::cout<<"--------------------"<<std::endl;
-			for(k=0; k<kNum; k++)
+			for(k = 0; k < kNum; k++)
 			{
-				for(j=0; j<x._col; j++)
+				for(j = 0; j < x._col; j++)
 				{
-					std::cout<<kmeans._data[k][j]<<"  ";
+					std::cout<< kmeans._data[k][j] <<"  ";
 				}
 				std::cout<<std::endl;
 			}
@@ -143,45 +137,45 @@ namespace MLL
 		将聚类结果保存到结构体中
 		*/
 		CenAndDis cendis;
-		cendis.cen.initMatrix(kNum,x._col,0);
-		cendis.dis.initMatrix(x._row,1,0);
+		cendis.cen.initMatrix(kNum, x._col, 0);
+		cendis.dis.initMatrix(x._row, 1, 0);
 		cendis.cen = kmeans;
 
 		///保存所有样本到其类中心的距离到结构体中
-		for(i=0; i<x._row; i++)
+		for(i = 0; i < x._row; i++)
 		{
-			k=kLabel._data[i][0];
-			xOne=x.getOneRow(i);
-			kOne=kmeans.getOneRow(k);
-			cendis.dis._data[i][0]=distances(xOne,kOne);
+			k = kLabel._data[i][0];
+			xOne = x.getOneRow(i);
+			kOne = kmeans.getOneRow(k);
+			cendis.dis._data[i][0] = distances(xOne, kOne);
 		}
 		//
 		double sum=0;
-		for(i=0; i<x._row; i++)
+		for(i = 0; i < x._row; i++)
 		{
-			sum+=cendis.dis._data[i][0];
+			sum += cendis.dis._data[i][0];
 		}
-		std::cout<<"err="<<sum<<std::endl;
+		std::cout<< "err=" << sum <<std::endl;
 		return cendis;
 	}
 
 	Matrix KMeans::subMatrix(const Matrix &x, const Matrix &clusterAssment,const int &label)
 	{
-		int i=0,j=0,k=0;
+		int i = 0, j = 0, k = 0;
 		Matrix submatrix;
 		submatrix = x;
-		for(i=0; i<x._row; i++)
+		for(i = 0; i < x._row; i++)
 		{
-			if( int(clusterAssment._data[i][0])==label)
+			if( int(clusterAssment._data[i][0]) == label)
 			{
-				for(j=0; j<x._col; j++)
+				for(j = 0; j < x._col; j++)
 				{
-					submatrix._data[k][j]=x._data[i][j];
+					submatrix._data[k][j] = x._data[i][j];
 				}
 				k++;
 			}
 		}
-		submatrix._row=k;
+		submatrix._row = k;
 		return submatrix;
 	}
 	/***
@@ -190,118 +184,116 @@ namespace MLL
 	就对哪一类进行二分，直到不再减少SSE，或者有一类为空类，或者到达预设的聚为K类
 
 	**/
-	int KMeans::biKmeans(Matrix &x,const int &kNum,const int &Iter)
+	int KMeans::biKmeans(const Matrix &x,const int &kNum,const int &Iter)
 	{
-		int i,j,k,d;
+		int i = 0, j = 0, k = 0, d = 0;
 		Matrix kmeans;
 		kmeans.initMatrix(kNum,x._col,0);///初始化聚为一类，
-
 		Matrix xOne;//一个样本
 		Matrix kOne;//一个聚类中心
 		Matrix clusterAssment;///矩阵的第一列保存其到所属类别，第二列保存样本到所属类别的距离
 		clusterAssment.initMatrix(x._row,2,0);
-
 		CenAndDis cenanddis;///聚类结果
 		cenanddis.cen.initMatrix(kNum,x._col,0);
 		cenanddis.dis.initMatrix(x._col,1,0);
-
 		CenAndDis bestCenanddis;///记录当前最好的距离结果
 		bestCenanddis.cen.initMatrix(kNum,x._col,0);
 		bestCenanddis.dis.initMatrix(x._row,1,0);
-
-		for(i=0; i<x._row; i++)
+		for(i = 0; i < x._row; i++)
 		{
-			for(j=0; j<x._col; j++)
+			for(j = 0; j < x._col; j++)
 			{
-				kmeans._data[0][j]=(kmeans._data[0][j]*i+x._data[i][j])/(i+1);
+				kmeans._data[0][j] = (kmeans._data[0][j] * i + x._data[i][j]) / (i+1);
 			}
-			clusterAssment._data[i][0]=0;///初始化聚为一类，类中心为之前初始化为一类的类中心
+			clusterAssment._data[i][0] = 0;///初始化聚为一类，类中心为之前初始化为一类的类中心
 		}
-		for(i=0; i<x._row; i++)
+		for(i = 0; i < x._row; i++)
 		{
-			xOne=x.getOneRow(i);
-			clusterAssment._data[i][1]=distances(xOne,kmeans);///初始化为一类后，所有样本到其所属类的距离
+			xOne = x.getOneRow(i);
+			clusterAssment._data[i][1] = distances(xOne, kmeans);///初始化为一类后，所有样本到其所属类的距离
 		}
 
 		Matrix submatrix;///分裂后的子集矩阵
 		submatrix = x;
-
-		double lowestSSE=MAX;///记录当前聚类结果的SSE值
-		double sseSplit=0;///记录分裂后子集的SSE值
-		double sseNosplit=0;///记录没有分裂的自己的SSE值
+		double lowestSSE = MAX;///记录当前聚类结果的SSE值
+		double sseSplit = 0;///记录分裂后子集的SSE值
+		double sseNosplit = 0;///记录没有分裂的自己的SSE值
 		int bestCentToSplit;///记录预分裂子集的类别
 		double dis[2];///记录分裂后两个子集的SSE值
-		for(d=1; d<kNum; d++)
+		for(d = 1; d < kNum; d++)
 		{
-			lowestSSE=MAX;//如果这个初始距离设置成当前不分裂下的总距离，那么不能保证一定得到kNum个类中心
-			for(k=0; k<d; k++)
+			lowestSSE = MAX;//如果这个初始距离设置成当前不分裂下的总距离，那么不能保证一定得到kNum个类中心
+			for(k = 0; k < d; k++)
 			{
-				submatrix=subMatrix(x,clusterAssment,k);///用于保存属于k类的子集用于下面kmeans尝试进行划分
-				cenanddis=kMeans(submatrix,2,10);///尝试用kmeans进行二分
-				sseSplit=0;
-				sseNosplit=0;
+				submatrix = subMatrix(x, clusterAssment, k);///用于保存属于k类的子集用于下面kmeans尝试进行划分
+				cenanddis = kMeans(submatrix, 2, 10);///尝试用kmeans进行二分
+				sseSplit = 0;
+				sseNosplit = 0;
 				/**
 				分裂类别的SSE值和
 				*/
-				for(i=0; i<submatrix._row; i++)
+				for(i = 0; i < submatrix._row; i++)
 				{
-					sseSplit+=cenanddis.dis._data[i][1];
+					sseSplit += cenanddis.dis._data[i][1];
 				}
 				/**
 				未分裂的类别的SSE值和
 				*/
-				for(i=0; i<x._row; i++)
+				for(i = 0; i < x._row; i++)
 				{
-					if(clusterAssment._data[i][0]!=k)
+					if(clusterAssment._data[i][0] != k)
 					{
-						sseNosplit+=clusterAssment._data[i][1];
+						sseNosplit += clusterAssment._data[i][1];
 					}
 				}
 				///与最小的SSE进行比较，选择出最佳的分裂类
-				if(sseSplit+sseNosplit<lowestSSE)//如果将第k个簇进行而划分更好，则记录下来，并更新lowsetSSE
+				if(sseSplit + sseNosplit < lowestSSE)//如果将第k个簇进行而划分更好，则记录下来，并更新lowsetSSE
 				{
-					bestCentToSplit=k;
-					bestCenanddis=cenanddis;
-					lowestSSE=sseSplit+sseNosplit;
+					bestCentToSplit = k;
+					bestCenanddis = cenanddis;
+					lowestSSE = sseSplit + sseNosplit;
 				}
 			}
 			///最后确定选出最好的二划分簇之后，下面开始在x数据上进行更新聚类中心和距离，clusterAssment变量
-			for(i=0; i<x._row; i++)
+			for(i = 0; i < x._row; i++)
 			{
-				if(clusterAssment._data[i][0]==bestCentToSplit)
+				if(clusterAssment._data[i][0] == bestCentToSplit)
 				{
-					xOne=x.getOneRow(i);
-					for(k=0; k<2; k++)
+					xOne = x.getOneRow(i);
+					for(k = 0; k < 2; k++)
 					{
-						kOne=bestCenanddis.cen.getOneRow(k);
-						dis[k]=distances(kOne,xOne);
+						kOne = bestCenanddis.cen.getOneRow(k);
+						dis[k] = distances(kOne, xOne);
 					}
-					if(dis[0]<dis[1])
+					if(dis[0] < dis[1])
 					{
-						clusterAssment._data[i][0]=bestCentToSplit;///分裂后的两个类，第一个类的类别还是当前类别值
-						clusterAssment._data[i][1]=dis[0];
+						clusterAssment._data[i][0] = bestCentToSplit;///分裂后的两个类，第一个类的类别还是当前类别值
+						clusterAssment._data[i][1] = dis[0];
 					}
 					else
 					{
-						clusterAssment._data[i][0]=bestCentToSplit+1;///分裂后的两个类，第二个类的类别分配一个新的类别值，一直往上加1
-						clusterAssment._data[i][1]=dis[1];
+						clusterAssment._data[i][0] = bestCentToSplit+1;///分裂后的两个类，第二个类的类别分配一个新的类别值，一直往上加1
+						clusterAssment._data[i][1] = dis[1];
 					}
 				}
 			}
 			///计算最终的SSE值
-			double sum=0;
-			for(i=0; i<x._row; i++)
+			double sum = 0;
+			for(i = 0; i < x._row; i++)
 			{
-				sum+=clusterAssment._data[i][1];
+				sum += clusterAssment._data[i][1];
 			}
 			std::cout<<"err==="<<sum<<std::endl;
 		}
 	}
 
-	KMeans::KMeans(const std::string &file)
+	KMeans::KMeans(const std::string &file, const int &K)
 	{
+		_K = K;
 		_x.init_by_data(file);
-		kMeans(_x,3,10);
-		biKmeans(_x,3,10);
+		std::cout<<"----------Kmeans-----------"<<std::endl;
+		kMeans(_x, _K, 10);
+		std::cout<<"----------biKmeans-----------"<<std::endl;
+		biKmeans(_x, _K, 10);
 	}
 }

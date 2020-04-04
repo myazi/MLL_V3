@@ -10,21 +10,21 @@ namespace MLL
 {
 	Bayes::DIC Bayes::createVocabList(const std::vector<DataStr> &dataClass)//生成单词字典
 	{
-		int i,j,k,vl;
+		int i = 0, j = 0, k = 0, vl = 0;
 		std::vector<std::string> dic;
-		for(k=0; k<dataClass.size(); k++)
+		for(k = 0; k < dataClass.size(); k++)
 		{
-			for(i=0; i<dataClass[k].size(); i++)
+			for(i = 0; i < dataClass[k].size(); i++)
 			{
-				for(j=0; j<dataClass[k][i].size(); j++)
+				for(j = 0; j < dataClass[k][i].size(); j++)
 				{
-					for(vl=0; vl<dic.size(); vl++)
+					for(vl = 0; vl < dic.size(); vl++)
 					{
 						//std::cout<<dataClass[k][i][j]<<std::endl;
 						if(!dataClass[k][i][j].compare(dic[vl]))
 							break;
 					}
-					if(vl==dic.size())
+					if(vl == dic.size())
 					{
 						dic.push_back(dataClass[k][i][j]);
 					}
@@ -36,27 +36,27 @@ namespace MLL
 
 	Matrix Bayes::createFectVec(const std::vector<DataStr> &dataClass, const Bayes::DIC &dic)//生成训练样本矩阵
 	{
-		int i,j,k=0,vl;
-		int sampleNum=0;
-		for(k=0; k<dataClass.size(); k++)
+		int i = 0, j = 0, k=0, vl = 0;
+		int sampleNum = 0;
+		for(k = 0; k < dataClass.size(); k++)
 		{
-			sampleNum+=dataClass[k].size();
+			sampleNum += dataClass[k].size();
 		}
 		Matrix vecX;
 		vecX.initMatrix(sampleNum, dic.size() + 1, 0);
-		int iSample=0;
-		for(k=0; k<dataClass.size(); k++)
+		int iSample = 0;
+		for(k = 0; k < dataClass.size(); k++)
 		{
-			for(i=0; i<dataClass[k].size(); i++)//只有一行
+			for(i = 0; i < dataClass[k].size(); i++)//只有一行
 			{
-				vecX._data[iSample][dic.size()]=k;//标签
-				for(j=0; j<dataClass[k][i].size(); j++)
+				vecX._data[iSample][dic.size()] = k;//标签
+				for(j = 0; j < dataClass[k][i].size(); j++)
 				{
-					for(vl=0; vl<dic.size(); vl++)
+					for(vl = 0; vl < dic.size(); vl++)
 					{
 						if(!dataClass[k][i][j].compare(dic[vl]))
 						{
-							vecX._data[iSample][vl]=1;//one-hot编码特征
+							vecX._data[iSample][vl] = 1;//one-hot编码特征
 							break;
 						}
 					}
@@ -74,60 +74,60 @@ namespace MLL
 		bayes.pX_1Y.initMatrix(CLASS_SUM,X._col,0);//X_1Y表示在Y下X=1的概率，反之X=0的概率为1-
 		bayes.pX.initMatrix(X._col,1,0);//
 
-		int i,j,k;
-		for(k=0; k<bayes.pX_1Y._row; k++)
+		int i = 0, j = 0, k = 0;
+		for(k = 0; k < bayes.pX_1Y._row; k++)
 		{
-			for(i=0; i<bayes.pX_1Y._col; i++)
+			for(i = 0; i < bayes.pX_1Y._col; i++)
 			{
-				bayes.pX_1Y._data[k][i]=1;//平滑处理,默认出现一次，后期归一化时把特征向量的长度也考虑进去,这里的平滑是指每一类字典与整个字典的，未涉及测试
+				bayes.pX_1Y._data[k][i] = 1;//平滑处理,默认出现一次，后期归一化时把特征向量的长度也考虑进去,这里的平滑是指每一类字典与整个字典的，未涉及测试
 				//样本中的未登入词
 			}
 		}
-		for(i=0; i<X._row; i++)
+		for(i = 0; i < X._row; i++)
 		{
-			if(Y._data[i][0]==0)
+			if(Y._data[i][0] == 0)
 			{
 				bayes.pY._data[0][0]++;
-				for(j=0; j<X._col; j++)
+				for(j = 0; j < X._col; j++)
 				{
-					bayes.pX_1Y._data[0][j]+=X._data[i][j];
+					bayes.pX_1Y._data[0][j] += X._data[i][j];
 				}
 			}
 			else
 			{
 				bayes.pY._data[1][0]++;
-				for(j=0; j<X._col; j++)
+				for(j = 0; j < X._col; j++)
 				{
-					bayes.pX_1Y._data[1][j]+=X._data[i][j];
+					bayes.pX_1Y._data[1][j] += X._data[i][j];
 				}
 			}
 		}
-		for(i=0; i<X._col; i++)
+		for(i = 0; i < X._col; i++)
 		{
 			//所有类下x各个特征分量出现的概率
-			//bayes.pX._data[i][0]=(bayes.pX_1Y._data[0][i]-1) + (bayes.pX_1Y._data[1][i]-1) + 1;
-			//bayes.pX._data[i][0]/=bayes.pY._data[0][0] + bayes.pY._data[1][0] + 2;
+			//bayes.pX._data[i][0] = (bayes.pX_1Y._data[0][i] - 1) + (bayes.pX_1Y._data[1][i] - 1) + 1;
+			//bayes.pX._data[i][0] /= bayes.pY._data[0][0] + bayes.pY._data[1][0] + 2;
 
 			//某一类下x各个特征分量出现的概率
-			bayes.pX_1Y._data[0][i]/=bayes.pY._data[0][0] + 2;
-			bayes.pX_1Y._data[1][i]/=bayes.pY._data[1][0] + 2;
+			bayes.pX_1Y._data[0][i] /= bayes.pY._data[0][0] + 2;
+			bayes.pX_1Y._data[1][i] /= bayes.pY._data[1][0] + 2;
 
-			bayes.pX._data[i][0] = (bayes.pX_1Y._data[0][i] + bayes.pX_1Y._data[1][i])/2;
+			bayes.pX._data[i][0] = (bayes.pX_1Y._data[0][i] + bayes.pX_1Y._data[1][i]) / 2;
 		}
 		//计算出PY两类的概率
-		for(k=0; k<bayes.pY._row; k++)
+		for(k = 0; k < bayes.pY._row; k++)
 		{
-			bayes.pY._data[k][0]/=X._row;
+			bayes.pY._data[k][0] /= X._row;
 		}
-		std::cout<<"pY="<<bayes.pY._data[0][0]<<std::endl;
+		std::cout<< "pY=" << bayes.pY._data[0][0] <<std::endl;
 
-		for(k=0; k<bayes.pX_1Y._row; k++)
+		for(k = 0; k < bayes.pX_1Y._row; k++)
 		{
-			for(i=0; i<bayes.pX_1Y._col; i++)
+			for(i = 0; i < bayes.pX_1Y._col; i++)
 			{
-				std::cout<<bayes.pX_1Y._data[k][i]<<" & ";
+				std::cout<< bayes.pX_1Y._data[k][i] <<"\t";
 			}
-			std::cout<<"---";
+			std::cout<<"--";
 		}
 	}
 
@@ -136,30 +136,30 @@ namespace MLL
 	**/
 	int Bayes::classifyNB(const Matrix &testVecX)
 	{
-		double p0=1.0,p1=1.0;
-		int i,j;
-		for(i=0; i<testVecX._row; i++)
+		double p0 = 1.0, p1 = 1.0;
+		int i = 0, j = 0;
+		for(i = 0; i < testVecX._row; i++)
 		{
-			p0=1.0,p1=1.0;
-			for(j=0; j<testVecX._col ; j++)
+			p0 = 1.0, p1 = 1.0;
+			for(j = 0; j < testVecX._col; j++)
 			{
 				//特征分量不出现的概率为1-
-				if(testVecX._data[i][j]==0)
+				if(testVecX._data[i][j] == 0)
 				{
-					p0*=(1-bayes.pX_1Y._data[0][j])/(1-bayes.pX._data[j][0]);
-					p1*=(1-bayes.pX_1Y._data[1][j])/(1-bayes.pX._data[j][0]);
+					p0 *= (1 - bayes.pX_1Y._data[0][j]) /(1 - bayes.pX._data[j][0]);
+					p1 *= (1 - bayes.pX_1Y._data[1][j]) /(1 - bayes.pX._data[j][0]);
 				}
 				//特征分量出现的概率
 				else
 				{
-					p0*=(bayes.pX_1Y._data[0][j])/bayes.pX._data[j][0];
-					p1*=(bayes.pX_1Y._data[1][j])/bayes.pX._data[j][0];
+					p0 *= bayes.pX_1Y._data[0][j] / bayes.pX._data[j][0];
+					p1 *= bayes.pX_1Y._data[1][j] / bayes.pX._data[j][0];
 				}
 			}
-			p0*=bayes.pY._data[0][0];
-			p1*=bayes.pY._data[1][0];
+			p0 *= bayes.pY._data[0][0];
+			p1 *= bayes.pY._data[1][0];
 			std::cout<<"p0="<<p0<<"&"<<"p1="<<p1;
-			if(p0<p1)
+			if(p0 < p1)
 				std::cout<<"class="<<1;
 			else
 				std::cout<<"class="<<0;
@@ -207,15 +207,15 @@ namespace MLL
 		RowDataStr rowData;
 		DataStr data;
 		std::vector<DataStr> dataClass;
-		for(k=0; k<CLASS_SUM; k++)
+		for(k = 0; k < CLASS_SUM; k++)
 		{
 			//getAllFiles(path[k],files);
 			filess.push_back(files);
 			files.clear();
 		}
-		for(k=0; k<filess.size(); k++)
+		for(k = 0; k < filess.size(); k++)
 		{
-			for(i=0; i<filess[k].size(); i++)
+			for(i = 0; i < filess[k].size(); i++)
 			{
 				LoadDataStr(rowData,filess[k][i].c_str());
 				data.push_back(rowData);
@@ -231,7 +231,7 @@ namespace MLL
 		/**
 		生成样本矩阵
 		**/
-		Matrix X=createFectVec(dataClass,dic);
+		Matrix X = createFectVec(dataClass,dic);
 
 		/**
 		生成样本标签
@@ -246,7 +246,6 @@ namespace MLL
 
 		classifyNB(X);///分类决策
 
-		//bayes.pX_1Y.print();
 		std::cout<<"----------"<<std::endl;
 		Matrix pxt=bayes.pX.transposeMatrix();
 		pxt.print();

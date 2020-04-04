@@ -59,25 +59,25 @@ namespace MLL{
         /**
         根据测试样本点与整个样本的距离已经选择的核确定局部加权矩阵，采用对角线上为局部加权值
         **/
-        for(i=0;i < _x._row;i++)
+        for(i = 0;i < _x._row;i++)
         {
-            temp=0;
-            for(j=0;j < _x._col;j++)
+            temp = 0;
+            for(j = 0;j < _x._col;j++)
             {
-                temp+=(test._data[0][j]- _x._data[i][j])*(test._data[0][j] - _x._data[i][j]);
+                temp += (test._data[0][j] - _x._data[i][j]) * (test._data[0][j] - _x._data[i][j]);
             }
-            w._data[i][i]=exp(temp/-2.0 *_k * _k);
+            w._data[i][i] = exp(temp / -2.0 *_k * _k);
         }
         Matrix xT = _x.transposeMatrix();
-        Matrix wx=wx.multsMatrix(w,_x);
+        Matrix wx = wx.multsMatrix(w,_x);
         Matrix xTwx;
-        xTwx=xTwx.multsMatrix(xT,wx);
+        xTwx = xTwx.multsMatrix(xT,wx);
         Matrix xTwx_1;
-        xTwx_1=xTwx.niMatrix();
+        xTwx_1 = xTwx.niMatrix();
         Matrix xTwx_1xT;
-        xTwx_1xT=xTwx_1xT.multsMatrix(xTwx_1,xT);
+        xTwx_1xT = xTwx_1xT.multsMatrix(xTwx_1,xT);
         Matrix xTwx_1xTw;
-        xTwx_1xTw=xTwx_1xTw.multsMatrix(xTwx_1xT,w);
+        xTwx_1xTw = xTwx_1xTw.multsMatrix(xTwx_1xT,w);
         Matrix ws = xTwx_1xTw * _y;
         return ws;
     }
@@ -98,15 +98,15 @@ namespace MLL{
         for(i=0; i < _x._row;i++)///ws以列为一个权重参数向量，m列表示m个样本
         {
             test = _x.getOneRow(i);
-            wsOne=locWeightLineReg(test);
-            for(j=0;j < _x._col;j++)
+            wsOne = locWeightLineReg(test);
+            for(j = 0; j < _x._col; j++)
             {
-                ws._data[i][j]=wsOne._data[0][j];
+                ws._data[i][j] = wsOne._data[0][j];
             }
         }
-        for(i=0;i<ws._row;i++)
+        for(i = 0; i < ws._row; i++)
         {
-            for(j=0;j<ws._col;j++)
+            for(j = 0; j < ws._col; j++)
             {
                 std::cout<<ws._data[j][i]<<"  ";
             }
@@ -115,12 +115,12 @@ namespace MLL{
 
         /**验证局部加权线性回归的正确性*/
         double yy;
-        for(i=0;i<ws._row;i++)
+        for(i = 0; i < ws._row;i++)
         {
-            yy=0;
-            for(j=0;j<ws._col;j++)
+            yy = 0;
+            for(j = 0; j < ws._col; j++)
             {
-                yy+=ws._data[j][i] * _x._data[i][j];
+                yy += ws._data[j][i] * _x._data[i][j];
             }
             std::cout<<"y="<<yy<<std::endl;
         }

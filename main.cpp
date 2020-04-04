@@ -15,14 +15,6 @@
 #include "HMM_CWS.h"
 #include "MEMM_CWS.h"
 #include "CRF_CWS.h"
-/*#include "HMM.h"
-#include "MEMM.h"
-#include "CRF.h"
-#include "MDP.h"
-#include "PCA.h"//
-#include "SVD.h"//
-#include "Hash.h"//
-*/
 
 std::string path_file = "data/";
 std::map<std::string, std::map<std::string, std::string> > conf_map;
@@ -69,6 +61,7 @@ int SoftMaxReg(const char *file = "logReg.txt")
 	std::string model = "gradAscent";
     double alpha = 0.001;
     double iter = 100;
+
 	std::map<std::string, std::map<std::string, std::string> >::iterator it = conf_map.find("SoftMaxReg");
 	if(it != conf_map.end())
 	{
@@ -158,6 +151,32 @@ int trainDNN(const char *file = "logReg.txt")
     double beta1=0.9;
     double beta2=0.999;
     double epsilon=0.00000001;
+	
+	std::map<std::string, std::map<std::string, std::string> >::iterator it = conf_map.find("DNN");
+	if(it != conf_map.end())
+	{
+		std::map<std::string, std::string> DNN_map = it->second;
+		std::map<std::string, std::string>::iterator learn_rateing_it = DNN_map.find("learn_rateing");
+		if(learn_rateing_it != DNN_map.end())
+		{
+			learn_rateing = atof((learn_rateing_it->second).c_str());
+		}
+		std::map<std::string, std::string>::iterator lambd_it = DNN_map.find("lambd");
+		if(lambd_it != DNN_map.end())
+		{
+			lambd = atof((lambd_it->second).c_str());
+		}
+		std::map<std::string, std::string>::iterator keep_prob_it = DNN_map.find("keep_prob");
+		if(keep_prob_it != DNN_map.end())
+		{
+			keep_prob = atof((keep_prob_it->second).c_str());
+		}
+		std::map<std::string, std::string>::iterator iter_it = DNN_map.find("iter");
+		if(iter_it != DNN_map.end())
+		{
+			iter = atof((iter_it->second).c_str());
+		}
+	}
     MLL::DNN::DNNPtr dnn = std::make_shared<MLL::DNN>(path_file,"gd",0.1,"he",0.01,1,64,0.9, 0.999, 0.0000001, 500, true);
     //dnn->predict(dnn->_x,dnn->_y);
     return 0;
@@ -171,8 +190,8 @@ int SVM(const char *file = "logReg.txt")
     double b = 0;
     int iter = 100;
     MLL::kTup ktup;//核函数的定义，其中type元素为0表示不适用核函数，非0分别对应不同的核函数
-    ktup.type=1;
-    ktup.arg=1.0;
+    ktup.type = 1;
+    ktup.arg = 1.0;
 
 	std::map<std::string, std::map<std::string, std::string> >::iterator it = conf_map.find("SVM");
 	if(it != conf_map.end())
@@ -200,7 +219,7 @@ int SVM(const char *file = "logReg.txt")
 		}
 	}
 	std::cout << C << "\t" << soft << "\t" << b << iter << std::endl;
-    MLL::SVM::SVMPtr svm = std::make_shared<MLL::SVM>(path_file,C,soft,b,iter,ktup);//
+    MLL::SVM::SVMPtr svm = std::make_shared<MLL::SVM>(path_file,C,soft,b,iter,ktup);
     svm->smoP();
     return 0;
 }
@@ -223,7 +242,7 @@ int Adaboost(const char *file = "adaboost.txt")
 	std::cout << numIt << std::endl;
     
 	MLL::Adaboost::AdaboostPtr adaboost = std::make_shared<MLL::Adaboost>(path_file,numIt);
-	adaboost->AdaboostTrainDS();
+	adaboost->AdaboostTrain();
 	return 0;
 }
 
@@ -289,7 +308,19 @@ int RF(const char *file = "rf.txt")
 int KMeans(const char *file = "kmeans.txt")
 {
     path_file.append(file);
-	MLL::KMeans::KMeansPtr kmeans = std::make_shared<MLL::KMeans>(path_file);
+	int K = 3;
+	std::map<std::string, std::map<std::string, std::string> >::iterator it = conf_map.find("KMeans");
+	if(it != conf_map.end())
+	{
+		std::map<std::string, std::string> KMeans_map = it->second;
+		std::map<std::string, std::string>::iterator K_it = KMeans_map.find("K");
+		if(K_it != KMeans_map.end())
+		{
+			K = atof((K_it->second).c_str());
+		}
+	}
+	std::cout << K << std::endl;
+	MLL::KMeans::KMeansPtr kmeans = std::make_shared<MLL::KMeans>(path_file, K);
 	return 0;
 
 }
@@ -297,7 +328,19 @@ int KMeans(const char *file = "kmeans.txt")
 int KNN(const char *file = "knn.txt")
 {
     path_file.append(file);
-	MLL::KNN::KNNPtr knn = std::make_shared<MLL::KNN>(path_file);
+	int K = 10;
+	std::map<std::string, std::map<std::string, std::string> >::iterator it = conf_map.find("KNN");
+	if(it != conf_map.end())
+	{
+		std::map<std::string, std::string> KNN_map = it->second;
+		std::map<std::string, std::string>::iterator K_it = KNN_map.find("K");
+		if(K_it != KNN_map.end())
+		{
+			K = atof((K_it->second).c_str());
+		}
+	}
+	std::cout << K << std::endl;
+	MLL::KNN::KNNPtr knn = std::make_shared<MLL::KNN>(path_file, K);
 	return 0;
 }
 
@@ -374,7 +417,6 @@ int load_conf(char *file = "model.conf")
 		while(conf_file.peek() != EOF)
 		{
 			getline(conf_file, tmpstrline, '\n');
-			//std::cout<<tmpstrline<<std::endl;
 			if('#' != tmpstrline[0] && '\0' != tmpstrline[0])
 			{
 				if ('[' == tmpstrline[0])
@@ -385,11 +427,9 @@ int load_conf(char *file = "model.conf")
 					{
 						std::string name = it->first;
 						std::string value = it->second;
-						//std::cout << "erase" << "\t" << name << "\t" << value << std::endl;
 						model_map.erase(it++);
 					}
 					model = tmpstrline.substr(1,tmpstrline.size()-2);
-					//std::cout << "model:" << model << std::endl;
 				}
 				else
 				{
@@ -402,19 +442,20 @@ int load_conf(char *file = "model.conf")
 		}
 		conf_map[model] = model_map;
 	}
-
+	/*
 	for(std::map<std::string, std::map<std::string, std::string> >::iterator it1 = conf_map.begin(); it1 != conf_map.end(); it1++)
 	{
 		std::string model = it1->first;
 		std::map<std::string, std::string> model_map = it1->second;
-		std::cout << "model:" << model << "----------" << std::endl;
+		std::cout << "model:" << model << std::endl;
 		for(std::map<std::string, std::string>::iterator it2 = model_map.begin(); it2 != model_map.end(); it2++)
 		{
 			std::string name = it2->first;
 			std::string value = it2->second;
-			//std::cout << name << "\t" << value << std::endl;
+			std::cout << name << "\t" << value << std::endl;
 		}
 	}
+	*/
 	return 0;
 }
 
@@ -428,11 +469,11 @@ int main(int argc, char* argv[])
     }
 	std::string type = argv[1];
 	char *file_name = argv[2];
-	std::cout<< type << "\t" << file_name << std::endl;
+	std::cout<< "model:" << type << "\t" << "filename:" << file_name << std::endl;
 	
-	std::cout<< "----------------------------------------------" << std::endl;	
+	std::cout<< "---------------------- start load model conf ------------------------" << std::endl;	
 	load_conf();
-	std::cout<< "----------------------------------------------" << std::endl;	
+	std::cout<< "---------------------- end load model conf --------------------------" << std::endl;	
 	
 	std::string models[20] ={"LineReg","LogReg","SoftMaxReg","DNN","SVM","DTree","CART","Adaboost","RF","KMeans","KNN","Bayes","GMM","HMM","HMM_CWS","MEMM_CWS","CRF_CWS"};
 	std::vector<std::string> models_pos(models, models + 20); 
@@ -441,7 +482,6 @@ int main(int argc, char* argv[])
     
 	for(int i = 0; i < models_pos.size(); i++)
     {
-		std::cout<< models_pos[i] << std::endl;
         if(type == models_pos[i])
         {
             models_ptr = models_list[i];

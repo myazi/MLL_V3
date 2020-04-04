@@ -16,7 +16,6 @@ namespace MLL
 {
 	class CRF_CWS
 	{
-
 		typedef struct Word3
 		{
 			short int word;
@@ -31,10 +30,10 @@ namespace MLL
 		typedef struct Word2
 		{
 			short int word;
-			three word3;
 			Word2 *next;
 			int arg[INDEX];
 			bool flag;
+			three word3;
 		}*two;
 		/**
 		连续两个字中的第一个字
@@ -42,10 +41,10 @@ namespace MLL
 		typedef struct DICOS
 		{
 			short int word;
-			two word2;
 			DICOS *next;
 			int arg[INDEX*2];
 			bool flag;
+			two word2;
 		}*one;
 		private:
 			std::string dic_ci[CI_LEN];
@@ -65,7 +64,6 @@ namespace MLL
 			int no_state[INDEX]= {0,0,0,0,0,0,0,0};
 			//double ADD_ONE=0.01;
 			//double MUL=2;
-			std::ofstream f1file;
 			bool flag=0;
 			std::string bd[BD]= {"，","。","“","”","：","、","《","》","（","）","？","『","』","℃","●","！","·",":","‘","’","—",",","×","/","(",")","[","]"};
 			std::string zm[ZM]= {"a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z",

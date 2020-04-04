@@ -39,7 +39,7 @@ int MDP()
     };
     double maxreward[size]= {0,0,0,0,0,0,0,0,0,0,0,0};
     int action[size]= {4,0,1,-1,8,-1,10,-1,9,8,9,10};//直接表示可到节点的下标
-    int i=0,j=0,count=0;
+    int i = 0, j = 0, count = 0;
     bool flag=0;
     for(i=0;i<size;i++)
         maxreward[i]=reward[i];

@@ -1,8 +1,3 @@
-/***
-
-采用CART构成森林
-
-**/
 #ifndef RF_H
 #define RF_H
 

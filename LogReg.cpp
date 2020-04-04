@@ -9,7 +9,7 @@ namespace MLL {
     **/
     int LogReg::gradAscent_Log()
     {
-        if(_y._col!=1)
+        if(_y._col != 1)
         {
             std::cout<<"logReg is two class"<<std::endl;
             return -1;
@@ -43,7 +43,7 @@ namespace MLL {
             //if(error<x._row/100 && error>x._row/100)///设置错误率小于一定值时退出迭代
                // break;
             grad = xT * z ;///计算负梯度方向
-            //grad = (1.0/x._row) * grad;
+            //grad = (1.0 / x._row) * grad;
             for(i = 0; i < grad._row; i++)
                 grad._data[i][0] *= _alpha;///负梯度方向与步长的乘积确定迭代值
             weights = weights + grad;///往负梯度方向走一个步长
@@ -108,8 +108,8 @@ namespace MLL {
                 z._data[i][0]=_y._data[i][0]-z._data[i][0];
                 xOnerowT = xOnerow.transposeMatrix();
                 grad = xOnerowT * z;///根据一样样本的预测误差来确定负梯度方向
-                for(j=0; j<grad._row; j++)
-                    grad._data[j][0]*=_alpha;
+                for(j = 0; j < grad._row; j++)
+                    grad._data[j][0] *= _alpha;
                 weights = weights + grad; ///迭代
             }
         }
@@ -131,11 +131,8 @@ namespace MLL {
     LogReg::LogReg(const std::string &file, const std::string &model, const double alpha,const int iter)
     {
         _x.init_by_data(file);
-		_y=_x.getOneCol(_x._col-1);
+		_y = _x.getOneCol(_x._col-1);
 		_x.deleteOneCol(_x._col-1);
-        _y.print();
-		std::cout << "x:" << _x._row << "&" << _x._col << std::endl;
-		std::cout << "y:" <<  _y._row << "&" << _y._col << std::endl;
 		_alpha = alpha;
         _iter = iter;
     }

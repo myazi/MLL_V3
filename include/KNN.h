@@ -9,16 +9,17 @@ namespace MLL
 		private:
             Matrix _x;
             Matrix _y;
+			int _K;
 		public:
 			int autoNorm(Matrix &x);
 
 			Matrix cdistances(const Matrix &test, const Matrix &x);
 
-			Matrix getK(const Matrix &oneTest, const Matrix &x, const int &K);
+			Matrix getK(const Matrix &oneTest, const Matrix &x);
 
-			int classfiy(Matrix &testData,const Matrix &testDatay, Matrix &x, const Matrix &y,const int &K);
+			int classfiy(Matrix &testData,const Matrix &testDatay, Matrix &x, const Matrix &y);
 
-			KNN(const std::string &file);
+			KNN(const std::string &file, const int &K);
 
 			typedef std::shared_ptr<KNN> KNNPtr;
 	};

@@ -1,7 +1,6 @@
 #ifndef HMM_H
 #define HMM_H
 #include "MatrixOpe.h"
-#include <iostream>
 #define VEC_LEN 10000
 #define STATE 3
 #define T 1000
@@ -18,7 +17,7 @@ namespace MLL
 			double a[STATE][STATE];//参数A
 			double b[STATE][VEC_LEN];//参数B
 			double pi[STATE];//参数pi
-			int len;
+			int len = 0;
 		};
 		private:
 			double alpha[T][STATE];
@@ -28,11 +27,11 @@ namespace MLL
 			double Gam[STATE];
 			double Gamvk[STATE][T];
 			double sum[STATE];
-			double sumall=0;
+			double sumall = 0;
 			HMM_Pra hmm_pra;
 		public:
 			void createOset(const DataStr &data);
-			int getPos_O(const std::string str);
+			int getPos(const std::string str);
 			void init_test();
 			void forwardBack(const DataStr &data);
 			void Baum_Weach(const DataStr &data);

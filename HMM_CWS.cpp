@@ -1,7 +1,5 @@
 /**
-
 极大似然+Veiterbi算法
-
 **/
 
 #include "HMM_CWS.h"
@@ -10,8 +8,8 @@ namespace MLL
 {
 	int HMM_CWS::getPos(const std::string &str)
 	{
-		int i=0;
-		for(i=0; i<dicos.len; i++)
+		int i = 0;
+		for(i = 0; i < dicos.len; i++)
 		{
 			if(!str.compare(dicos.dic[i]))
 				return i;
@@ -22,20 +20,20 @@ namespace MLL
 	}
 	int HMM_CWS::getState(const std::string &str)
 	{
-		if(str=="0")
+		if(str == "0")
 			return 0;
-		if(str=="1")
+		if(str == "1")
 			return 1;
-		if(str=="2")
+		if(str == "2")
 			return 2;
-		if(str=="3")
+		if(str == "3")
 			return 3;
 		return 0;
 	}
 	/**
 		映射策略对分词的质量影响非常之大
 	**/
-	int HMM_CWS::wordToState(const RowDataStr &str,int word,int j,int vl, std::string &state)
+	int HMM_CWS::wordToState(const RowDataStr &str, int word, int j, int vl, std::string &state)
 	{
 		char ch;
 		if(str[j].length()==2)
@@ -46,7 +44,7 @@ namespace MLL
 		}
 		if(str[j].length()==4)
 		{
-			if(word==0)
+			if(word == 0)
 			{
 				dicos.b[0][vl]++;
 				state.append(1,'0');
@@ -59,32 +57,32 @@ namespace MLL
 				state.append(1,' ');
 			}
 		}
-		if(str[j].length()==6)
+		if(str[j].length() == 6)
 		{
-			dicos.b[word/2][vl]++;
-			ch=(char)(word/2+48);
-			state.append(1,ch);
-			state.append(1,' ');
+			dicos.b[word / 2][vl]++;
+			ch=(char)(word / 2 + 48);
+			state.append(1, ch);
+			state.append(1, ' ');
 		}
 		if(str[j].length()==8)
 		{
-			if(word==0)
+			if(word == 0)
 			{
 				dicos.b[0][vl]++;
-				state.append(1,'0');
-				state.append(1,' ');
+				state.append(1, '0');
+				state.append(1, ' ');
 			}
-			if(word==6)
+			if(word == 6)
 			{
 				dicos.b[2][vl]++;
-				state.append(1,'2');
-				state.append(1,' ');
+				state.append(1, '2');
+				state.append(1, ' ');
 			}
 			else
 			{
 				dicos.b[1][vl]++;
-				state.append(1,'1');
-				state.append(1,' ');
+				state.append(1, '1');
+				state.append(1, ' ');
 			}
 		}
 	}
@@ -102,28 +100,28 @@ namespace MLL
 		std::string state;
 		char ch;
 		double sum;
-		for(i=0; i<data.size(); i++)
+		for(i = 0; i < data.size(); i++)
 		{
-			state="";
-			for(j=0; j<data[i].size(); j++)
+			state = "";
+			for(j = 0; j < data[i].size(); j++)
 			{
-				if(data[i][j].length()%2!=0||data[i][j].length()>9)//训练预料词长度检测,最大四字长
+				if(data[i][j].length() % 2 != 0 || data[i][j].length() > 9)//训练预料词长度检测,最大四字长
 					continue;
-				for(word=0; word<data[i][j].length(); word+=2)
+				for(word = 0; word < data[i][j].length(); word += 2)
 				{
-					for(vl=0; vl<dic_len; vl++)
+					for(vl = 0; vl < dic_len; vl++)
 					{
 						if(!data[i][j].substr(word,2).compare(dicos.dic[vl]))
 						{
-							wordToState(data[i],word,j,vl,state);
+							wordToState(data[i], word, j, vl, state);
 							break;
 						}
 					}
-					if(vl==dic_len)
+					if(vl == dic_len)
 					{
-						dicos.dic[vl]=data[i][j].substr(word,2);//对字典进行扩展
+						dicos.dic[vl] = data[i][j].substr(word,2);//对字典进行扩展
 						wordToState(data[i],word,j,vl,state);
-						ofile<<data[i][j].substr(word,2)<<"  ";
+						ofile<< data[i][j].substr(word,2) <<"  ";
 						dic_len++;
 					}
 				}
@@ -133,20 +131,20 @@ namespace MLL
 		}
 		ofile.close();
 		ofile_state.close();
-		dicos.len=dic_len;
+		dicos.len = dic_len;
 		ofile_arg.open("data/hmm_arg.txt");
-		for(j=0; j<dicos.len; j++)
+		for(j = 0; j < dicos.len; j++)
 		{
 			ofile_arg<<dicos.dic[j]<<"  ";
-			sum=0;
-			for(i=0; i<STATE; i++)
+			sum = 0;
+			for(i = 0; i < STATE; i++)
 			{
-				sum+=dicos.b[i][j];
+				sum += dicos.b[i][j];
 			}
-			for(i=0; i<STATE; i++)
+			for(i = 0; i < STATE; i++)
 			{
-				dicos.b[i][j]/=sum;
-				ofile_arg<<dicos.b[i][j]<<"  ";
+				dicos.b[i][j] /= sum;
+				ofile_arg<< dicos.b[i][j] <<"  ";
 			}
 			ofile_arg<<'\n';
 		}
@@ -156,40 +154,40 @@ namespace MLL
 
 		DataStr state_data;
 		LoadData(state_data,"data/hmm_state.txt");
-		for(i=0; i<state_data.size(); i++)
+		for(i = 0; i < state_data.size(); i++)
 		{
 			dicos.pi[getState(state_data[i][0])]++;//统计参数pi
-			for(j=1; j<state_data[i].size(); j++)
+			for(j = 1; j < state_data[i].size(); j++)
 			{
-				dicos.a[getState(state_data[i][j-1])][getState(state_data[i][j])]++;//统计参数a
+				dicos.a[getState(state_data[i][j - 1])][getState(state_data[i][j])]++;//统计参数a
 			}
 		}
-		std::cout<<"i="<<i<<std::endl;
+		std::cout<< "i=" << i <<std::endl;
 		std::cout<<"A:--------------"<<std::endl;
-		for(i=0; i<STATE; i++)
+		for(i = 0; i < STATE; i++)
 		{
-			sum=0;
-			for(j=0; j<STATE; j++)
+			sum = 0;
+			for(j = 0; j < STATE; j++)
 			{
-				sum+=dicos.a[i][j];
+				sum += dicos.a[i][j];
 			}
-			for(j=0; j<STATE; j++)
+			for(j = 0; j < STATE; j++)
 			{
-				dicos.a[i][j]/=sum;
-				std::cout<<dicos.a[i][j]<<"  ";
+				dicos.a[i][j] /= sum;
+				std::cout<< dicos.a[i][j] <<"  ";
 			}
 			std::cout<<std::endl;
 		}
 		std::cout<<"PI:--------------"<<std::endl;
-		sum=0;
-		for(i=0; i<STATE; i++)
+		sum = 0;
+		for(i = 0; i < STATE; i++)
 		{
-			sum+=dicos.pi[i];
+			sum += dicos.pi[i];
 		}
-		for(i=0; i<STATE; i++)
+		for(i = 0; i < STATE; i++)
 		{
-			dicos.pi[i]/=sum;
-			std::cout<<dicos.pi[i]<<"  ";
+			dicos.pi[i] /= sum;
+			std::cout<< dicos.pi[i] <<"  ";
 		}
 		std::cout<<std::endl;
 	}
@@ -203,57 +201,57 @@ namespace MLL
 		double max_deta;
 		double max_fai;
 		int max_i;
-		for(i=0; i<STATE; i++)
+		for(i = 0; i < STATE; i++)
 		{
-			pos=getPos(testdata[0][0]);
-			deta[0][i]=dicos.pi[i]*dicos.b[i][pos];
-			fai[0][i]=0;
+			pos = getPos(testdata[0][0]);
+			deta[0][i] = dicos.pi[i] * dicos.b[i][pos];
+			fai[0][i] = 0;
 		}
-		for(k=0; k<testdata.size(); k++)
+		for(k = 0; k < testdata.size(); k++)
 		{
-			for(t=1; t<testdata[k].size(); t++)
+			for(t = 1; t < testdata[k].size(); t++)
 			{
-				for(i=0; i<STATE; i++)
+				for(i = 0; i <STATE; i++)
 				{
-					max_deta=double_min;
-					max_fai=double_min;
-					for(j=0; j<STATE; j++)
+					max_deta = double_min;
+					max_fai = double_min;
+					for(j = 0; j < STATE; j++)
 					{
-						pos=getPos(testdata[k][t]);
-						if(deta[t-1][j]*dicos.a[j][i]*dicos.b[i][pos]>max_deta)
+						pos = getPos(testdata[k][t]);
+						if(deta[t - 1][j] * dicos.a[j][i] * dicos.b[i][pos] > max_deta)
 						{
-							max_deta=deta[t-1][j]*dicos.a[j][i]*dicos.b[i][pos];
+							max_deta = deta[t-1][j] * dicos.a[j][i] * dicos.b[i][pos];
 						}
-						if(deta[t-1][j]*dicos.a[j][i]>max_fai)
+						if(deta[t - 1][j] * dicos.a[j][i] > max_fai)
 						{
-							max_fai=deta[t-1][j]*dicos.a[j][i];
-							max_i=j;
+							max_fai = deta[t - 1][j] * dicos.a[j][i];
+							max_i = j;
 						}
 					}
-					deta[t][i]=max_deta;
-					fai[t][i]=max_i;
+					deta[t][i] = max_deta;
+					fai[t][i] = max_i;
 				}
 			}
-			max_deta=double_min;
-			for(i=0; i<STATE; i++)
+			max_deta = double_min;
+			for(i = 0; i < STATE; i++)
 			{
-				if(deta[testdata[k].size()-1][i]>max_deta)
+				if(deta[testdata[k].size() - 1][i] > max_deta)
 				{
-					max_deta=deta[testdata[k].size()-1][i];
-					max_i=i;
+					max_deta = deta[testdata[k].size() - 1][i];
+					max_i = i;
 				}
 			}
 			std::cout<<max_i;
-			for(t=testdata[k].size()-2; t>=0; t--)
+			for(t = testdata[k].size() - 2; t >= 0; t--)
 			{
-				max_deta=double_min;
-				std::cout<<fai[t+1][max_i];
-				for(i=0; i<STATE; i++)
+				max_deta = double_min;
+				std::cout<<fai[t + 1][max_i];
+				for(i = 0; i < STATE; i++)
 				{
-					if(deta[t][i]>max_deta)
+					if(deta[t][i] > max_deta)
 					{
-						max_deta=deta[t][i];
-						max_i=i;
+						max_deta = deta[t][i];
+						max_i = i;
 					}
 				}
 			}
@@ -262,16 +260,16 @@ namespace MLL
 	}
 	void HMM_CWS::init_DICOS()
 	{
-		int i,j;
-		for(i=0; i<STATE; i++)
+		int i = 0, j = 0;
+		for(i = 0; i < STATE; i++)
 		{
-			for(j=0; j<VEC_LEN; j++)
+			for(j = 0; j < VEC_LEN; j++)
 			{
-				dicos.b[i][j]=0;
+				dicos.b[i][j] = 0;
 			}
-			for(j=0; j<STATE; j++)
+			for(j = 0; j < STATE; j++)
 			{
-				dicos.a[i][j]=0;
+				dicos.a[i][j] = 0;
 			}
 		}
 	}
