@@ -351,7 +351,7 @@ namespace MLL
 	HMM::HMM(const std::string file)
 	{
 		DataStr data;
-		LoadDataStr(data,file);//加载训练集，亦为测试集，只考虑了一个样本
+		LoadData(data,file);//加载训练集，亦为测试集，只考虑了一个样本
 		createOset(data);//建立词典
 		init_test();
 		std::cout<<"-------------forwardBack-----------------"<<std::endl;

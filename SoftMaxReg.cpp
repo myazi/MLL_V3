@@ -8,32 +8,32 @@ namespace MLL {
     **/
     int SoftMaxReg::gradAscent_SoftMax()
     {
-        Matrix weights(_x.col,_y.col,0.1,"T");
+        Matrix weights(_x._col,_y._col,0.1);
         Matrix xT = _x.transposeMatrix();
 
         //float alpha=0.001;///迭代步长
         float error=0;///记录错误率
         int iter=0;
         int i,j;
-        Matrix z(_y.row,_y.col,0,"T");//最好确定矩阵的大小
-        Matrix zRowSum(z.row,1,0,"ss");//各个维度求和，归一化为概率形式
-        Matrix grad(_x.col,_y.col,0,"T");
+        Matrix z(_y._row,_y._col,0);//最好确定矩阵的大小
+        Matrix z_rowSum(z._row,1,0);//各个维度求和，归一化为概率形式
+        Matrix grad(_x._col,_y._col,0);
         for(iter=0; iter<_iter; iter++)
         {
             z = _x * weights;
-            for(i=0; i<z.row; i++)
+            for(i=0; i<z._row; i++)
             {
-                zRowSum.data[i][0]=0;
-                for(j=0;j<z.col;j++)
+                z_rowSum._data[i][0]=0;
+                for(j=0;j<z._col;j++)
                 {
-					MLL::sigmoid(&z.data[i][j]);
-                    zRowSum.data[i][0]+=z.data[i][j];//求和
+					MLL::sigmoid(z._data[i][j]);
+                    z_rowSum._data[i][0]+=z._data[i][j];//求和
                 }
-                for(j=0;j<z.col;j++)
+                for(j=0;j<z._col;j++)
                 {
-                    z.data[i][j]/=zRowSum.data[i][0];//归一化
+                    z._data[i][j]/=z_rowSum._data[i][0];//归一化
                     //if(iter%5000==0)
-                        //std::cout<<z.data[i][j] <<"  ";
+                        //std::cout<<z._data[i][j] <<"  ";
                 }
                 //if(iter%5000==0)
                     //std::cout<<std::endl;
@@ -41,12 +41,12 @@ namespace MLL {
             z = _y - z;
 
             grad = xT * z;///计算负梯度方向
-            //grad = (1.0/x.row) * grad;
-            for(i=0; i<grad.row; i++)
+            //grad = (1.0/x._row) * grad;
+            for(i=0; i<grad._row; i++)
             {
-                for(j=0;j<grad.col; j++)
+                for(j=0;j<grad._col; j++)
                 {
-                    grad.data[i][j]*= _alpha;///负梯度方向与步长的乘积确定迭代值
+                    grad._data[i][j]*= _alpha;///负梯度方向与步长的乘积确定迭代值
                 }
             }
             weights = weights + grad;///往负梯度方向走一个步长
@@ -57,13 +57,13 @@ namespace MLL {
         **/
         Matrix test=_x * weights;
         std::cout<<"test"<<std::endl;
-        for(i=0; i<_y.row; i++)
+        for(i=0; i<_y._row; i++)
         {
-            //for(j=0; j<y.col; j++)
-            if(test.data[i][0]>test.data[i][1])
-                std::cout<<0-_y.data[i][1]<<"  ";
+            //for(j=0; j<y._col; j++)
+            if(test._data[i][0]>test._data[i][1])
+                std::cout<<0-_y._data[i][1]<<"  ";
             else
-                std::cout<<1-_y.data[i][1]<<"  ";
+                std::cout<<1-_y._data[i][1]<<"  ";
             std::cout<<std::endl;
         }
     }
@@ -74,47 +74,47 @@ namespace MLL {
     **/
     int SoftMaxReg::stoGradAscent_SoftMax()//随机梯度下降每一次选择m个样本进行求梯度下降方向，该代码中只选择一个样本进行求解梯度下降方向与数值
     {
-        Matrix xOneRow(1,_x.col,0,"T");
-        Matrix xOneRowT(_x.col,1,0,"T");
+        Matrix xOne_row(1,_x._col,0);
+        Matrix xOne_rowT(_x._col,1,0);
 
-        Matrix weights(_x.col,_y.col,0.1,"T");
-        Matrix z(1,_y.col,0,"T");//最好确定矩阵的大小
-        Matrix grad(_x.col,_y.col,0,"T");
-        double zRowSum=0;
+        Matrix weights(_x._col,_y._col,0.1);
+        Matrix z(1,_y._col,0);//最好确定矩阵的大小
+        Matrix grad(_x._col,_y._col,0);
+        double z_rowSum=0;
         //double alpha=0.001;///步长
         double error;
         int i,j,k,iter;
         for(iter=0; iter<_iter; iter++)
         {
-            for(i=0; i<_x.row; i++)
+            for(i=0; i<_x._row; i++)
             {
-                xOneRow=_x.getOneRow(i);///随机选择一个样本点，这里没有作随机选择，而是按序选择
-                z = xOneRow * weights;
-                zRowSum=0;
-                for(j=0;j<z.col;j++)
+                xOne_row=_x.getOneRow(i);///随机选择一个样本点，这里没有作随机选择，而是按序选择
+                z = xOne_row * weights;
+                z_rowSum=0;
+                for(j=0;j<z._col;j++)
                 {
-                    sigmoid(&z.data[0][j]);
-                    zRowSum+=z.data[0][j];//求和
+                    sigmoid(z._data[0][j]);
+                    z_rowSum+=z._data[0][j];//求和
                 }
-                for(j=0;j<z.col;j++)
+                for(j=0;j<z._col;j++)
                 {
-                    z.data[0][j]/=zRowSum;//归一化
+                    z._data[0][j]/=z_rowSum;//归一化
                     if(iter%1000==0)
-                        std::cout<<z.data[0][j] <<" s ";
+                        std::cout<<z._data[0][j] <<" s ";
                 }
                 if(iter%1000==0)
                     std::cout<<std::endl;
-                for(j=0;j<_y.col;j++)
+                for(j=0;j<_y._col;j++)
                 {
-                    z.data[0][j]=_y.data[i][j]-z.data[0][j];
+                    z._data[0][j]=_y._data[i][j]-z._data[0][j];
                 }
-                xOneRowT = xOneRow.transposeMatrix();
-                grad = xOneRowT * z;///根据一样样本的预测误差来确定负梯度方向
-                for(k=0; k<grad.row;k++)
+                xOne_rowT = xOne_row.transposeMatrix();
+                grad = xOne_rowT * z;///根据一样样本的预测误差来确定负梯度方向
+                for(k=0; k<grad._row;k++)
                 {
-                    for(j=0;j<grad.col; j++)
+                    for(j=0;j<grad._col; j++)
                     {
-                        grad.data[k][j]*= _alpha;///负梯度方向与步长的乘积确定迭代值
+                        grad._data[k][j]*= _alpha;///负梯度方向与步长的乘积确定迭代值
                     }
                 }
                 weights = weights + grad; ///迭代
@@ -126,24 +126,25 @@ namespace MLL {
         **/
         Matrix test = _x * weights;
         std::cout<<"test"<<std::endl;
-        for(i=0; i < _y.row; i++)
+        for(i=0; i < _y._row; i++)
         {
-            if(test.data[i][0]>test.data[i][1])
-                std::cout<<0 - _y.data[i][1]<<"  ";
+            if(test._data[i][0]>test._data[i][1])
+                std::cout<<0 - _y._data[i][1]<<"  ";
             else
-                std::cout<<1 - _y.data[i][1]<<"  ";
+                std::cout<<1 - _y._data[i][1]<<"  ";
             std::cout<<std::endl;
         }
     }
 
     SoftMaxReg::SoftMaxReg(const std::string &file, const std::string &model, const double &alpha, const int &iter)
     {
-        std::cout<<"loadData"<<std::endl;
+        std::cout<<"load_data"<<std::endl;
         std::cout<<"----------------------"<<std::endl;
-        _x.LoadData(file);
-        _y=_x.getOneCol(_x.col-1);
-        _y=one_hot(_y,2);
-        _x.deleteOneCol(_x.col-1);
+        _x.init_by_data(file);
+        _y=_x.getOneCol(_x._col-1);
+		one_hot(_y,2);
+        //_y.print();
+		_x.deleteOneCol(_x._col-1);
         _alpha = alpha;
         _iter = iter;
     }

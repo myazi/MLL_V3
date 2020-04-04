@@ -23,9 +23,39 @@ typedef std::vector<std::vector<std::string> > DataStr;  //定义为模板
 typedef std::vector<std::string> RowDataStr;
 typedef std::vector<std::string> ColDataStr;
 
-void LoadDataNum_spare(Data &data, const std::string &infile);
-void LoadDataNum(Data &data, const std::string &infile);
-void LoadDataStr(DataStr &data, const std::string &infile);
+
+template<typename elemType>
+void LoadData(std::vector<std::vector<elemType> > &data, const std::string &infile)
+{
+    std::cout << "locddata filename is:" << infile <<std::endl;
+    std::ifstream dataFile;
+    dataFile.open(infile);
+    std::string tmpstrline;
+    elemType val;
+	std::vector<elemType> rowData;
+    if(dataFile)
+    {
+        while(!dataFile.eof())
+        {
+            getline(dataFile,tmpstrline,'\n');//读取文件中一行的数据，保存为string类型
+            //char buffer[256];
+            //dataFile.getline(buffer,100);//读取文件中一行的数据，保存为string类型
+            std::stringstream input(tmpstrline);
+            if(tmpstrline!="\0")
+            {
+                while(input>>val)
+                {
+                    rowData.push_back(val);
+                }
+                data.push_back(rowData);
+            }
+            rowData.clear();
+        }
+    }
+    dataFile.close();
+}
+
 void LoadDataStr(RowDataStr &data, const std::string &infile);
+void LoadData_spare(Data &data, const std::string &infile);
 
 #endif // LoadData_H

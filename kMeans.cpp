@@ -19,9 +19,9 @@ namespace MLL
 	{
 		int i,j;
 		double dis;
-		for(i=0; i<xOne.col; i++)
+		for(i=0; i<xOne._col; i++)
 		{
-			dis=pow((xOne.data[0][i]-kCen.data[0][i]),2);
+			dis=pow((xOne._data[0][i]-kCen._data[0][i]),2);
 		}
 		return dis;
 	}
@@ -38,7 +38,7 @@ namespace MLL
 	{
 		int i,j,k;
 		Matrix initmeans;
-		initmeans.initMatrix(kNum,x.col,0,"ss");
+		initmeans.initMatrix(kNum,x._col,0);
 
 		double min[2];
 		double max[2];
@@ -46,19 +46,19 @@ namespace MLL
 		/**
 		在样本空间内随机初始化k个类中心
 		**/
-		for(j=0; j<x.col; j++)
+		for(j=0; j<x._col; j++)
 		{
 			min[j]=MAX;
 			max[j]=MIN;
-			for(i=0; i<x.row; i++)
+			for(i=0; i<x._row; i++)
 			{
-				if(x.data[i][j]<min[j])
+				if(x._data[i][j]<min[j])
 				{
-					min[j]=x.data[i][j];
+					min[j]=x._data[i][j];
 				}
-				if(x.data[i][j]>max[j])
+				if(x._data[i][j]>max[j])
 				{
-					max[j]=x.data[i][j];
+					max[j]=x._data[i][j];
 				}
 			}
 		}
@@ -67,11 +67,11 @@ namespace MLL
 		*/
 		for(k=0; k<kNum; k++)
 		{
-			for(j=0; j<x.col; j++)
+			for(j=0; j<x._col; j++)
 			{
 				//改变初值的选取，得到的聚类中心会不一致，可见初值的选取的关键，
-				initmeans.data[k][j]=x.data[k][j];//min[j]+(max[j]-min[j])*(random(10)/10.0);
-				std::cout<<initmeans.data[k][j]<<"  ";
+				initmeans._data[k][j]=x._data[k][j];//min[j]+(max[j]-min[j])*(random(10)/10.0);
+				std::cout<<initmeans._data[k][j]<<"  ";
 			}
 			std::cout<<std::endl;
 		}
@@ -88,14 +88,14 @@ namespace MLL
 		Matrix xOne;//存储一个样本
 		Matrix kOne;//存储一个聚类中心样本
 		Matrix kLabel;//存储每个样本的类别
-		kLabel.initMatrix(x.row,1,0,"ss");
+		kLabel.initMatrix(x._row,1,0);
 
 		double minDis=MAX;//最小的距离
 
 		for(it=0; it<Iter; it++)
 		{
 			//根据k个聚类中心划分类标签
-			for(i=0; i<x.row; i++)
+			for(i=0; i<x._row; i++)
 			{
 				xOne = x.getOneRow(i);
 				minDis=MAX;
@@ -105,7 +105,7 @@ namespace MLL
 					dis[k]=distances(xOne,kOne);
 					if(dis[k]<minDis)
 					{
-						kLabel.data[i][0]=k;
+						kLabel._data[i][0]=k;
 						minDis=dis[k];
 					}
 				}
@@ -113,18 +113,18 @@ namespace MLL
 			//kmeans清零，当计算类中心采用+=的形式则需要清零，而下面更新kmeans同样是采用+=的形式，因为右边有一项就是kmeans
 			for(k=0; k<kNum; k++)
 			{
-				for(j=0; j<x.col; j++)
+				for(j=0; j<x._col; j++)
 				{
-					kmeans.data[k][j]=0;
+					kmeans._data[k][j]=0;
 				}
 			}
 			//更新kmeans
-			for(i=0; i<x.row; i++)
+			for(i=0; i<x._row; i++)
 			{
-				k=kLabel.data[i][0];
-				for(j=0; j<x.col; j++)
+				k=kLabel._data[i][0];
+				for(j=0; j<x._col; j++)
 				{
-					kmeans.data[k][j]=(kmeans.data[k][j]*(i)+x.data[i][j])/(i+1);//采用累加方式求均值，该方法增加计算量
+					kmeans._data[k][j]=(kmeans._data[k][j]*(i)+x._data[i][j])/(i+1);//采用累加方式求均值，该方法增加计算量
 					//当然也可以把一类的所有样本取出来，求和再取均值，这里没有这样做，而是来一个加一个
 				}
 			}
@@ -132,9 +132,9 @@ namespace MLL
 			std::cout<<"--------------------"<<std::endl;
 			for(k=0; k<kNum; k++)
 			{
-				for(j=0; j<x.col; j++)
+				for(j=0; j<x._col; j++)
 				{
-					std::cout<<kmeans.data[k][j]<<"  ";
+					std::cout<<kmeans._data[k][j]<<"  ";
 				}
 				std::cout<<std::endl;
 			}
@@ -143,23 +143,23 @@ namespace MLL
 		将聚类结果保存到结构体中
 		*/
 		CenAndDis cendis;
-		cendis.cen.initMatrix(kNum,x.col,0,"b");
-		cendis.dis.initMatrix(x.row,1,0,"ss");
+		cendis.cen.initMatrix(kNum,x._col,0);
+		cendis.dis.initMatrix(x._row,1,0);
 		cendis.cen = kmeans;
 
 		///保存所有样本到其类中心的距离到结构体中
-		for(i=0; i<x.row; i++)
+		for(i=0; i<x._row; i++)
 		{
-			k=kLabel.data[i][0];
+			k=kLabel._data[i][0];
 			xOne=x.getOneRow(i);
 			kOne=kmeans.getOneRow(k);
-			cendis.dis.data[i][0]=distances(xOne,kOne);
+			cendis.dis._data[i][0]=distances(xOne,kOne);
 		}
 		//
 		double sum=0;
-		for(i=0; i<x.row; i++)
+		for(i=0; i<x._row; i++)
 		{
-			sum+=cendis.dis.data[i][0];
+			sum+=cendis.dis._data[i][0];
 		}
 		std::cout<<"err="<<sum<<std::endl;
 		return cendis;
@@ -170,18 +170,18 @@ namespace MLL
 		int i=0,j=0,k=0;
 		Matrix submatrix;
 		submatrix = x;
-		for(i=0; i<x.row; i++)
+		for(i=0; i<x._row; i++)
 		{
-			if( int(clusterAssment.data[i][0])==label)
+			if( int(clusterAssment._data[i][0])==label)
 			{
-				for(j=0; j<x.col; j++)
+				for(j=0; j<x._col; j++)
 				{
-					submatrix.data[k][j]=x.data[i][j];
+					submatrix._data[k][j]=x._data[i][j];
 				}
 				k++;
 			}
 		}
-		submatrix.row=k;
+		submatrix._row=k;
 		return submatrix;
 	}
 	/***
@@ -194,33 +194,33 @@ namespace MLL
 	{
 		int i,j,k,d;
 		Matrix kmeans;
-		kmeans.initMatrix(kNum,x.col,0,"ss");///初始化聚为一类，
+		kmeans.initMatrix(kNum,x._col,0);///初始化聚为一类，
 
 		Matrix xOne;//一个样本
 		Matrix kOne;//一个聚类中心
 		Matrix clusterAssment;///矩阵的第一列保存其到所属类别，第二列保存样本到所属类别的距离
-		clusterAssment.initMatrix(x.row,2,0,"ss");
+		clusterAssment.initMatrix(x._row,2,0);
 
 		CenAndDis cenanddis;///聚类结果
-		cenanddis.cen.initMatrix(kNum,x.col,0,"ss");
-		cenanddis.dis.initMatrix(x.col,1,0,"ss");
+		cenanddis.cen.initMatrix(kNum,x._col,0);
+		cenanddis.dis.initMatrix(x._col,1,0);
 
 		CenAndDis bestCenanddis;///记录当前最好的距离结果
-		bestCenanddis.cen.initMatrix(kNum,x.col,0,"ss");
-		bestCenanddis.dis.initMatrix(x.row,1,0,"ss");
+		bestCenanddis.cen.initMatrix(kNum,x._col,0);
+		bestCenanddis.dis.initMatrix(x._row,1,0);
 
-		for(i=0; i<x.row; i++)
+		for(i=0; i<x._row; i++)
 		{
-			for(j=0; j<x.col; j++)
+			for(j=0; j<x._col; j++)
 			{
-				kmeans.data[0][j]=(kmeans.data[0][j]*i+x.data[i][j])/(i+1);
+				kmeans._data[0][j]=(kmeans._data[0][j]*i+x._data[i][j])/(i+1);
 			}
-			clusterAssment.data[i][0]=0;///初始化聚为一类，类中心为之前初始化为一类的类中心
+			clusterAssment._data[i][0]=0;///初始化聚为一类，类中心为之前初始化为一类的类中心
 		}
-		for(i=0; i<x.row; i++)
+		for(i=0; i<x._row; i++)
 		{
 			xOne=x.getOneRow(i);
-			clusterAssment.data[i][1]=distances(xOne,kmeans);///初始化为一类后，所有样本到其所属类的距离
+			clusterAssment._data[i][1]=distances(xOne,kmeans);///初始化为一类后，所有样本到其所属类的距离
 		}
 
 		Matrix submatrix;///分裂后的子集矩阵
@@ -243,18 +243,18 @@ namespace MLL
 				/**
 				分裂类别的SSE值和
 				*/
-				for(i=0; i<submatrix.row; i++)
+				for(i=0; i<submatrix._row; i++)
 				{
-					sseSplit+=cenanddis.dis.data[i][1];
+					sseSplit+=cenanddis.dis._data[i][1];
 				}
 				/**
 				未分裂的类别的SSE值和
 				*/
-				for(i=0; i<x.row; i++)
+				for(i=0; i<x._row; i++)
 				{
-					if(clusterAssment.data[i][0]!=k)
+					if(clusterAssment._data[i][0]!=k)
 					{
-						sseNosplit+=clusterAssment.data[i][1];
+						sseNosplit+=clusterAssment._data[i][1];
 					}
 				}
 				///与最小的SSE进行比较，选择出最佳的分裂类
@@ -266,9 +266,9 @@ namespace MLL
 				}
 			}
 			///最后确定选出最好的二划分簇之后，下面开始在x数据上进行更新聚类中心和距离，clusterAssment变量
-			for(i=0; i<x.row; i++)
+			for(i=0; i<x._row; i++)
 			{
-				if(clusterAssment.data[i][0]==bestCentToSplit)
+				if(clusterAssment._data[i][0]==bestCentToSplit)
 				{
 					xOne=x.getOneRow(i);
 					for(k=0; k<2; k++)
@@ -278,21 +278,21 @@ namespace MLL
 					}
 					if(dis[0]<dis[1])
 					{
-						clusterAssment.data[i][0]=bestCentToSplit;///分裂后的两个类，第一个类的类别还是当前类别值
-						clusterAssment.data[i][1]=dis[0];
+						clusterAssment._data[i][0]=bestCentToSplit;///分裂后的两个类，第一个类的类别还是当前类别值
+						clusterAssment._data[i][1]=dis[0];
 					}
 					else
 					{
-						clusterAssment.data[i][0]=bestCentToSplit+1;///分裂后的两个类，第二个类的类别分配一个新的类别值，一直往上加1
-						clusterAssment.data[i][1]=dis[1];
+						clusterAssment._data[i][0]=bestCentToSplit+1;///分裂后的两个类，第二个类的类别分配一个新的类别值，一直往上加1
+						clusterAssment._data[i][1]=dis[1];
 					}
 				}
 			}
 			///计算最终的SSE值
 			double sum=0;
-			for(i=0; i<x.row; i++)
+			for(i=0; i<x._row; i++)
 			{
-				sum+=clusterAssment.data[i][1];
+				sum+=clusterAssment._data[i][1];
 			}
 			std::cout<<"err==="<<sum<<std::endl;
 		}
@@ -301,7 +301,7 @@ namespace MLL
 	KMeans::KMeans(const std::string &file)
 	{
 		Matrix x;
-		x.LoadData(file);
+		x.init_by_data(file);
 		kMeans(x,3,10);
 		biKmeans(x,3,10);
 	}

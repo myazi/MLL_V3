@@ -16,36 +16,36 @@ namespace MLL{
         /**
             随机初始化
         **/
-        //p->A.initMatrix(sup_par.layer_n[k],X.col,0,"ss");
+        //p->A.initMatrix(sup_par.layer_n[k],X._col,0);
 
-        //p->AT.initMatrix(X.col,X.row,0,"ss");
+        //p->AT.initMatrix(X._col,X._row,0);
         for(k=0; k<L-1; k++)
         {
-            p->A.initMatrix(_sup_par.layer_n[k],_x.col,0,"ss");
+            p->A.initMatrix(_sup_par.layer_n[k],_x._col,0);
             //用于dropout，这里初始化一次即可，后面当使用dropout时，D才会赋值，不使用则不赋值，且实际使用长度小于网络层数
-            p->D.initMatrix(_sup_par.layer_n[k],_x.col,0,"ss");
-            p->W.initMatrix(_sup_par.layer_n[k+1],_sup_par.layer_n[k],0,"ss");
-            p->b.initMatrix(_sup_par.layer_n[k+1],1,0,"ss");
-            p->Z.initMatrix(_sup_par.layer_n[k+1],_x.col,0,"ss");
+            p->D.initMatrix(_sup_par.layer_n[k],_x._col,0);
+            p->W.initMatrix(_sup_par.layer_n[k+1],_sup_par.layer_n[k],0);
+            p->b.initMatrix(_sup_par.layer_n[k+1],1,0);
+            p->Z.initMatrix(_sup_par.layer_n[k+1],_x._col,0);
 
-            for(i=0; i<p->W.row; i++)
+            for(i=0; i<p->W._row; i++)
             {
-                for(j=0; j<p->W.col; j++)
+                for(j=0; j<p->W._col; j++)
                 {
                     if(_initialization=="he")
                     {
                         radom=(rand()%100)/100.0;
-                        p->W.data[i][j]=radom * sqrt(2.0/_sup_par.layer_n[k]);//一种常用的参数初始化方法，参数初始化也有技巧
+                        p->W._data[i][j]=radom * sqrt(2.0/_sup_par.layer_n[k]);//一种常用的参数初始化方法，参数初始化也有技巧
                     }
                     if(_initialization=="random")
                     {
                         radom=(rand()%100)/100.0;
-                        p->W.data[i][j]=radom;//一种常用的参数初始化方法，参数初始化也有技巧
+                        p->W._data[i][j]=radom;//一种常用的参数初始化方法，参数初始化也有技巧
                     }
                     if(_initialization=="arxiv")
                     {
                         radom=(rand()%100)/100.0;
-                        p->W.data[i][j]=radom/sqrt(_sup_par.layer_n[k]);//一种常用的参数初始化方法，参数初始化也有技巧
+                        p->W._data[i][j]=radom/sqrt(_sup_par.layer_n[k]);//一种常用的参数初始化方法，参数初始化也有技巧
                     }
                 }
             }
@@ -53,31 +53,31 @@ namespace MLL{
             p->next->pre=p;
             p=p->next;
 
-            g->grad_A.initMatrix(_sup_par.layer_n[L-k-1],_x.col,0,"ss");
-            g->grad_Z.initMatrix(_sup_par.layer_n[L-k-1],_x.col,0,"ss");
-            g->grad_W.initMatrix(_sup_par.layer_n[L-k-1],_sup_par.layer_n[L-k-2],0,"ss");
-            g->grad_b.initMatrix(_sup_par.layer_n[L-k-1],1,0,"ss");
+            g->grad_A.initMatrix(_sup_par.layer_n[L-k-1],_x._col,0);
+            g->grad_Z.initMatrix(_sup_par.layer_n[L-k-1],_x._col,0);
+            g->grad_W.initMatrix(_sup_par.layer_n[L-k-1],_sup_par.layer_n[L-k-2],0);
+            g->grad_b.initMatrix(_sup_par.layer_n[L-k-1],1,0);
 
             //用于momentum 和adam优化中用于保存前n次加权平均值
-            g->V_dw.initMatrix(_sup_par.layer_n[L-k-1],_sup_par.layer_n[L-k-2],0,"ss");
-            g->V_db.initMatrix(_sup_par.layer_n[L-k-1],1,0,"ss");
+            g->V_dw.initMatrix(_sup_par.layer_n[L-k-1],_sup_par.layer_n[L-k-2],0);
+            g->V_db.initMatrix(_sup_par.layer_n[L-k-1],1,0);
 
-            g->S_dw.initMatrix(_sup_par.layer_n[L-k-1],_sup_par.layer_n[L-k-2],0,"ss");
-            g->S_db.initMatrix(_sup_par.layer_n[L-k-1],1,0,"ss");
+            g->S_dw.initMatrix(_sup_par.layer_n[L-k-1],_sup_par.layer_n[L-k-2],0);
+            g->S_db.initMatrix(_sup_par.layer_n[L-k-1],1,0);
 
             //用于修正的momentum 和adam
-            g->V_dw_corrected.initMatrix(_sup_par.layer_n[L-k-1],_sup_par.layer_n[L-k-2],0,"ss");
-            g->V_db_corrected.initMatrix(_sup_par.layer_n[L-k-1],1,0,"ss");
+            g->V_dw_corrected.initMatrix(_sup_par.layer_n[L-k-1],_sup_par.layer_n[L-k-2],0);
+            g->V_db_corrected.initMatrix(_sup_par.layer_n[L-k-1],1,0);
 
-            g->S_dw_corrected.initMatrix(_sup_par.layer_n[L-k-1],_sup_par.layer_n[L-k-2],0,"ss");
-            g->S_db_corrected.initMatrix(_sup_par.layer_n[L-k-1],1,0,"ss");
+            g->S_dw_corrected.initMatrix(_sup_par.layer_n[L-k-1],_sup_par.layer_n[L-k-2],0);
+            g->S_db_corrected.initMatrix(_sup_par.layer_n[L-k-1],1,0);
 
             g->pre=new grad();//上一层网络参数梯度
             g->pre->next=g;
             g=g->pre;
         }
-        p->A.initMatrix(_sup_par.layer_n[k],_x.col,0,"ss");
-        g->grad_A.initMatrix(_sup_par.layer_n[L-k-1],_x.col,0,"ss");
+        p->A.initMatrix(_sup_par.layer_n[k],_x._col,0);
+        g->grad_A.initMatrix(_sup_par.layer_n[L-k-1],_x._col,0);
 
         return 0;
     }
@@ -87,33 +87,33 @@ namespace MLL{
         int i=0,j=0;
         if(keep_prob!=1)
         {
-           for(i=0; i<p->D.row; i++)
+           for(i=0; i<p->D._row; i++)
             {
-                for(j=0; j<p->D.col; j++)
+                for(j=0; j<p->D._col; j++)
                 {
-                    p->D.data[i][j]=(rand()%100)/100.0;
+                    p->D._data[i][j]=(rand()%100)/100.0;
 
-                    if(p->D.data[i][j]<keep_prob)
-                        p->D.data[i][j]=1.0/keep_prob; //这里已经扩充了keep_prob
+                    if(p->D._data[i][j]<keep_prob)
+                        p->D._data[i][j]=1.0/keep_prob; //这里已经扩充了keep_prob
                     else
-                        p->D.data[i][j]=0;
+                        p->D._data[i][j]=0;
                 }
             }
             p->A = p->A * p->D;
         }
-        std::cout<<"zzz"<<p->Z.row<<"&&"<<p->Z.col<<std::endl;
-        std::cout<<"www"<<p->W.row<<"&&"<<p->W.col<<std::endl;
-        std::cout<<"aaa"<<p->A.row<<"&&"<<p->A.col<<std::endl;
-        std::cout<<"bbb"<<p->b.row<<"&&"<<p->b.col<<std::endl;
+        std::cout<<"zzz"<<p->Z._row<<"&&"<<p->Z._col<<std::endl;
+        std::cout<<"www"<<p->W._row<<"&&"<<p->W._col<<std::endl;
+        std::cout<<"aaa"<<p->A._row<<"&&"<<p->A._col<<std::endl;
+        std::cout<<"bbb"<<p->b._row<<"&&"<<p->b._col<<std::endl;
         p->Z.print();
         p->b.print();
         p->Z = p->W * p->A;
 
-        for(i=0; i<p->Z.row; i++) //矩阵与向量的相加，class中未写
+        for(i=0; i<p->Z._row; i++) //矩阵与向量的相加，class中未写
         {
-            for(j=0; j<p->Z.col; j++)
+            for(j=0; j<p->Z._col; j++)
             {
-                p->Z.data[i][j]+=p->b.data[i][0];//这里可以把b也定义为等大小的矩阵，每行一样
+                p->Z._data[i][j]+=p->b._data[i][0];//这里可以把b也定义为等大小的矩阵，每行一样
             }
         }
     }
@@ -121,11 +121,11 @@ namespace MLL{
     void DNN::sigmoid_forward(parameters *p)
     {
         int i,j;
-        for(i=0; i<p->Z.row; i++)
+        for(i=0; i<p->Z._row; i++)
         {
-            for(j=0; j<p->Z.col; j++)
+            for(j=0; j<p->Z._col; j++)
             {
-                p->next->A.data[i][j]=1.0/(1.0+exp(-p->Z.data[i][j]));//sigmoid(p->Z.data[i][j]);
+                p->next->A._data[i][j]=1.0/(1.0+exp(-p->Z._data[i][j]));//sigmoid(p->Z._data[i][j]);
             }
         }
     }
@@ -133,17 +133,17 @@ namespace MLL{
     void DNN::relu_forward(parameters *p)
     {
         int i,j;
-        for(i=0; i<p->Z.row; i++)
+        for(i=0; i<p->Z._row; i++)
         {
-            for(j=0; j<p->Z.col; j++)
+            for(j=0; j<p->Z._col; j++)
             {
-                if(p->Z.data[i][j]>0)
+                if(p->Z._data[i][j]>0)
                 {
-                    p->next->A.data[i][j] = p->Z.data[i][j];
+                    p->next->A._data[i][j] = p->Z._data[i][j];
                 }
                 else
                 {
-                    p->next->A.data[i][j]=0;
+                    p->next->A._data[i][j]=0;
                 }
             }
         }
@@ -178,11 +178,11 @@ namespace MLL{
     void DNN::sigmoid_backword(parameters *p,grad *g)
     {
         int i=0,j=0;
-        for(i=0; i<g->grad_A.row; i++)
+        for(i=0; i<g->grad_A._row; i++)
         {
-            for(j=0; j<g->grad_A.col; j++)
+            for(j=0; j<g->grad_A._col; j++)
             {
-                g->grad_Z.data[i][j]=g->grad_A.data[i][j]*p->A.data[i][j]*(1-p->A.data[i][j]);
+                g->grad_Z._data[i][j]=g->grad_A._data[i][j]*p->A._data[i][j]*(1-p->A._data[i][j]);
             }
         }
     }
@@ -190,17 +190,17 @@ namespace MLL{
     void DNN::relu_backword(parameters *p,grad *g)
     {
         int i=0,j=0;
-        for(i=0; i<g->grad_Z.row; i++)
+        for(i=0; i<g->grad_Z._row; i++)
         {
-            for(j=0; j<g->grad_Z.col; j++)
+            for(j=0; j<g->grad_Z._col; j++)
             {
-                if(p->pre->Z.data[i][j]>0)
+                if(p->pre->Z._data[i][j]>0)
                 {
-                    g->grad_Z.data[i][j]=g->grad_A.data[i][j];
+                    g->grad_Z._data[i][j]=g->grad_A._data[i][j];
                 }
                 else
                 {
-                    g->grad_Z.data[i][j]=0;
+                    g->grad_Z._data[i][j]=0;
                 }
             }
         }
@@ -213,37 +213,37 @@ namespace MLL{
         g->grad_W = g->grad_W.multsMatrix(g->grad_Z,AT);
         if(_lambd!=0)
         {
-            for(i=0; i<p->W.row; i++)
+            for(i=0; i<p->W._row; i++)
             {
-                for(j=0; j<p->W.col; j++)
+                for(j=0; j<p->W._col; j++)
                 {
-                     g->grad_W.data[i][j]+=(_lambd * p->W.data[i][j]);
+                     g->grad_W._data[i][j]+=(_lambd * p->W._data[i][j]);
                 }
             }
         }
-        for(i=0; i<g->grad_W.row; i++)
+        for(i=0; i<g->grad_W._row; i++)
         {
-            for(j=0; j<g->grad_W.col; j++)
+            for(j=0; j<g->grad_W._col; j++)
             {
-                g->grad_W.data[i][j]/=g->grad_Z.col;
+                g->grad_W._data[i][j]/=g->grad_Z._col;
             }
         }
-        for(i=0; i<g->grad_Z.row; i++)
+        for(i=0; i<g->grad_Z._row; i++)
         {
-            g->grad_b.data[i][0]=0;
-            for(j=0; j<g->grad_Z.col; j++)
+            g->grad_b._data[i][0]=0;
+            for(j=0; j<g->grad_Z._col; j++)
             {
-                g->grad_b.data[i][0]+=g->grad_Z.data[i][j];
+                g->grad_b._data[i][0]+=g->grad_Z._data[i][j];
             }
-            g->grad_b.data[i][0]/=g->grad_Z.col;
+            g->grad_b._data[i][0]/=g->grad_Z._col;
         }
         Matrix WT = p->W.transposeMatrix();
         g->pre->grad_A = g->pre->grad_A.multsMatrix(WT,g->grad_Z);
 		if(keep_prob!=1)
         {
             //这里p指向的D与对应A的dropout层，而等于1的情况下，D是只有初始化，无关赋值，所以对应dropout关系是正确的
-            //std::cout<<p->D.col<<"&"<<p->D.row<<std::endl;
-            //std::cout<<g->pre->grad_A.col<<"&"<<g->pre->grad_A.row<<std::endl;
+            //std::cout<<p->D._col<<"&"<<p->D._row<<std::endl;
+            //std::cout<<g->pre->grad_A._col<<"&"<<g->pre->grad_A._row<<std::endl;
 
             g->pre->grad_A = g->pre->grad_A.multsMatrix(g->pre->grad_A,p->D);//由于keep_prob扩充已经放到D上了
         }
@@ -278,9 +278,9 @@ namespace MLL{
         }
         grad *g = &_gra;
 
-        for(i=0; i< _y.col; i++)
+        for(i=0; i< _y._col; i++)
         {
-            _gra.grad_A.data[0][i]=-(_y.data[0][i]/AL.data[0][i]-(1 - _y.data[0][i])/(1-AL.data[0][i]));
+            _gra.grad_A._data[0][i]=-(_y._data[0][i]/AL._data[0][i]-(1 - _y._data[0][i])/(1-AL._data[0][i]));
         }
         for(i=L-1; i>0; i--)
         {
@@ -293,7 +293,7 @@ namespace MLL{
     double DNN::cost_cumpter(Matrix AL)
     {
         int i=0,j=0;
-        int m = _y.col;//样本数
+        int m = _y._col;//样本数
         double loss=0;
         double loss_L2_regularization=0;
         if(_lambd!=0)
@@ -301,11 +301,11 @@ namespace MLL{
             parameters *p = &_par;
             while(p!=NULL)
             {
-                for(i=0;i<p->W.row;i++)
+                for(i=0;i<p->W._row;i++)
                 {
-                    for(j=0;j<p->W.col;j++)
+                    for(j=0;j<p->W._col;j++)
                     {
-                        loss_L2_regularization+=(_lambd*p->W.data[i][j]*p->W.data[i][j]);
+                        loss_L2_regularization+=(_lambd*p->W._data[i][j]*p->W._data[i][j]);
                     }
                 }
                p=p->next;
@@ -314,7 +314,7 @@ namespace MLL{
         }
         for(i=0; i<m; i++)
         {
-            loss+=-(_y.data[0][i]*log(AL.data[0][i])+(1 - _y.data[0][i])*log(1-AL.data[0][i]));
+            loss+=-(_y._data[0][i]*log(AL._data[0][i])+(1 - _y._data[0][i])*log(1-AL._data[0][i]));
         }
         loss/=m;
         //loss+=loss_L2_regularization;
@@ -335,12 +335,12 @@ namespace MLL{
 
         for(k=0; k<L-1&&p->next!=NULL&&g!=NULL; k++)
         {
-            for(i=0; i<g->grad_W.row; i++)
+            for(i=0; i<g->grad_W._row; i++)
             {
-                g->grad_b.data[i][0] *= -_learn_rateing;
-                for(j=0; j<g->grad_W.col; j++)
+                g->grad_b._data[i][0] *= -_learn_rateing;
+                for(j=0; j<g->grad_W._col; j++)
                 {
-                    g->grad_W.data[i][j] *= -_learn_rateing;
+                    g->grad_W._data[i][j] *= -_learn_rateing;
                 }
             }
             p->W = p->W + g->grad_W;
@@ -366,17 +366,17 @@ namespace MLL{
 
         for(k=0; k<L-1&&p->next!=NULL&&g!=NULL; k++)
         {
-            for(i=0; i<g->grad_W.row; i++)
+            for(i=0; i<g->grad_W._row; i++)
             {
-                g->V_db.data[i][0]=(_beta1 * g->V_db.data[i][0] + (1 - _beta1) * g->grad_b.data[i][0]);
-                g->V_db_corrected.data[i][0] = g->V_db.data[i][0] / (1-pow(_beta1,t));//修正
-                g->grad_b.data[i][0]=(-_learn_rateing) * g->V_db_corrected.data[i][0];
+                g->V_db._data[i][0]=(_beta1 * g->V_db._data[i][0] + (1 - _beta1) * g->grad_b._data[i][0]);
+                g->V_db_corrected._data[i][0] = g->V_db._data[i][0] / (1-pow(_beta1,t));//修正
+                g->grad_b._data[i][0]=(-_learn_rateing) * g->V_db_corrected._data[i][0];
 
-                for(j=0; j<g->grad_W.col; j++)
+                for(j=0; j<g->grad_W._col; j++)
                 {
-                    g->V_dw.data[i][j]=(_beta1 * g->V_dw.data[i][j] + (1 - _beta1) * g->grad_W.data[i][j]);
-                    g->V_dw_corrected.data[i][j]=g->V_dw.data[i][j] / (1-pow(_beta1,t));//修正
-                    g->grad_W.data[i][j]=(-_learn_rateing) * g->V_dw_corrected.data[i][j];
+                    g->V_dw._data[i][j]=(_beta1 * g->V_dw._data[i][j] + (1 - _beta1) * g->grad_W._data[i][j]);
+                    g->V_dw_corrected._data[i][j]=g->V_dw._data[i][j] / (1-pow(_beta1,t));//修正
+                    g->grad_W._data[i][j]=(-_learn_rateing) * g->V_dw_corrected._data[i][j];
                 }
             }
             p->W = p->W + g->grad_W;
@@ -402,25 +402,25 @@ namespace MLL{
 
         for(k=0; k<L-1&&p->next!=NULL&&g!=NULL; k++)
         {
-            for(i=0; i<g->grad_W.row; i++)
+            for(i=0; i<g->grad_W._row; i++)
             {
-                g->V_db.data[i][0]=(_beta1 * g->V_db.data[i][0] + (1 - _beta1) * g->grad_b.data[i][0]);
-                g->V_db_corrected.data[i][0] = g->V_db.data[i][0] / (1-pow(_beta1,t));//修正
+                g->V_db._data[i][0]=(_beta1 * g->V_db._data[i][0] + (1 - _beta1) * g->grad_b._data[i][0]);
+                g->V_db_corrected._data[i][0] = g->V_db._data[i][0] / (1-pow(_beta1,t));//修正
 
-                g->S_db.data[i][0]=(_beta2 * g->S_db.data[i][0] + (1 - _beta2) * (g->grad_b.data[i][0] * g->grad_b.data[i][0]));
-                g->S_db_corrected.data[i][0] = g->S_db.data[i][0] / (1-pow(_beta2,t));//修正
+                g->S_db._data[i][0]=(_beta2 * g->S_db._data[i][0] + (1 - _beta2) * (g->grad_b._data[i][0] * g->grad_b._data[i][0]));
+                g->S_db_corrected._data[i][0] = g->S_db._data[i][0] / (1-pow(_beta2,t));//修正
 
-                g->grad_b.data[i][0]= (-_learn_rateing) * g->V_db_corrected.data[i][0] / sqrt(g->S_db_corrected.data[i][0]);
+                g->grad_b._data[i][0]= (-_learn_rateing) * g->V_db_corrected._data[i][0] / sqrt(g->S_db_corrected._data[i][0]);
 
-                for(j=0; j<g->grad_W.col; j++)
+                for(j=0; j<g->grad_W._col; j++)
                 {
-                    g->V_dw.data[i][j]=(_beta1 * g->V_dw.data[i][j] + (1 - _beta1) * g->grad_W.data[i][j]);
-                    g->V_dw_corrected.data[i][j]=g->V_dw.data[i][j] / (1-pow(_beta1,t));//修正
+                    g->V_dw._data[i][j]=(_beta1 * g->V_dw._data[i][j] + (1 - _beta1) * g->grad_W._data[i][j]);
+                    g->V_dw_corrected._data[i][j]=g->V_dw._data[i][j] / (1-pow(_beta1,t));//修正
 
-                    g->S_dw.data[i][j]=(_beta2 * g->S_dw.data[i][j] + (1 - _beta2) * (g->grad_W.data[i][j] * g->grad_W.data[i][j]));
-                    g->S_dw_corrected.data[i][j]=g->S_dw.data[i][j] / (1-pow(_beta2,t));//修正
+                    g->S_dw._data[i][j]=(_beta2 * g->S_dw._data[i][j] + (1 - _beta2) * (g->grad_W._data[i][j] * g->grad_W._data[i][j]));
+                    g->S_dw_corrected._data[i][j]=g->S_dw._data[i][j] / (1-pow(_beta2,t));//修正
 
-                    g->grad_W.data[i][j]= (-_learn_rateing) * g->V_dw_corrected.data[i][j] / sqrt(g->S_dw_corrected.data[i][j] + _epsilon) ;
+                    g->grad_W._data[i][j]= (-_learn_rateing) * g->V_dw_corrected._data[i][j] / sqrt(g->S_dw_corrected._data[i][j] + _epsilon) ;
                 }
             }
             p->W = p->W + g->grad_W;
@@ -450,27 +450,27 @@ namespace MLL{
         //p = &_par;
         //p->A = _x.copyMatrix();
         //Matrix AL;
-        Matrix AL(_y.row,_y.col,0,"ss");
+        Matrix AL(_y._row,_y._col,0);
         double *keep_probs=new double [L];
         for(k=0;k<L;k++)
         {
             keep_probs[k]=1;
         }
         AL=model_forward(keep_probs);
-        for(i=0;i<_y.col;i++)
+        for(i=0;i<_y._col;i++)
         {
-            if(AL.data[0][i]>0.5)
-                AL.data[0][i]=1;
+            if(AL._data[0][i]>0.5)
+                AL._data[0][i]=1;
             else
-                AL.data[0][i]=0;
+                AL._data[0][i]=0;
         }
         double pre=0;
-        for(i=0;i<_y.col;i++)
+        for(i=0;i<_y._col;i++)
         {
-            if((AL.data[0][i]==1 && _y.data[0][i]==1)||(AL.data[0][i]==0 && _y.data[0][i]==0))
+            if((AL._data[0][i]==1 && _y._data[0][i]==1)||(AL._data[0][i]==0 && _y._data[0][i]==0))
                 pre+=1;
         }
-        pre/=_y.col;
+        pre/=_y._col;
         std::cout<<"pre="<<pre<<std::endl;
         return 0;
     }
@@ -483,18 +483,18 @@ namespace MLL{
 
         **/
 
-        _x.LoadData(file);
+        _x.init_by_data(file);
         //_x = _x.transposeMatrix();
        
         //_x = _x.transposeMatrix();
         
-        _y = _x.getOneRow(_x.row-1);
+        _y = _x.getOneRow(_x._row-1);
         _y.print();
-        _x.deleteOneRow(_x.row-1);
+        _x.deleteOneRow(_x._row-1);
         //_y=one_hot(_y,2);
         //_y.print();
-        std::cout<<"_x:row&col"<<_x.row << _x.col<<std::endl; 
-        std::cout<<"_y:row&col"<<_y.row << _y.col<<std::endl; 
+        std::cout<<"_x:row&col"<<_x._row << _x._col<<std::endl; 
+        std::cout<<"_y:row&col"<<_y._row << _y._col<<std::endl; 
         
         _initialization = initialization;
         _learn_rateing = learn_rateing;
@@ -510,7 +510,7 @@ namespace MLL{
         int i=0,k=0;
         int lay_dim=3;
         int lay_n[3]= {500,3,1};
-        lay_n[0]=_x.row;
+        lay_n[0]=_x._row;
         std::string lay_active[3]= {"relu","relu","sigmoid"};
         _sup_par.layer_dims=lay_dim;
         for(i=0; i<lay_dim; i++)
@@ -521,8 +521,8 @@ namespace MLL{
         init_parameters();
         double loss;
 
-        //Matrix AL(_y.row,_y.col,0,"ss");
-        Matrix AL(1,_y.col,0,"ss");
+        //Matrix AL(_y._row,_y._col,0);
+        Matrix AL(1,_y._col,0);
         double *keep_probs;
         keep_probs=new double [_sup_par.layer_dims];
         if(keep_prob==1)

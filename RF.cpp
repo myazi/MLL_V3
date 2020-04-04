@@ -178,7 +178,7 @@ namespace MLL
 	{
 		Data data;
 		Data bdata;
-		LoadDataNum(data,"data/rf.txt");
+		LoadData(data,"data/rf.txt");
 		bitree *t;
 		if(!(t=(bitree*)malloc(sizeof(bitree)*numIt))) exit(-1);
 		for(int i=0;i<numIt;i++)
@@ -189,7 +189,7 @@ namespace MLL
 			preorder(t[i]);
 		}
 		Data testdata;
-		LoadDataNum(testdata,"data/rftest.txt");
+		LoadData(testdata,"data/rftest.txt");
 		std::vector<double> labels(testdata.size(),0);
 		std::vector<double> bs(numIt,0);
 		for(size_t i =0; i<testdata.size(); i++)
