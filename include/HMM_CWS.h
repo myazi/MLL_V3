@@ -1,7 +1,6 @@
 #ifndef HMM_CWS_H
 #define HMM_CWS_H
 #include "MatrixOpe.h"
-#include <iostream>
 #define VEC_LEN 5000
 #define STATE 4
 #define double_min -1

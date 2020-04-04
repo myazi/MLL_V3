@@ -8,8 +8,8 @@ namespace MLL
 	{
 	public:
 		Data _data;
-		unsigned int _row;
-		unsigned int _col;
+		size_t _row;
+		size_t _col;
 	public:
 		Matrix();
 		
@@ -17,27 +17,27 @@ namespace MLL
 
 		Matrix(const Matrix &rhs);
 		
-		Matrix(const unsigned int &row, const unsigned int &col, const float &init_val);
+		Matrix(const size_t &row, const size_t &col, const float &init_val);
 		
-		Matrix(const unsigned int &row, const unsigned int &col, const float &init_val, const std::string &type);
+		Matrix(const size_t &row, const size_t &col, const float &init_val, const std::string &type);
 
-		void initMatrix(const unsigned int &row, const unsigned int &col, const float &init_val);
+		void initMatrix(const size_t &row, const size_t &col, const float &init_val);
 
 		void init_by_data(const std::string &filename);
 
-		void init_by_spare(const std::string &filename, const unsigned int &row, const unsigned int &col);
+		void init_by_spare(const std::string &filename, const size_t &row, const size_t &col);
 		
 		void print() const;
 
 		Matrix copyMatrix() const;
 
-		Matrix getOneRow(const unsigned int &iRow) const;
+		Matrix getOneRow(const size_t &iRow) const;
 
-		Matrix getOneCol(const unsigned int &jCol) const;
+		Matrix getOneCol(const size_t &jCol) const;
 
-		void deleteOneRow(const unsigned int &iRow);
+		void deleteOneRow(const size_t &iRow);
 
-		void deleteOneCol(const unsigned int &iCol);
+		void deleteOneCol(const size_t &iCol);
 
 		Matrix transposeMatrix();//矩阵形式的转置
 

@@ -1,6 +1,5 @@
 #ifndef LoadData_H
 #define LoadData_H
-#include <iostream>
 #include <string>
 #include <iostream>
 #include <fstream>
@@ -27,7 +26,7 @@ typedef std::vector<std::string> ColDataStr;
 template<typename elemType>
 void LoadData(std::vector<std::vector<elemType> > &data, const std::string &infile)
 {
-    std::cout << "locddata filename is:" << infile <<std::endl;
+    std::cout << "loaddata filename is:" << infile <<std::endl;
     std::ifstream dataFile;
     dataFile.open(infile);
     std::string tmpstrline;

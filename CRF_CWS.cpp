@@ -4,8 +4,8 @@ namespace MLL
 {
 	int CRF_CWS::getPos(const std::string &str)
 	{
-		int i=0;
-		for(i=0; i<dic_len; i++)
+		int i = 0;
+		for(i = 0; i < dic_len; i++)
 		{
 			if(!str.compare(dic[i]))
 				return i;
@@ -16,31 +16,31 @@ namespace MLL
 
 	std::string CRF_CWS::getWord(const int &pos)
 	{
-		if(pos>=0)
+		if(pos >= 0)
 			return dic[pos];
 		else
 		{
-			std::cout<<"pos="<<pos<<std::endl;
+			std::cout<< "pos=" << pos <<std::endl;
 		}
 		return "#";
 	}
 
 	int CRF_CWS::getState(const char &str)
 	{
-		if(str=='0')
+		if(str == '0')
 			return 0;
-		if(str=='1')
+		if(str == '1')
 			return 1;
-		if(str=='2')
+		if(str == '2')
 			return 2;
-		if(str=='3')
+		if(str == '3')
 			return 3;
 		return 0;
 	}
 
 	int CRF_CWS::senToword(const std::string &sen,std::string *word)
 	{
-		int i=0,j=0,k=0;
+		int i = 0, j = 0, k = 0;
 		int num = sen.size();
 		std::string qj[QJBJ]= {"£°","£±","£²","£³","£´","£µ","£¶","£·","£¸","£¹","£®"};
 		std::string bj[QJBJ]= {"0","1","2","3","4","5","6","7","8","9","."};

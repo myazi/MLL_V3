@@ -11,7 +11,7 @@ namespace MLL
 			std::cout << "addData data1 data2 is no" << std::endl;
 			exit(-1);
 		}
-		unsigned int i = 0, j = 0;
+		size_t i = 0, j = 0;
 		Matrix add(matrix1._row, matrix1._col, 0);
 		for(i = 0; i < matrix1._row; i++)
 		{
@@ -31,7 +31,7 @@ namespace MLL
 			std::cout << "addData data1 data2 is no" << std::endl;
 			exit(-1);
 		}
-		unsigned int i = 0, j = 0;
+		size_t i = 0, j = 0;
 		Matrix sub(matrix1._row, matrix1._col, 0);
 		for(i = 0; i < matrix1._row; i++)
 		{
@@ -51,7 +51,7 @@ namespace MLL
 			std::cout << "multsData error" << std::endl;
 			exit(-1);
 		}
-		unsigned int i = 0, j = 0, k = 0;
+		size_t i = 0, j = 0, k = 0;
 		Matrix mults(matrix1._row,matrix2._col,0);
 		for(i = 0; i < matrix1._row; i++)
 		{
@@ -74,7 +74,7 @@ namespace MLL
 	}
 	Matrix operator*(const double &alpha, const Matrix &matrix1)
 	{
-		unsigned int i = 0, j = 0;
+		size_t i = 0, j = 0;
 		Matrix mults(matrix1._row,matrix1._col,0);
 		for(i = 0; i < matrix1._row; i++)
 		{
@@ -87,7 +87,7 @@ namespace MLL
 	}
 	Matrix operator/(const double &alpha, const Matrix &matrix1)
 	{
-		unsigned int i = 0, j = 0;
+		size_t i = 0, j = 0;
 		Matrix mults(matrix1._row,matrix1._col,0);
 		for(i = 0 ; i < matrix1._row; i++)
 		{
