@@ -14,11 +14,11 @@
 加载数值型样本数据
 */
 
-typedef std::vector<std::vector<float> > Data;  //定义为模板更好
+typedef std::vector<std::vector<float> > Data;
 typedef std::vector<float> RowData;
 typedef std::vector<float> ColData;
 
-typedef std::vector<std::vector<std::string> > DataStr;  //定义为模板
+typedef std::vector<std::vector<std::string> > DataStr;
 typedef std::vector<std::string> RowDataStr;
 typedef std::vector<std::string> ColDataStr;
 
@@ -50,6 +50,10 @@ void LoadData(std::vector<std::vector<elemType> > &data, const std::string &infi
             }
             rowData.clear();
         }
+    }
+    else
+    {
+        std::cout<< "open data file fail" <<  std::endl;    
     }
     dataFile.close();
 }

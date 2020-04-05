@@ -484,8 +484,8 @@ namespace MLL{
         **/
 
         _x.init_by_data(file);
-        //_x = _x.transposeMatrix();
-       
+        _x = _x.transposeMatrix();
+        _x.print();
         //_x = _x.transposeMatrix();
         
         _y = _x.getOneRow(_x._row-1);
