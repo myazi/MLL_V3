@@ -23,6 +23,8 @@ namespace MLL
 
 		void initMatrix(const size_t &row, const size_t &col, const float &init_val);
 
+		void init_by_random(const size_t &row, const size_t &col);
+		
 		void init_by_data(const std::string &filename);
 
 		void init_by_spare(const std::string &filename, const size_t &row, const size_t &col);

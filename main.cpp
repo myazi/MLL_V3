@@ -15,6 +15,7 @@
 #include "HMM_CWS.h"
 #include "MEMM_CWS.h"
 #include "CRF_CWS.h"
+#include "SVD.h"
 
 std::string path_file = "data/";
 std::map<std::string, std::map<std::string, std::string> > conf_map;
@@ -405,6 +406,44 @@ int CRF_CWS(const char *file = "pku_training.utf8")
 	return 0;
 }
 
+int SVD(const char *file = "svd.txt")
+{
+    path_file.append(file);
+	std::string model = "normal";
+	int d = 2;
+	int iter = 1000;
+	double alpha = 0.001;
+	
+	std::map<std::string, std::map<std::string, std::string> >::iterator it = conf_map.find("SVD");
+	if(it != conf_map.end())
+	{
+		std::map<std::string, std::string> SVD_map = it->second;
+		std::map<std::string, std::string>::iterator model_it = SVD_map.find("model");
+		if(model_it != SVD_map.end())
+		{
+			model = model_it->second;
+		}
+		std::map<std::string, std::string>::iterator d_it = SVD_map.find("d");
+		if(d_it != SVD_map.end())
+		{
+			d = atof((d_it->second).c_str());
+		}
+		std::map<std::string, std::string>::iterator alpha_it = SVD_map.find("alpha");
+		if(alpha_it != SVD_map.end())
+		{
+			alpha = atof((alpha_it->second).c_str());
+		}
+		std::map<std::string, std::string>::iterator iter_it = SVD_map.find("iter");
+		if(iter_it != SVD_map.end())
+		{
+			iter = atof((iter_it->second).c_str());
+		}
+	}
+	std::cout << d << "\t" << alpha << "\t" << iter << std::endl;
+	MLL::SVD::SVDPtr svd = std::make_shared<MLL::SVD>(path_file, model, d, alpha, iter);
+	return 0;
+}
+
 int load_conf(char *file = "model.conf")
 {
 	std::string model = "";
@@ -475,9 +514,9 @@ int main(int argc, char* argv[])
 	load_conf();
 	std::cout<< "---------------------- end load model conf --------------------------" << std::endl;	
 	
-	std::string models[20] ={"LineReg","LogReg","SoftMaxReg","DNN","SVM","DTree","CART","Adaboost","RF","KMeans","KNN","Bayes","GMM","HMM","HMM_CWS","MEMM_CWS","CRF_CWS"};
+	std::string models[20] ={"LineReg","LogReg","SoftMaxReg","DNN","SVM","DTree","CART","Adaboost","RF","KMeans","KNN","Bayes","GMM","HMM","HMM_CWS","MEMM_CWS","CRF_CWS","SVD"};
 	std::vector<std::string> models_pos(models, models + 20); 
-    int (*models_list[])(const char *file) = {LineReg, LogReg,SoftMaxReg,trainDNN,SVM,DTree,CART,Adaboost,RF,KMeans,KNN,Bayes,GMM,HMM,HMM_CWS,MEMM_CWS,CRF_CWS};
+    int (*models_list[])(const char *file) = {LineReg, LogReg,SoftMaxReg,trainDNN,SVM,DTree,CART,Adaboost,RF,KMeans,KNN,Bayes,GMM,HMM,HMM_CWS,MEMM_CWS,CRF_CWS,SVD};
     int (*models_ptr) (const char *file) = LogReg;
     
 	for(int i = 0; i < models_pos.size(); i++)

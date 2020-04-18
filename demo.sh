@@ -4,7 +4,7 @@
 # ./ML LogReg logreg.txt
 # ./ML LineReg linereg.txt
 # ./ML SoftMaxReg logreg.txt
-### ./ML DNN logreg.txt
+# ./ML DNN logreg.txt
 # ./ML SVM svm.txt
 # ./ML DTree id3.txt
 # ./ML CART cart.txt
@@ -16,6 +16,9 @@
 #./ML GMM GMM.txt
 # ./ML HMM hmm.txt
 # ./ML HMM_CWS pku_training.txt
- ./ML MEMM_CWS pku_training.txt
+# ./ML MEMM_CWS pku_training.txt
 ### ./ML CRF_CWS pku_training.txt
 #./ML LogReg logreg.txt
+#./ML SVD svd.txt
+#./ML SVD svd_sparse.txt
+./ML SVD sim_index

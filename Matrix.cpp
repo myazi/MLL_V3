@@ -75,6 +75,26 @@ namespace MLL
 				this->_data[i][j] = init_val;
 		}
 	}
+	void Matrix::init_by_random(const size_t &row, const size_t &col)
+	{
+		std::cout<< "matrix size:" << row << "*" << col << std::endl;
+		RowData cda(col);
+		Data da(row,cda);
+		this->_data = da;
+		this->_row = row;
+		this->_col = col;
+		size_t  i = 0, j = 0;
+		double random = 0.0;
+		for(i = 0; i < _row; i++)
+		{
+			for(j = 0; j < _col; j++)
+			{
+				random = (rand() % 100) / 100.0;
+				_data[i][j] = random;
+			}
+		}
+	}
+
 	void Matrix::init_by_spare(const std::string &filename, const size_t  &row, const size_t  &col)
 	{
 		size_t  i = 0, j = 0;
@@ -363,7 +383,7 @@ namespace MLL
 	{
 		if(_row != _col)
 		{
-			std::cout << "Data ni is no" << std::endl;
+			std::cout << "Data ni is no" << "row * col:" << _row << "*" << _col << std::endl;
 			exit(-1);
 		}
 		if(this->detMatrix() == 0)//这里调用求行列式进行了列主元消去改变了参数矩阵，如何传递不改变是一个问题

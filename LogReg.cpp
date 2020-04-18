@@ -35,7 +35,7 @@ namespace MLL {
             z = _y - z ;
 			for(i = 0; i < z._row; i++)
             {
-                z._data[i][0] *= exp( -0.5 * _y._data[i][0]);
+                z._data[i][0] *= exp( -0.5 * _y._data[i][0]);//结构风险损失系数
             }
             for(i = 0; i < _x._row; i++)///统计错误率
                 error += z._data[i][0];
