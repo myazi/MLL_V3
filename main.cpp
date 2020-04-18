@@ -469,6 +469,7 @@ int load_conf(char *file = "model.conf")
 						model_map.erase(it++);
 					}
 					model = tmpstrline.substr(1,tmpstrline.size()-2);
+		            std::cout << "model_conf" << model << std::endl;
 				}
 				else
 				{
@@ -495,6 +496,7 @@ int load_conf(char *file = "model.conf")
 		}
 	}
 	*/
+	conf_file.close();
 	return 0;
 }
 
@@ -508,12 +510,11 @@ int main(int argc, char* argv[])
     }
 	std::string type = argv[1];
 	char *file_name = argv[2];
-	std::cout<< "model:" << type << "\t" << "filename:" << file_name << std::endl;
 	
 	std::cout<< "---------------------- start load model conf ------------------------" << std::endl;	
 	load_conf();
 	std::cout<< "---------------------- end load model conf --------------------------" << std::endl;	
-	
+	std::cout<< "model is " << type << ", " << "filename is " << file_name << std::endl;
 	std::string models[20] ={"LineReg","LogReg","SoftMaxReg","DNN","SVM","DTree","CART","Adaboost","RF","KMeans","KNN","Bayes","GMM","HMM","HMM_CWS","MEMM_CWS","CRF_CWS","SVD"};
 	std::vector<std::string> models_pos(models, models + 20); 
     int (*models_list[])(const char *file) = {LineReg, LogReg,SoftMaxReg,trainDNN,SVM,DTree,CART,Adaboost,RF,KMeans,KNN,Bayes,GMM,HMM,HMM_CWS,MEMM_CWS,CRF_CWS,SVD};
@@ -524,7 +525,7 @@ int main(int argc, char* argv[])
         if(type == models_pos[i])
         {
             models_ptr = models_list[i];
-			ret = models_ptr(file_name);
+		    ret = models_ptr(file_name);
 			return ret;
         }
     }

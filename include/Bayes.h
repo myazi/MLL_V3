@@ -1,7 +1,7 @@
 #ifndef Bayes_H
 #define Bayes_H
 #include "MatrixOpe.h"
-
+#include <memory>
 namespace MLL
 {
 	class Bayes
@@ -26,7 +26,7 @@ namespace MLL
 
 			int classifyNB(const Matrix &testVecX);//分类决策函数
 
-			void getAllFiles(const std::string &path, const std::vector <std::string> &files);
+			void getAllFiles(const std::string &path, std::vector <std::string> &files);
 
 			Bayes(const std::string &file);
 

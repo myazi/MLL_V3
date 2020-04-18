@@ -101,18 +101,18 @@ namespace MLL
 	4，由k个样本加权投票得到最终的决策类别
 
 	***/
-	int KNN::classfiy(Matrix &test_data,const Matrix &test_datay,Matrix &x, const Matrix &y)
+	int KNN::classfiy(Matrix &test_data, const Matrix &test_datay, Matrix &x, const Matrix &y)
 	{
 		int i = 0, j = 0, k = 0;
 		int sumz = 0,sumf = 0;
 		Matrix knn(_K, 2, 0);
 		autoNorm(x);
 		autoNorm(test_data);
+	    Matrix oneTest(1,test_data._col,0);
 		for(i = 0; i < test_data._row; i++)
 		{
 			sumz = 0;
 			sumf = 0;
-			Matrix oneTest;
 			oneTest = test_data.getOneRow(i);
 			knn = getK(oneTest,x);
 			for(j = 0; j < _K; j++)

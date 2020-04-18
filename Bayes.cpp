@@ -1,8 +1,8 @@
 //#include <io.h>
+#include <dirent.h>
 #include <string.h>
 #include <stdio.h>
 #include "Bayes.h"
-
 #define CLASS_SUM 2
 #define X_RANGE 2  //X_RANGE 表示X的取值范围，由于采用one-hot编码，所以X的每一个分量的取值范围为0或1
 
@@ -115,12 +115,12 @@ namespace MLL
 			bayes.pX._data[i][0] = (bayes.pX_1Y._data[0][i] + bayes.pX_1Y._data[1][i]) / 2;
 		}
 		//计算出PY两类的概率
-		for(k = 0; k < bayes.pY._row; k++)
+		/*for(k = 0; k < bayes.pY._row; k++)
 		{
 			bayes.pY._data[k][0] /= X._row;
 		}
 		std::cout<< "pY=" << bayes.pY._data[0][0] <<std::endl;
-
+        
 		for(k = 0; k < bayes.pX_1Y._row; k++)
 		{
 			for(i = 0; i < bayes.pX_1Y._col; i++)
@@ -129,6 +129,7 @@ namespace MLL
 			}
 			std::cout<<"--";
 		}
+        */
 	}
 
 	/**
@@ -168,13 +169,13 @@ namespace MLL
 		return 0;
 
 	}
-	/*	
+	/*win	
 	void Bayes::getAllFiles(const std::string &path, const std::vector<std::string> &files)
 	{
 		//文件句柄
 		long   hFile = 0;
 		//文件信息
-		struct _finddata_t fileinfo;
+		_finddata_t fileinfo;
 		std::string p;
 		if ((hFile = _findfirst(p.assign(path).append("/*").c_str(), &fileinfo)) != -1)
 		{
@@ -196,7 +197,38 @@ namespace MLL
 			_findclose(hFile);
 		}
 	}
-	*/
+    */
+    //linux
+    void Bayes::getAllFiles(const std::string &path, std::vector<std::string> &files)
+    {
+        const char *dir = path.c_str();
+        DIR *pDir = NULL;
+        struct dirent *pFile = NULL;
+		std::string p;
+        pDir = opendir(dir);
+        if (pDir == NULL) return;
+        
+        while ((pFile = readdir(pDir)) != NULL) 
+        {
+            if (pFile->d_type & DT_DIR) 
+            {
+                if (strcmp(pFile->d_name, ".") == 0 
+                    || strcmp(pFile->d_name, "..") == 0) continue;
+                char Path[256];
+                int len = strlen(dir);
+                strncpy(Path, dir, len + 1);
+                if (dir[len - 1] != '/') strncat(Path, "/", 2);
+                strncat(Path, pFile->d_name, strlen(pFile->d_name) + 1);
+                //getAllFiles(Path,files);//
+            } 
+            else
+            {
+                files.push_back(p.assign(dir).append("/").append(pFile->d_name));
+            }
+        }
+        
+        closedir(pDir);
+    }
 	Bayes::Bayes(const std::string &file)
 	{
 
@@ -209,7 +241,7 @@ namespace MLL
 		std::vector<DataStr> dataClass;
 		for(k = 0; k < CLASS_SUM; k++)
 		{
-			//getAllFiles(path[k],files);
+			getAllFiles(path[k],files);
 			filess.push_back(files);
 			files.clear();
 		}
@@ -224,7 +256,6 @@ namespace MLL
 			dataClass.push_back(data);
 			data.clear();
 		}
-		std::cout<<" -------------"<< std::endl;		
 		Bayes::DIC dic = createVocabList(dataClass);
 		
 		std::cout<<dic.size();
@@ -246,8 +277,7 @@ namespace MLL
 
 		classifyNB(X);///分类决策
 
-		std::cout<<"----------"<<std::endl;
 		Matrix pxt=bayes.pX.transposeMatrix();
-		pxt.print();
+		//pxt.print();
 	}
 }

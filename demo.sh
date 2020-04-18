@@ -12,7 +12,7 @@
 # ./ML RF rf.txt
 # ./ML KMeans kmeans.txt
 # ./ML KNN knn.txt
-### ./ML Bayes email
+# ./ML Bayes email
 #./ML GMM GMM.txt
 # ./ML HMM hmm.txt
 # ./ML HMM_CWS pku_training.txt
