@@ -25,11 +25,11 @@ namespace MLL
 		this->_data = da;
 		this->_row = row;
 		this->_col = col;
-		size_t  i = 0, j = 0;
-		for(i = 0; i < _row; i++)
+		size_t  irow = 0, jcol = 0;
+		for(irow = 0; irow < _row; irow++)
 		{
-			for(j = 0; j < _col; j++)
-				this->_data[i][j] = init_val;
+			for(jcol = 0; jcol < _col; jcol++)
+				this->_data[irow][jcol] = init_val;
 		}
 	}
 	Matrix::Matrix(const size_t  &row, const size_t  &col, const float &init_val, const std::string &type)
@@ -49,11 +49,11 @@ namespace MLL
 		this->_data = da;
 		this->_row = row;
 		this->_col = col;
-		size_t  i = 0, j = 0;
+		size_t  index = 0;
 		// 初始化diag矩阵
-		for(i = 0; i< _row; i++)
+		for(index = 0; index < _row; index++)
 		{
-			this->_data[i][i] = init_val;
+			this->_data[index][index] = init_val;//方阵
 		}
 	}
 	void Matrix::initMatrix(const size_t  &row, const size_t  &col, const float &init_val)
@@ -68,128 +68,130 @@ namespace MLL
 		this->_data = da;
 		this->_row = row;
 		this->_col = col;
-		size_t  i = 0, j = 0;
-		for(i = 0; i < _row; i++)
+		size_t  irow = 0, jcol = 0;
+		for(irow = 0; irow < _row; irow++)
 		{
-			for(j = 0; j < _col; j++)
-				this->_data[i][j] = init_val;
+			for(jcol = 0; jcol < _col; jcol++)
+				this->_data[irow][jcol] = init_val;
 		}
 	}
 	void Matrix::init_by_random(const size_t &row, const size_t &col)
 	{
-		std::cout<< "matrix size:" << row << "*" << col << std::endl;
 		RowData cda(col);
 		Data da(row,cda);
 		this->_data = da;
 		this->_row = row;
 		this->_col = col;
-		size_t  i = 0, j = 0;
+		size_t  irow = 0, jcol = 0;
 		double random = 0.0;
-		for(i = 0; i < _row; i++)
+		for(irow = 0; irow < _row; irow++)
 		{
-			for(j = 0; j < _col; j++)
+			for(jcol = 0; jcol < _col; jcol++)
 			{
 				random = (rand() % 100) / 100.0;
-				_data[i][j] = random;
+				_data[irow][jcol] = random;
 			}
 		}
 	}
 
 	void Matrix::init_by_spare(const std::string &filename, const size_t  &row, const size_t  &col)
 	{
-		size_t  i = 0, j = 0;
+		//initMatrix(row, col, 0)//调用initMatrix函数初始化
 		RowData cda(col);
 		Data da(row,cda);
 		this->_data = da;
 		this->_row = row;
 		this->_col = col;
-		for(i = 0; i < this->_row; i++)
+		size_t  irow = 0, jcol = 0;
+		for(irow = 0; irow < this->_row; irow++)
 		{
-			for(j = 0; j < this->_col; j++)
+			for(jcol = 0; jcol < this->_col; jcol++)
 			{
-				this->_data[i][j] = 0;
+				this->_data[irow][jcol] = 0;
 			}
 		}
 		LoadData_spare(this->_data, filename);
 	}
 	void Matrix::init_by_data(const std::string &filename)
 	{
-		size_t  i = 0, j = 0;
 		LoadData(this->_data,filename);
-		_row = this->_data.size();
-		_col = this->_data[0].size();
-		for (i = 0; i < _row; i++)
+		_row = this->_data.size();//data数据的行数
+		_col = this->_data[0].size();//data数据列数
+
+		size_t  irow = 0;
+		for (irow = 0; irow < _row; irow++)
 		{
-			if(_col > _data[i].size()) //兼容多余数据
+			if(_col > _data[irow].size()) //兼容多余数据
 				std::cout << "loaddata is error col" << std::endl;
 		}
 	}
 	void Matrix::print() const
 	{
 		std::cout<< "matrix size:" << _row<<"*"<< _col<<std::endl;
-		size_t  i = 0, j = 0;
-		for(i = 0; i < _row; i++)
+		size_t  irow = 0, jcol = 0;
+		for(irow = 0; irow < _row; irow++)
 		{
-			for(j = 0; j < _col; j++)
+			for(jcol = 0; jcol < _col; jcol++)
 			{
-				std::cout<< _data[i][j] <<"  ";
+				std::cout<< _data[irow][jcol] <<"  ";
 			}
 			std::cout<<std::endl;
 		}
 	}
 	Matrix Matrix::copyMatrix() const
 	{
-		size_t  i = 0, j = 0;
 		Matrix cp(_row, _col, 0);
-		for(i = 0; i < this->_row; i++)
+		size_t  irow = 0, jcol = 0;
+		for(irow = 0; irow < this->_row; irow++)
 		{
-			for(j = 0; j < this->_col; j++)
+			for(jcol = 0; jcol < this->_col; jcol++)
 			{
-				cp._data[i][j] = this->_data[i][j];
-			}
+				cp._data[irow][jcol] = this->_data[irow][jcol];
+            }
 		}
 		return cp;
-	}
+    }
 	Matrix Matrix::getOneRow (const size_t  &iRow) const
 	{
-		size_t  j = 0;
-		Matrix one_row_matrix(1,_col,0);
-		for(j = 0; j < this->_data[iRow].size(); j++)
+		size_t  jcol = 0;
+		Matrix one_row_matrix(1, _col,0);
+		for(jcol = 0; jcol < this->_data[iRow].size(); jcol++)
 		{
-			one_row_matrix._data[0][j] = this->_data[iRow][j];
+			one_row_matrix._data[0][jcol] = this->_data[iRow][jcol];
 		}
 		return one_row_matrix;
 	}
 	Matrix Matrix::getOneCol (const size_t  &jCol) const 
 	{
-		size_t  i = 0;
+		size_t  irow = 0;
 		Matrix one_col_matrix(_row,1,0);
-		for(i = 0; i < this->_data.size(); i++)
+		for(irow = 0; irow < this->_data.size(); irow++)
 		{
-			one_col_matrix._data[i][0] = this->_data[i][jCol];
+			one_col_matrix._data[irow][0] = this->_data[irow][jCol];
 		}
 		return one_col_matrix;
 	}
 	void Matrix::deleteOneRow(const size_t  &iRow)
 	{
 
-		size_t  i = 0, j = 0;
-		Matrix cp = this->copyMatrix();
+		//Matrix cp = this->copyMatrix();
+		Matrix cp = *this;
 		this->_row--;
-		for(Data::iterator it = cp._data.begin(); it != cp._data.end(); it++, i++)
+		size_t  irow = 0, jcol = 0;
+		for(Data::iterator it = cp._data.begin(); it != cp._data.end(); it++, irow++)
 		{
-			if(i < iRow)
+			if(irow < iRow)
 			{
-				for(std::vector<float>::iterator itRow = it->begin(); itRow != it->end(); itRow++)
+				for(std::vector<float>::iterator itRow = it->begin(); itRow != it->end(); itRow++, jcol++)
 				{
-					this->_data[i][j] = *itRow;
+					this->_data[irow][jcol] = *itRow;
 				}
 			}
-			if(i > iRow)
+			if(irow > iRow)
 			{
-				for(std::vector<float>::iterator itRow = it->begin(); itRow != it->end(); itRow++)
+				for(std::vector<float>::iterator itRow = it->begin(); itRow != it->end(); itRow++, jcol++)
 				{
-					this->_data[i-1][j] = *itRow;
+					this->_data[irow-1][jcol] = *itRow;
 				}
 			}
 		}
@@ -197,26 +199,23 @@ namespace MLL
 	void Matrix::deleteOneCol(const size_t  &iCol)
 	{
 
-		size_t  i=0, j=0;
-		Matrix cp = this->copyMatrix();
+		//Matrix cp = this->copyMatrix();
+		Matrix cp = *this;
 		this->_col--;
-		//this->_data.clear();
-		//RowData cda(this->_col);
-		//Data da(this->_row,cda);
-		//this->_data=da;
 
-		for(Data::iterator it = cp._data.begin(); it != cp._data.end(); it++, i++)
+		size_t  irow = 0, jcol = 0;
+		for(Data::iterator it = cp._data.begin(); it != cp._data.end(); it++, irow++)
 		{
-			j = 0;
-			for(std::vector<float>::iterator itRow = it->begin(); itRow != it->end(); itRow++, j++)
+			jcol = 0;
+			for(std::vector<float>::iterator itRow = it->begin(); itRow != it->end(); itRow++, jcol++)
 			{
-				if(j < iCol)
+				if(jcol < iCol)
 				{
-					this->_data[i][j] = *itRow;
+					this->_data[irow][jcol] = *itRow;
 				}
-				if(j > iCol)
+				if(jcol > iCol)
 				{
-					this->_data[i][j-1] = *itRow;
+					this->_data[irow][jcol-1] = *itRow;
 				}
 			}
 
@@ -224,13 +223,13 @@ namespace MLL
 	}
 	Matrix Matrix::transposeMatrix()//矩阵形式的转置
 	{
-		size_t  i = 0, j = 0;
 		Matrix matrixT(_col,_row,0);
-		for(i = 0; i < _col; i++)
+		size_t  irow = 0, jcol = 0;
+		for(irow = 0; irow < _row; irow++)
 		{
-			for(j = 0; j < _row; j++)
+			for(jcol = 0; jcol < _col; jcol++)
 			{
-				matrixT._data[i][j] = this->_data[j][i];
+				matrixT._data[jcol][irow] = this->_data[irow][jcol];
 			}
 		}
 		return matrixT;
@@ -244,13 +243,13 @@ namespace MLL
 			std::cout<<"addData data1 data2 is no"<<std::endl;
 			exit(-1);
 		}
-		size_t  i = 0, j = 0;
+		size_t  irow = 0, jcol = 0;
 		Matrix add(matrix1._row, matrix1._col,0);
-		for(i = 0; i < matrix1._row; i++)
+		for(irow = 0; irow < matrix1._row; irow++)
 		{
-			for(j = 0; j < matrix1._col; j++)
+			for(jcol = 0; jcol < matrix1._col; jcol++)
 			{
-				add._data[i][j] = matrix1._data[i][j] + matrix2._data[i][j];
+				add._data[irow][jcol] = matrix1._data[irow][jcol] + matrix2._data[irow][jcol];
 			}
 		}
 		return add;
@@ -265,13 +264,13 @@ namespace MLL
 			std::cout << "subData data1 data2 is no" << std::endl;
 			exit(-1);
 		}
-		size_t  i,j;
+		size_t  irow = 0, jcol = 0;
 		Matrix sub(matrix1._row, matrix1._col,0);
-		for(i = 0; i < matrix1._row; i++)
+		for(irow = 0; irow < matrix1._row; irow++)
 		{
-			for(j = 0; j < matrix1._col; j++)
+			for(jcol = 0; jcol < matrix1._col; jcol++)
 			{
-				sub._data[i][j] = matrix1._data[i][j] - matrix2._data[i][j];
+				sub._data[irow][jcol] = matrix1._data[irow][jcol] - matrix2._data[irow][jcol];
 			}
 		}
 		return sub;
@@ -286,29 +285,29 @@ namespace MLL
 			std::cout << "multsData error" << std::endl;
 			exit(-1);
 		}
-		size_t  i = 0, j =0, k = 0;
+		size_t  irow = 0, jcol = 0, k = 0;
 		Matrix mults(matrix1._row,matrix2._col,0);
-		for(i = 0; i < matrix1._row; i++)
+		for(irow = 0; irow < matrix1._row; irow++)
 		{
-			for(j = 0; j < matrix2._col; j++)
+			for(jcol = 0; jcol < matrix2._col; jcol++)
 			{
-				mults._data[i][j] = 0;
+				mults._data[irow][jcol] = 0;
 			}
 		}
-		for(i = 0; i < matrix1._row; i++)
+		for(irow = 0; irow < matrix1._row; irow++)
 		{
-			for(j = 0; j < matrix2._col; j++)
+			for(jcol = 0; jcol < matrix2._col; jcol++)
 			{
 				for( k = 0; k < matrix1._col; k++)
 				{
-					mults._data[i][j] += matrix1._data[i][k] * matrix2._data[k][j];
+					mults._data[irow][jcol] += matrix1._data[irow][k] * matrix2._data[k][jcol];
 				}
 			}
 		}
 		return mults;
 	}
 
-	Matrix Matrix::dotmultsMatrix(const Matrix &matrix1, const Matrix &matrix2)//矩阵对应相乘
+	Matrix Matrix::dotmultsMatrix(const Matrix &matrix1, const Matrix &matrix2)//矩阵对应相乘，哈达玛积
 	{
 		if(matrix1._row != matrix2._row || matrix1._col != matrix2._col)
 		{
@@ -317,13 +316,13 @@ namespace MLL
 			std::cout<<"multsData error"<<std::endl;
 			exit(-1);
 		}
-		size_t  i = 0, j = 0;
+		size_t  irow = 0, jcol = 0;
 		Matrix dotmults(matrix1._row, matrix2._col, 0);
-		for(i = 0; i < matrix1._row; i++)
+		for(irow = 0; irow < matrix1._row; irow++)
 		{
-			for(j = 0; j < matrix2._col; j++)
+			for(jcol = 0; jcol < matrix2._col; jcol++)
 			{
-				dotmults._data[i][j] = matrix1._data[i][j] * matrix2._data[i][j];
+				dotmults._data[irow][jcol] = matrix1._data[irow][jcol] * matrix2._data[irow][jcol];
 			}
 		}
 		return dotmults;

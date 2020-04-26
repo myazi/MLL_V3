@@ -12,7 +12,7 @@ namespace MLL
 
 	Matrix operator*(const double &alpha, const Matrix &matrix1);
 
-	Matrix operator/(const double &alpha, const Matrix &matrix1);
+	Matrix operator/(const Matrix &matrix1, const double &alpha);
 
 	inline void sigmoid(float &z)
 	{

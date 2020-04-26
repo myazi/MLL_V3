@@ -1,7 +1,6 @@
 #ifndef Matrix_H
 #define Matrix_H
 #include "LoadData.h"
-//#include "LoadData_new.h"
 namespace MLL
 {
 	class Matrix
@@ -30,7 +29,7 @@ namespace MLL
 		void init_by_spare(const std::string &filename, const size_t &row, const size_t &col);
 		
 		void print() const;
-
+	
 		Matrix copyMatrix() const;
 
 		Matrix getOneRow(const size_t &iRow) const;

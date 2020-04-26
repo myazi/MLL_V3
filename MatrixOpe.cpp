@@ -85,7 +85,7 @@ namespace MLL
 		}
 		return mults;
 	}
-	Matrix operator/(const double &alpha, const Matrix &matrix1)
+	Matrix operator/(const Matrix &matrix1, const double &alpha)
 	{
 		size_t i = 0, j = 0;
 		Matrix mults(matrix1._row,matrix1._col,0);
