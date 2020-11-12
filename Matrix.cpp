@@ -11,7 +11,7 @@ namespace MLL
 	}
 	Matrix::Matrix(const Matrix &rhs): _data(rhs._data), _row(rhs._row), _col(rhs._col)
 	{
-		//std::cout << "(const A& rhs)" << std::endl;
+		std::cout << "(const A& rhs)" << std::endl;
 	}
 	Matrix::Matrix(const size_t  &row, const size_t  &col, const float &init_val)
 	{
@@ -133,6 +133,7 @@ namespace MLL
 		{
 			for(jcol = 0; jcol < _col; jcol++)
 			{
+				//if(jcol == irow){std::cout<< _data[irow][jcol] <<"  ";}
 				std::cout<< _data[irow][jcol] <<"  ";
 			}
 			std::cout<<std::endl;
@@ -155,7 +156,7 @@ namespace MLL
 	{
 		size_t  jcol = 0;
 		Matrix one_row_matrix(1, _col,0);
-		for(jcol = 0; jcol < this->_data[iRow].size(); jcol++)
+		for(jcol = 0; jcol < _col; jcol++)
 		{
 			one_row_matrix._data[0][jcol] = this->_data[iRow][jcol];
 		}
@@ -165,7 +166,7 @@ namespace MLL
 	{
 		size_t  irow = 0;
 		Matrix one_col_matrix(_row,1,0);
-		for(irow = 0; irow < this->_data.size(); irow++)
+		for(irow = 0; irow < _row; irow++)
 		{
 			one_col_matrix._data[irow][0] = this->_data[irow][jCol];
 		}
@@ -173,7 +174,32 @@ namespace MLL
 	}
 	void Matrix::deleteOneRow(const size_t  &iRow)
 	{
-
+		//这里存在 data数据不释放，只row--,后续在矩阵copy时，初始化时按
+		Matrix cp = this->copyMatrix();
+		//Matrix cp = *this;
+		this->_row--;
+		size_t  irow = 0, jcol = 0;
+		for(Data::iterator it = cp._data.begin(); it != cp._data.end(); it++, irow++)
+		{
+			if(irow < iRow)
+			{
+				for(std::vector<float>::iterator itRow = it->begin(); itRow != it->end(); itRow++, jcol++)
+				{
+					this->_data[irow][jcol] = *itRow;
+				}
+			}
+			if(irow > iRow)
+			{
+				for(std::vector<float>::iterator itRow = it->begin(); itRow != it->end(); itRow++, jcol++)
+				{
+					this->_data[irow-1][jcol] = *itRow;
+				}
+			}
+		}
+	}
+	/*Matrix Matrix::deleteOneRow(const size_t  &iRow)
+	{
+		//这里存在 data数据不释放，只row--,后续在矩阵copy时，初始化时按
 		//Matrix cp = this->copyMatrix();
 		Matrix cp = *this;
 		this->_row--;
@@ -195,8 +221,8 @@ namespace MLL
 				}
 			}
 		}
-	}
-	void Matrix::deleteOneCol(const size_t  &iCol)
+	}*/
+	void Matrix::deleteOneCol(const size_t  &jCol)
 	{
 
 		//Matrix cp = this->copyMatrix();
@@ -209,11 +235,11 @@ namespace MLL
 			jcol = 0;
 			for(std::vector<float>::iterator itRow = it->begin(); itRow != it->end(); itRow++, jcol++)
 			{
-				if(jcol < iCol)
+				if(jcol < jCol)
 				{
 					this->_data[irow][jcol] = *itRow;
 				}
-				if(jcol > iCol)
+				if(jcol > jCol)
 				{
 					this->_data[irow][jcol-1] = *itRow;
 				}
@@ -410,7 +436,7 @@ namespace MLL
 				}
 			}
 		}
-		UMatrix = *this;
+		//UMatrix = *this;
 		for(j = 0; j < _col; j++)
 		{
 			for(i = j+1; i <_row; i++)
@@ -420,6 +446,7 @@ namespace MLL
 				{
 					temp = LMatrix._data[i][k] * UMatrix._data[k][j];
 				}
+				if(UMatrix._data[j][j] == 0) {UMatrix._data[j][j] = 0.000000001; std::cout << "yingwenjie" << j<<std::endl;}//防止对称矩阵主对角元素为0的情况
 				LMatrix._data[i][j] = 1.0 / UMatrix._data[j][j] * (mCopy._data[i][j]-temp);
 			}
 		}
@@ -434,11 +461,15 @@ namespace MLL
 			}
 		}
 		Matrix mults;
-		mults = *this;
+		//mults = *this;
 		mults = mults.multsMatrix(LMatrix,UMatrix);
+		std::cout << "Lmatrix" <<std::endl;
+		LMatrix.print();
+		std::cout << "Umatrix" <<std::endl;
+		UMatrix.print();
 		Matrix LU = mults;
-		//cout << "lu" << endl;
-		//mults.print();
+		std::cout << "lu" <<std::endl;
+		mults.print();
 
 		//计算u逆
 		for(j = 0; j < _col; j++)
@@ -481,11 +512,11 @@ namespace MLL
 		}
 
 		mults = mults.multsMatrix(UniMatrix,LniMatrix);
-		*this = mCopy;
-		Matrix I = *this;
+		//*this = mCopy;
+		Matrix I;// = *this;
 		I = I.multsMatrix(LU,mults);
-		//cout<<"LU"<<"*"<<"LUni"<<endl;
-		//I.print();
+		std::cout<<"LU"<<"*"<<"LUni"<<std::endl;
+		I.print();
 		return mults;
 	}
 	/*size_t  LDL(Data x)//矩阵的LDL分解，不知道怎样用于矩阵特征值，特征向量求解
